@@ -1,9 +1,9 @@
 // App.js
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { View, Text, Image, ScrollView, TextInput } from 'react-native';
+import { View, Text, Image, ScrollView, TextInput, SafeAreaView } from 'react-native'; // Import SafeAreaView
 import styles from './styles';
-import { NavigationContainer } from '@react-navigation/native'; // Add this line
+import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Login from './Tabs/Login/Login';
 import Register from './Tabs/Login/Register';
