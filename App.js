@@ -1,20 +1,44 @@
+// App.js
+import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { View, Text, Image, ScrollView, TextInput } from 'react-native';
+import styles from './styles';
+import { NavigationContainer } from '@react-navigation/native'; // Add this line
+import { createStackNavigator } from '@react-navigation/stack';
+import Login from './Tabs/Login/Login';
+import Register from './Tabs/Login/Register';
+import Main from './Main.js';
+import ForgotPassword from './Tabs/Login/ForgotPassword';
+
+const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Login">
+
+        <Stack.Screen
+          name="TourDC_Login"
+          component={Login}
+        />
+
+        <Stack.Screen
+          name="TourDC_Register"
+          component={Register}
+        />
+
+        <Stack.Screen
+          name="TourDC_ForgotPassword"
+          component={ForgotPassword}
+        />
+
+        <Stack.Screen
+          name="TourDC_Main"
+          component={Main}
+          options={{ headerShown: false }}
+        />
+
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
