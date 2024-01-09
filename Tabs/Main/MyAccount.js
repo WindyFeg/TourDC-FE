@@ -1,9 +1,11 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { Text, View } from 'react-native';
 
 const MyAccount = () => {
     return (
-        <Text>My Account</Text>
+        <View>
+
+        </View>
     )
 }
 

@@ -9,6 +9,9 @@ import Home from './Tabs/Main/Home';
 import MyAccount from './Tabs/Main/MyAccount';
 import MyTrip from './Tabs/Main/MyTrip';
 
+import Home_Icon from './assets/icons/home.svg';
+import Explore_Icon from './assets/icons/explore.svg';
+
 const Tab = createBottomTabNavigator();
 
 const Main = ({ navigation }) => {
@@ -23,19 +26,20 @@ const Main = ({ navigation }) => {
                             if (route.name === 'Home') {
                                 iconName = focused ? 'home' : 'home-outline';
                             } else if (route.name === 'Explore') {
-                                iconName = focused ? 'explore' : 'explore-outline';
-                            } else if (route.name === 'MyAccount') {
-                                iconName = focused ? 'picture' : 'picture-outline';
-                            } else if (route.name === 'Settings') { // Add this condition
-                                iconName = focused ? 'user' : 'user-outline';
+                                iconName = focused ? 'navigate-circle' : 'navigate-circle-outline';
+                            } else if (route.name === 'MyTrip') {
+                                iconName = focused ? 'images' : 'images-outline';
+                            } else if (route.name === 'MyAccount') { // Add this condition
+                                iconName = focused ? 'person' : 'person-outline';
                             }
-
+                            <ion-icon name="navigate-circle-outline"></ion-icon>
                             return <Ionicons name={iconName} size={size} color={color} />;
                         },
                         tabBarActiveTintColor: 'tomato',
                         tabBarInactiveTintColor: 'gray',
                     })}
                 >
+
                     <Tab.Screen
                         name="Home"
                         component={Home}
@@ -61,7 +65,7 @@ const Main = ({ navigation }) => {
                     />
                 </Tab.Navigator>
             </NavigationContainer>
-        </SafeAreaView>
+        </SafeAreaView >
     );
 };
 
