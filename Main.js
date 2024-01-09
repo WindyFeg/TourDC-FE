@@ -32,7 +32,6 @@ const Main = ({ navigation }) => {
                             } else if (route.name === 'MyAccount') { // Add this condition
                                 iconName = focused ? 'person' : 'person-outline';
                             }
-                            <ion-icon name="navigate-circle-outline"></ion-icon>
                             return <Ionicons name={iconName} size={size} color={color} />;
                         },
                         tabBarActiveTintColor: 'tomato',
