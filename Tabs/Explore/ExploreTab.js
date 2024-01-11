@@ -6,7 +6,7 @@ const ExploreTab = () => {
         <View>
             <Text>Hello</Text>
         </View>
-    );
+    );  
 };
 
 

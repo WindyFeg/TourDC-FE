@@ -1,47 +1,31 @@
 import React from 'react';
-import { View, TextInput } from 'react-native';
-import { Text } from 'react-native';
+import { Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import ExploreTab from '../Explore/ExploreTab';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SvgComponent from '../../assets/SvgComponent';
+import styles from '../../styles.js';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import ScanQR from '../ScanQR';
+import MainExplore from '../Explore/MainExplore';
 
-const Tab = createMaterialTopTabNavigator();
+const Stack = createStackNavigator();
 
+const Explore = ({ navigation }) => {
 
-const Explore = () => {
     return (
-        <View style={{ flex: 1 }}>
-            <TextInput
-                style={{
-                    height: 40,
-                    borderRadius: 5,
-                    borderColor: '#D9D9D9',
-                    borderWidth: 1,
-                    backgroundColor: '#FFF',
-                    width: 284,
-                    height: 44,
-
-                }}
-                // can you add icon by using screen options?
-
-                placeholder="Search"
-            />
-            <Tab.Navigator
-                screenOptions={({ route }) => ({
-                    tabBarIcon: ({ focused, color, size }) => {
-                        return <SvgComponent name={route.name} />;
-                    },
-                    tabBarActiveTintColor: 'tomato',
-                    tabBarInactiveTintColor: 'gray',
-                })}
-            >
-                <Tab.Screen name="Destination" component={ExploreTab} />
-                <Tab.Screen name="Hotel" component={ExploreTab} />
-                <Tab.Screen name="Restaurant" component={ExploreTab} />
-                <Tab.Screen name="Activities" component={ExploreTab} />
-            </Tab.Navigator>
-        </View>
+        <NavigationContainer independent={true}>
+            <Stack.Navigator initialRouteName="Explore" >
+                <Stack.Screen name="Explore"
+                    component={MainExplore}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen name="ScanQR"
+                    component={ScanQR}
+                />
+            </Stack.Navigator>
+        </NavigationContainer>
     )
 }
 

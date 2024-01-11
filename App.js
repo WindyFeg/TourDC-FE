@@ -38,6 +38,11 @@ export default function App() {
           options={{ headerShown: false }}
         />
 
+        <Stack.Screen
+          name="TourDC_QRCode"
+          component={ScanQR}
+        />
+
       </Stack.Navigator>
     </NavigationContainer>
   );
