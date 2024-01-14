@@ -1,12 +1,19 @@
 import React from 'react';
 import { View, Text, Image } from 'react-native';
+import TourismCard from './Card/TourismCard';
 
-const ExploreTab = () => {
+/* 
+! Explore Tab
+$ Contains all destination, hotel, restaurant, and activity cards
+*/
+const ExploreTab = ({ navigation }) => {
     return (
         <View>
-            <Text>Hello</Text>
+            {Array.from({ length: 4 }, (_, i) => (
+                <TourismCard key={i} navigation={navigation} />
+            ))}
         </View>
-    );  
+    );
 };
 
 

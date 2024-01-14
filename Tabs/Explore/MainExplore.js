@@ -7,6 +7,10 @@ import styles from '../../styles.js';
 
 const Tab = createMaterialTopTabNavigator();
 
+/* 
+! Explore page
+$ Contain Explore Tabs
+*/
 const MainExplore = ({ navigation }) => {
 
     const QRCode = () => {
@@ -33,10 +37,10 @@ const MainExplore = ({ navigation }) => {
                     tabBarInactiveTintColor: 'gray',
                 })}
             >
-                <Tab.Screen name="Destination" component={ExploreTab} />
-                <Tab.Screen name="Hotel" component={ExploreTab} />
-                <Tab.Screen name="Restaurant" component={ExploreTab} />
-                <Tab.Screen name="Activities" component={ExploreTab} />
+                <Tab.Screen name="Destination" component={ExploreTab} navigation={navigation} />
+                <Tab.Screen name="Hotel" component={ExploreTab} navigation={navigation} />
+                <Tab.Screen name="Restaurant" component={ExploreTab} navigation={navigation} />
+                <Tab.Screen name="Activities" component={ExploreTab} navigation={navigation} />
             </Tab.Navigator>
         </View>
     );

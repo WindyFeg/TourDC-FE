@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import styles from '../../styles.js';
-import { Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
+import { Text, View, Image, TextInput, TouchableOpacity, Button, ImageBackground } from 'react-native';
+import loginBackground from '../../assets/background/login_background.png';
+import TourDCLogo from '../../assets/logo/TourDCLogo.png';
+import TourismLogo from '../../assets/logo/TourismLogo.png';
 
 const Login = ({ navigation }) => {
     const [username, setUsername] = useState('');
@@ -25,52 +28,96 @@ const Login = ({ navigation }) => {
         navigation.navigate('TourDC_Main');
     }
 
+    const LoginInputUI = () => {
+        return (
+            <View>
+                <Text style={styles.loginLabel}>Email/Mobile phone</Text>
+                <StatusBar style="auto" />
+                <View style={styles.inputView}>
+                    <TextInput
+                        style={styles.TextInput}
+                        placeholder="Tên đăng nhập"
+                        placeholderTextColor="#003f5c"
+                        onChangeText={(username) => setUsername(username)}
+                    />
+                </View>
+
+                <Text style={styles.loginLabel}>Password</Text>
+                <View style={styles.inputView}>
+                    <TextInput
+                        style={styles.TextInput}
+                        placeholder="Mật Khẩu"
+                        placeholderTextColor="#003f5c"
+                        secureTextEntry={true}
+                        onChangeText={(password) => setPassword(password)}
+                    />
+                </View>
+
+            </View>
+        )
+    }
+
+    const CustomButton = ({ onPress, children, style }) => (
+        <TouchableOpacity style={[styles.loginBtn, style]} onPress={onPress}>
+            <Text style={styles.loginText}>{children}</Text>
+        </TouchableOpacity>
+    );
+
     return (
         <View style={styles.container}>
+            <ImageBackground source={loginBackground} resizeMode="cover" style={styles.loginBackground}>
+                {/* import image */}
 
-            <Text>Login/Register</Text>
+                <View style={styles.pinkOverlay}>
+                </View>
 
-            <Text>Email/Mobile phone</Text>
-            <StatusBar style="auto" />
-            <View style={styles.inputView}>
-                <TextInput
-                    style={styles.TextInput}
-                    placeholder="Tên đăng nhập"
-                    placeholderTextColor="#003f5c"
-                    onChangeText={(username) => setUsername(username)}
-                />
-            </View>
+                <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                    <Image
+                        style={styles.tourismLogo}
+                        source={TourismLogo}
+                    />
 
-            <Text>Password</Text>
-            <View style={styles.inputView}>
-                <TextInput
-                    style={styles.TextInput}
-                    placeholder="Mật Khẩu"
-                    placeholderTextColor="#003f5c"
-                    secureTextEntry={true}
-                    onChangeText={(password) => setPassword(password)}
-                />
-            </View>
+                    <Image
+                        style={styles.tourDCLogo}
+                        source={TourDCLogo}
+                    />
+                </View>
 
-            <TouchableOpacity onPress={() => ForgotPassword()}>
-                <Text>Forgot Password?</Text>
-            </TouchableOpacity>
+                <View style={styles.loginBackgroundOverlay}>
+                    <Text style={{
+                        color: 'rgba(0, 0, 0, 0.70)',
+                        fontFamily: 'Inter',
+                        fontSize: 18,
+                        fontStyle: 'normal',
+                        fontWeight: '400',
+                        lineHeight: 22,
+                    }}>
+                        Login/Register
+                    </Text>
 
-            <TouchableOpacity style={styles.loginBtn} onPress={() => Authentication()}>
-                <Text style={styles.loginText}>ĐĂNG NHẬP</Text>
-            </TouchableOpacity>
+                    <LoginInputUI />
 
-            <TouchableOpacity style={styles.loginBtn} onPress={() => Register()}>
-                <Text style={styles.loginText}>REGISTER</Text>
-            </TouchableOpacity>
+                    <CustomButton onPress={ForgotPassword}>
+                        Forgot Password?
+                    </CustomButton>
 
-            <Text>  By registering, you agree to our Terms & Conditions and that you have read our Privacy Policy.</Text>
-            <Text>_________Other_Method_________</Text>
+                    <CustomButton style={styles.loginBtn} onPress={Authentication}>
+                        LOGIN
+                    </CustomButton>
 
-            <TouchableOpacity style={styles.loginBtn} onPress={() => MetaMask()}>
-                <Text >METAMASK</Text>
-            </TouchableOpacity>
+                    <CustomButton style={styles.registerBtn} onPress={Register}>
+                        REGISTER
+                    </CustomButton>
 
+                    <Text>  By registering, you agree to our Terms & Conditions and that you have read our Privacy Policy.</Text>
+                    <Text>_________Other_Method_________</Text>
+
+                    <CustomButton style={styles.loginBtn} onPress={MetaMask}>
+                        MetaMask
+                    </CustomButton>
+                </View>
+
+            </ImageBackground>
         </View>
     )
 }

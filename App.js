@@ -20,6 +20,7 @@ export default function App() {
         <Stack.Screen
           name="TourDC_Login"
           component={Login}
+          options={{ headerShown: false }}
         />
 
         <Stack.Screen
@@ -36,11 +37,6 @@ export default function App() {
           name="TourDC_Main"
           component={Main}
           options={{ headerShown: false }}
-        />
-
-        <Stack.Screen
-          name="TourDC_QRCode"
-          component={ScanQR}
         />
 
       </Stack.Navigator>

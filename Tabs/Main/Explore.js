@@ -9,9 +9,15 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import ScanQR from '../ScanQR';
 import MainExplore from '../Explore/MainExplore';
+import TourismPage from '../Explore/Card/TourismPage/TourismPage.js';
+import ReviewPost from '../Explore/Card/Review/ReviewPost.js';
 
 const Stack = createStackNavigator();
 
+/* 
+! Navigation Explore page
+$ Includes the QR Code and Explore Tabs
+*/
 const Explore = ({ navigation }) => {
 
     return (
@@ -24,6 +30,14 @@ const Explore = ({ navigation }) => {
                 <Stack.Screen name="ScanQR"
                     component={ScanQR}
                 />
+                <Stack.Screen name="TourismPage"
+                    component={TourismPage}
+                />
+
+                <Stack.Screen name="ReviewPost"
+                    component={ReviewPost}
+                />
+
             </Stack.Navigator>
         </NavigationContainer>
     )
