@@ -30,13 +30,16 @@ const Explore = ({ navigation }) => {
                 />
                 <Stack.Screen name="ScanQR"
                     component={ScanQR}
+                    options={{ headerShown: false }}
                 />
                 <Stack.Screen name="TourismPage"
                     component={TourismPage}
+                    options={{ headerShown: false }}
                 />
 
                 <Stack.Screen name="ReviewPost"
                     component={ReviewPost}
+                    options={{ headerShown: false }}
                 />
 
             </Stack.Navigator>

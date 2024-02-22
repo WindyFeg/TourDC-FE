@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image } from 'react-native';
+import { Button, View, Text, Image } from 'react-native';
 import TourismCard from './Card/TourismCard';
 
 /* 

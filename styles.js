@@ -201,6 +201,47 @@ const styles = StyleSheet.create({
         margin: 15,
     },
 
+    backBtn: {
+        position: 'absolute',
+        zIndex: 1,
+        top: 20,
+        left: 20,
+    },
+
+    optionsBtn: {
+        position: 'absolute',
+        zIndex: 1,
+        top: 20,
+        right: 20,
+    },
+
+    tourismPageImage: {
+        width: "100%",
+        height: 220,
+        borderBottomLeftRadius: 30,
+        borderBottomRightRadius: 30,
+    },
+
+    tourismPageName: {
+        color: '#FFF',
+        fontSize: 28,
+        fontWeight: 'bold',
+        fontFamily: 'Roboto',
+        left: 20,
+        top: 130,
+    },
+
+    tourismPageRating: {
+        color: '#FFF',
+        fontSize: 12,
+        fontWeight: 'light',
+        fontFamily: 'Roboto',
+        left: 20,
+        top: 130,
+        flexDirection: 'row',
+    },
+
+
 });
 
 export default styles;

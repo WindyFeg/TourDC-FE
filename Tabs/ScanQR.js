@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Button } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import styles from '../styles.js';
+import CustomBackButton from './Custom/CustomBackButton.js';
 
 const ScanQR = () => {
 
@@ -31,6 +32,7 @@ const ScanQR = () => {
 
     return (
         <View style={styles.container}>
+            {/* <CustomBackButton /> */}
             <BarCodeScanner
                 onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
                 style={StyleSheet.absoluteFillObject}
