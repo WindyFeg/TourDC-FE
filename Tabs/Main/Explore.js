@@ -22,7 +22,8 @@ const Explore = ({ navigation }) => {
 
     return (
         <NavigationContainer independent={true}>
-            <Stack.Navigator initialRouteName="Explore" >
+            <Stack.Navigator initialRouteName="Explore"
+            >
                 <Stack.Screen name="Explore"
                     component={MainExplore}
                     options={{ headerShown: false }}

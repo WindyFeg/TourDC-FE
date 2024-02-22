@@ -13,8 +13,6 @@ import Collections from './Tabs/Collections.js';
 
 const Tab = createMaterialTopTabNavigator();
 /* 
-! Tourism Page
-$ Contains information of a destination, hotel, restaurant, or activity
 */
 const MainMyTrip = () => {
 

@@ -1,22 +1,45 @@
 import React from 'react';
-import { View, Text, Image, Button } from 'react-native';
+import { View, Text, Image, Button, TouchableOpacity, ImageBackground } from 'react-native';
+import styles from '../../../styles';
+import SvgComponent from '../../../assets/SvgComponent';
 
 /* 
 ! Card 
 $ Contains basic information of a destination, hotel, restaurant, or activity
 */
-const TourismCard = ({ navigation }) => {
+const TourismCard = ({ score, name, address, navigation }) => {
     return (
-        <View>
+        // Destination Card
 
-            <Text>Da Lat</Text>
-            <Text>Lam Dong, VietNam</Text>
-            <Text>4.5/5</Text>
-            {/* create a button to navigate to Tourism Page */}
-            <Button
-                title="Go to Tourism Page"
-                onPress={() => navigation.navigate('TourismPage')}
-            />
+        <View style={styles.destinationCard}>
+            <ImageBackground
+                source={require('../../../assets/destinations/dc_dalat.jpg')}
+                style={styles.bcDestinationImage}
+                imageStyle={styles.bcDestinationImage}
+            >
+                <View>
+                    <TouchableOpacity onPress={() => navigation.navigate('TourismPage')}>
+                        <Text style={styles.bcDestinationScore}>
+                            {score}
+                            <SvgComponent
+                                name="StarSmall0"
+                                style={styles.bcDestinationStar}
+                            />
+                        </Text>
+
+                        <View style={styles.bcTextContainer}>
+                            <Text style={styles.bcDestinationName}>
+                                {name}
+                            </Text>
+
+                            <Text style={styles.bcDestinationAddress}>
+                                {address}
+                            </Text>
+                        </View>
+                        {/* create a button to navigate to Tourism Page */}
+                    </TouchableOpacity>
+                </View>
+            </ImageBackground>
         </View>
     );
 };

@@ -34,8 +34,10 @@ const Main = ({ navigation }) => {
                             }
                             return <Ionicons name={iconName} size={size} color={color} />;
                         },
-                        tabBarActiveTintColor: 'tomato',
+                        tabBarActiveTintColor: '#39a7ff',
                         tabBarInactiveTintColor: 'gray',
+                        tabBarStyle: { backgroundColor: '#ffffff' },
+                        style: { backgroundColor: 'white' }, // Set the background color here
                     })}
                 >
 

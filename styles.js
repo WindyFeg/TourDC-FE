@@ -9,6 +9,21 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
 
+    mainExploreContainer: {
+        flex: 1,
+        padding: 10,
+        backgroundColor: '#fff',
+    },
+
+    headerContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: '100%',
+        height: 44,
+        marginBottom: 20,
+    },
+
     loginLabel: {
         display: 'flex',
         width: 290,
@@ -17,22 +32,30 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         flexShrink: 0,
         color: '#878282',
-        fontFamily: 'Inter',
+        // fontFamily: 'Inter',
         fontSize: 14,
         fontStyle: 'normal',
         fontWeight: '500',
         lineHeight: 17, // You need to specify a numeric value for lineHeight
     },
 
-    SearchInput: {
+    SearchBar: {
         height: 40,
         borderRadius: 5,
         borderColor: '#D9D9D9',
         borderWidth: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
         backgroundColor: '#FFF',
         width: 284,
         height: 44,
+        paddingHorizontal: 10,
+    },
 
+    SearchInput: {
+        width: '100%',
+        height: 40,
+        marginLeft: 10,
     },
 
     loginBtn: {
@@ -42,6 +65,16 @@ const styles = StyleSheet.create({
         height: 44,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+
+    qrCodeBtn: {
+        borderRadius: 5,
+        height: 44,
+        width: 44,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#D9D9D9',
     },
 
     loginBackground: {
@@ -102,6 +135,70 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
+    },
+
+    destinationCard: {
+        width: "100%",
+        height: 120,
+        backgroundColor: '#FFF',
+        borderRadius: 20,
+        // padding: 10,
+        marginBottom: 10,
+        // Box Shadow
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+
+    },
+
+    bcDestinationImage: {
+        width: "100%",
+        height: "100%",
+
+        // Image Style
+        borderRadius: 20,
+    },
+
+    bcDestinationStar: {
+        width: 10,
+        height: 10,
+        marginLeft: 5,
+    },
+
+    bcDestinationScore: {
+        color: '#000',
+        backgroundColor: '#FFF',
+        borderRadius: 10,
+        width: 50,
+        fontSize: 12,
+        fontWeight: 'bold',
+        margin: 10,
+        right: "-80%",
+        justifyContent: 'center',
+        alignItems: 'center',
+        textAlign: 'center',
+    },
+
+    bcDestinationName: {
+        color: '#FFF',
+        fontSize: 32,
+        fontWeight: 'bold',
+        fontFamily: 'Roboto',
+    },
+
+    bcDestinationAddress: {
+        color: '#FFF',
+        fontSize: 13,
+        fontWeight: 'light',
+    },
+
+    bcTextContainer: {
+        margin: 15,
     },
 
 });
