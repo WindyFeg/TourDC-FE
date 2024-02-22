@@ -58,6 +58,28 @@ const TourismPage = ({ navigation }) => {
         </View>)
     }
 
+    const DestinationContentHeader = () => {
+        return (
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+                    <SvgComponent name="Clock" />
+                    <Text>Open | Sun, 16:00-21:00 </Text>
+                </View>
+
+                <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+                    <SvgComponent name="Location" />
+                    <Text>Address | Lam Dong, Viet Nam </Text>
+                </View>
+            </View>
+        )
+    }
+
+    const DestinationContent = () => {
+        return (
+            <Text>Description</Text>
+        )
+    }
+
     return (
         <View>
             {/* Back Button and Options Button */}
@@ -68,8 +90,13 @@ const TourismPage = ({ navigation }) => {
 
             {/* Destination Page Content */}
             <View>
-                <Text>MAIN TOURISM PAGE</Text>
-                <Text>Description</Text>
+                {/* Big 2 icon for time and location */}
+                <DestinationContentHeader />
+
+                {/* Main Description of the page */}
+                <DestinationContent />
+
+                {/* Review section*/}
                 <Text>Review</Text>
 
                 {
