@@ -153,7 +153,6 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
-
     },
 
     bcDestinationImage: {
@@ -220,6 +219,15 @@ const styles = StyleSheet.create({
         height: 220,
         borderBottomLeftRadius: 30,
         borderBottomRightRadius: 30,
+
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        elevation: 5,
+        shadowOpacity: 0.5,
+        shadowRadius: 4,
     },
 
     tourismPageName: {
@@ -239,6 +247,86 @@ const styles = StyleSheet.create({
         left: 20,
         top: 130,
         flexDirection: 'row',
+    },
+
+    tourismPage_contentHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 20,
+        marginHorizontal: "20%",
+    },
+
+    tourismPage_contentHeaderIcons: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        opacity: 0.5,
+    },
+
+    tourismPage_contentHeaderTextTitle: {
+        color: '#000',
+        fontSize: 10,
+        fontWeight: 'bold',
+        fontFamily: 'Roboto',
+        textAlign: 'center',
+        width: 100,
+    },
+
+    tourismPage_contentHeaderText: {
+        color: '#000',
+        fontSize: 10,
+        fontWeight: 'bold',
+        fontFamily: 'Roboto',
+        textAlign: 'center',
+        width: 100,
+    },
+
+    tourismPage_contentHeaderTextContent: {
+        color: '#000',
+        fontSize: 12,
+        fontWeight: 'light',
+        fontFamily: 'Roboto',
+        textAlign: 'center',
+        opacity: 0.7,
+        margin: 10,
+        // make the text content justified
+        textAlign: 'justify',
+    },
+
+    tourismPage_contentImageContainer: {
+        borderRadius: 30,
+        backgroundColor: '#fff',
+        // Drop Shadow
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        elevation: 5,
+        shadowOpacity: 0.7,
+        // height: 360,
+    },
+
+    readMoreBtn: {
+        lineHeight: 21,
+        marginVertical: 10,
+        color: '#39A7FF',
+        fontWeight: 'bold',
+        fontSize: 14,
+        textAlign: 'center',
+
+    },
+
+    tourismPage_contentImages: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginHorizontal: 20,
+        marginBottom: 20,
+    },
+
+    tourismPage_contentImage: {
+        width: 150,
+        height: 150,
+        borderRadius: 10,
     },
 
 
