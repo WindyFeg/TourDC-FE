@@ -1,10 +1,9 @@
 import { Button, View, Text, Image, ImageBackground, TouchableOpacity, ScrollView } from 'react-native';
 import ReviewShort from '../Review/ReviewShort.js';
-import WhatPeopleSay from '../Review/WhatPeopleSay.js';
 import styles from '../../../../styles.js';
 import SvgComponent from '../../../../assets/SvgComponent.js';
 import React, { useState, useCallback } from 'react';
-import LinearGradient from 'react-native-linear-gradient';
+import WhatPeopleSay from '../Review/WhatPeopleSay.js';
 
 const TourismPage = ({ navigation }) => {
 
@@ -148,6 +147,35 @@ const TourismPage = ({ navigation }) => {
         )
     }
 
+    const WhatPeopleSayContainer = () => {
+        return (
+            <View>
+                <Text style={styles.tourismPage_whatPeopleSay}>What People Say</Text>
+                <ScrollView horizontal={true}>
+                    {
+                        Array.from({ length: 5 }, (_, i) => (
+                            <View key={i}>
+                                <WhatPeopleSay navigation={navigation} />
+                            </View>
+                        ))
+                    }
+                </ScrollView>
+            </View>
+        );
+    }
+
+    const ReviewContainer = () => {
+        return (
+            <View>
+                {
+                    Array.from({ length: 4 }, (_, i) => (
+                        <ReviewShort key={i} navigation={navigation} />
+                    ))
+                }
+            </View>
+        )
+    }
+
     return (
         <ScrollView style={{ backgroundColor: '#fff' }}>
             {/* Back Button and Options Button */}
@@ -165,19 +193,9 @@ const TourismPage = ({ navigation }) => {
                 <DestinationContent />
 
                 {/* Review section*/}
-                <Text>Review</Text>
+                <WhatPeopleSayContainer />
 
-                {
-                    Array.from({ length: 4 }, (_, i) => (
-                        <WhatPeopleSay key={i} navigation={navigation} />
-                    ))
-                }
-
-                {
-                    Array.from({ length: 4 }, (_, i) => (
-                        <ReviewShort key={i} navigation={navigation} />
-                    ))
-                }
+                <ReviewContainer />
             </View>
         </ScrollView >
     );

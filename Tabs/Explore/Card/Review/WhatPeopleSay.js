@@ -1,28 +1,45 @@
-import React from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
-import { Button } from 'react-native-web';
-import ReviewPost from './ReviewPost';
+import { Button, View, Text, Image, ImageBackground, TouchableOpacity, ScrollView } from 'react-native';
+import styles from '../../../../styles.js';
+import SvgComponent from '../../../../assets/SvgComponent.js';
 
-/* 
-! Tourism Page
-$ Contains information of a destination, hotel, restaurant, or activity
-*/
+
+
 const WhatPeopleSay = ({ navigation }) => {
 
     const ReviewPost = () => {
         navigation.navigate('ReviewPost');
     }
 
+    const UserSection = (props) => {
+        return (
+            <View style={styles.tourismPage_whatPeopleSayUserSection}>
+                <Image
+                    style={styles.tourismPage_whatPeopleSayUserAvatar}
+                    source={require('../../../../assets/destinations/dc_dalat.jpg')}
+                />
+                <Text style={styles.tourismPage_whatPeopleSayUserName}>David BeckHam</Text>
+
+                {
+                    Array.from({ length: 5 }).map((_, i) => (
+                        <SvgComponent key={i} name={i < props.nStart ? "StarBig0" : "StarBig1"} />
+                    ))
+                }
+
+            </View>
+        );
+    }
 
     return (
-        <View>
+        <View style={styles.WhatPeopleSay_container}>
             <TouchableOpacity onPress={ReviewPost}>
-                <Text>David Beckhamds</Text>
-                <Text>What I say : D</Text>
+                <UserSection nStart={5} />
+
+                <Text style={styles.WhatPeopleSay_text}>
+                    Sapa offers some of Vietnam's best trekking, and some villages such as Cat Cat and Ta Phin can be seen without a guide…
+                </Text>
+
             </TouchableOpacity>
         </View>
     );
-};
-
-
+}
 export default WhatPeopleSay;

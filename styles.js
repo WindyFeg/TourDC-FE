@@ -329,6 +329,105 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
 
+    tourismPage_whatPeopleSay: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        fontFamily: 'Roboto',
+        margin: 10,
+    },
+
+    WhatPeopleSay_container: {
+        width: 300,
+        height: 130,
+        // Drop Shadow
+        backgroundColor: '#fff',
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        elevation: 4,
+        shadowOpacity: 0.7,
+
+        borderRadius: 5,
+        marginHorizontal: 20,
+        marginVertical: 20,
+        padding: 10,
+
+    },
+
+    tourismPage_whatPeopleSayUserAvatar: {
+        width: 40,
+        height: 40,
+        borderRadius: 100,
+    },
+
+    tourismPage_whatPeopleSayUserSection: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+
+    tourismPage_whatPeopleSayUserName: {
+        fontWeight: 'regular',
+        fontSize: 15,
+        fontFamily: 'Roboto',
+        marginHorizontal: 10,
+    },
+
+    WhatPeopleSay_text: {
+        fontSize: 14,
+        fontWeight: 'light',
+        fontFamily: 'Roboto',
+        marginVertical: 10,
+        opacity: 0.7,
+    },
+
+    ReviewPostHeader_image: {
+        width: "100%",
+        height: 230,
+        borderRadius: 30,
+    },
+
+    ReviewPostHeader_title: {
+        color: '#FFF',
+        fontSize: 28,
+        fontWeight: 'bold',
+        fontFamily: 'Roboto',
+        top: 50,
+        padding: 20,
+    },
+
+    ReviewPostHeader_userContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+
+    ReviewPostHeader_backgroundUserAvatar: {
+        backgroundColor: '#FFF',
+        width: 50,
+        height: 50,
+        borderRadius: 100,
+        left: 20,
+        top: 40,
+        alignContent: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    ReviewPostHeader_userAvatar: {
+        width: 45,
+        height: 45,
+        borderRadius: 100,
+    },
+
+    ReviewPostHeader_username: {
+        color: '#FFF',
+        fontSize: 15,
+        fontWeight: 'regular',
+        fontFamily: 'Roboto',
+        left: 20,
+        top: 130,
+    },
 
 });
 

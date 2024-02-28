@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TouchableOpacity, ImageBackground } from 'react-native';
 import { Button } from 'react-native-web';
 import ReviewPost from './ReviewPost';
-
+import styles from '../../../../styles';
+import ReviewPostHeader from './ReviewHeader';
 /* 
 */
 const ReviewShort = ({ navigation }) => {
@@ -12,11 +13,12 @@ const ReviewShort = ({ navigation }) => {
     }
 
 
+
+
     return (
-        <View>
+        <View style={styles.ReviewPostShort_container}>
             <TouchableOpacity onPress={ReviewPost}>
-                <Text>Review Short David Beckhamds</Text>
-                <Text>What I say : D</Text>
+                <ReviewPostHeader />
             </TouchableOpacity>
         </View>
     );
