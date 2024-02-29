@@ -9,10 +9,23 @@ import Login from './Tabs/Login/Login';
 import Register from './Tabs/Login/Register';
 import Main from './Main.js';
 import ForgotPassword from './Tabs/Login/ForgotPassword';
+import { useFonts } from 'expo-font';
 
 const Stack = createStackNavigator();
 
 export default function App() {
+
+  const [loaded] = useFonts({
+    InterM: require('./assets/fonts/Inter/Inter-Medium.ttf'),
+    InterR: require('./assets/fonts/Inter/Inter-Regular.ttf'),
+    InterB: require('./assets/fonts/Inter/Inter-Bold.ttf'),
+    InterSB: require('./assets/fonts/Inter/Inter-SemiBold.ttf'),
+    InterL: require('./assets/fonts/Inter/Inter-Light.ttf'),
+  });
+
+  if (!loaded) {
+    return null;
+  }
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">

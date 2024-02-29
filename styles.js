@@ -256,6 +256,13 @@ const styles = StyleSheet.create({
         marginHorizontal: "20%",
     },
 
+    ReviewPost_achievementContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginHorizontal: "10%",
+        marginTop: 20,
+    },
+
     tourismPage_contentHeaderIcons: {
         flexDirection: 'column',
         alignItems: 'center',
@@ -268,7 +275,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontFamily: 'Roboto',
         textAlign: 'center',
-        width: 100,
+        width: 50,
     },
 
     tourismPage_contentHeaderText: {
@@ -282,12 +289,12 @@ const styles = StyleSheet.create({
 
     tourismPage_contentHeaderTextContent: {
         color: '#000',
-        fontSize: 12,
+        fontSize: 14,
         fontWeight: 'light',
         fontFamily: 'Roboto',
         textAlign: 'center',
         opacity: 0.7,
-        margin: 10,
+        margin: 20,
         // make the text content justified
         textAlign: 'justify',
     },
@@ -400,6 +407,8 @@ const styles = StyleSheet.create({
     ReviewPostHeader_userContainer: {
         flexDirection: 'row',
         alignItems: 'center',
+        left: 20,
+        top: 40,
     },
 
     ReviewPostHeader_backgroundUserAvatar: {
@@ -407,8 +416,6 @@ const styles = StyleSheet.create({
         width: 50,
         height: 50,
         borderRadius: 100,
-        left: 20,
-        top: 40,
         alignContent: 'center',
         justifyContent: 'center',
         alignItems: 'center',
@@ -424,11 +431,49 @@ const styles = StyleSheet.create({
         color: '#FFF',
         fontSize: 15,
         fontWeight: 'regular',
-        fontFamily: 'Roboto',
-        left: 20,
-        top: 130,
+        // fontFamily: 'Inter',
+        marginHorizontal: 10,
     },
 
+    ReviewPostShort_content: {
+        margin: 20,
+        opacity: 0.7,
+        fontFamily: 'InterR',
+        fontWeight: 'regular',
+        height: 100,
+        fontSize: 12,
+        textAlign: 'justify',
+    },
+
+    UpvoteButton: {
+        width: 35,
+        height: 35,
+        borderRadius: 5,
+        backgroundColor: '#ffe6e6',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#ff7676',
+    },
+
+    UpvoteButtonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+
+    UpvoteButtonText: {
+        color: '#7c7979',
+        fontWeight: 'bold',
+        marginLeft: 5,
+    },
+
+    ReviewPostFooter: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        margin: 20,
+    }
 });
 
 export default styles;

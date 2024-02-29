@@ -6,10 +6,12 @@ import loginBackground from '../../assets/background/login_background.png';
 import TourDCLogo from '../../assets/logo/TourDCLogo.png';
 import TourismLogo from '../../assets/logo/TourismLogo.png';
 
+
 const Login = ({ navigation }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [Wrong, setWrong] = useState(false);
+
 
 
     const Authentication = () => {

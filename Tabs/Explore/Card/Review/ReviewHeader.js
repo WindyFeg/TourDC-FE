@@ -28,14 +28,19 @@ const ReviewPostHeader = (props) => {
                         source={require('../../../../assets/destinations/dc_dalat.jpg')}
                     />
                 </View>
-                <Text style={styles.ReviewPostHeader_username}>David BeckHam</Text>
+                <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+                    <Text style={styles.ReviewPostHeader_username}>{props.uName}</Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        {
+                            Array.from({ length: 5 }).map((_, i) => (
+                                <SvgComponent key={i} name={i < props.nStart ? "StarBig0" : "StarBig1"} />
+                            ))
+                        }
+                    </View>
+                </View>
             </View>
 
-            {/* {
-            Array.from({ length: 5 }).map((_, i) => (
-                <SvgComponent key={i} name={i < props.nStart ? "StarBig0" : "StarBig1"} />
-            ))
-        } */}
+
 
 
 
@@ -45,9 +50,26 @@ const ReviewPostHeader = (props) => {
 const ReviewPostAchievement = () => {
     return (
         <View style={styles.ReviewPostShort_achievement}>
-            <Text>👍 100</Text>
-            <Text>💬 100</Text>
-            <Text>👀 100</Text>
+
+            <View style={styles.ReviewPost_achievementContainer}>
+                <View style={styles.tourismPage_contentHeaderIcons}>
+                    <SvgComponent name='UserVerification' />
+                    <Text style={styles.tourismPage_contentHeaderTextTitle}>User Verified</Text>
+                </View>
+                <View style={styles.tourismPage_contentHeaderIcons}>
+                    <SvgComponent name='Ticket' />
+                    <Text style={styles.tourismPage_contentHeaderTextTitle}>Ticket Verified</Text>
+                </View>
+                <View style={styles.tourismPage_contentHeaderIcons}>
+                    <SvgComponent name='Blockchain' />
+                    <Text style={styles.tourismPage_contentHeaderTextTitle}>Blockchain Verified</Text>
+                </View>
+                <View style={styles.tourismPage_contentHeaderIcons}>
+                    <SvgComponent name='Reputation' />
+                    <Text style={styles.tourismPage_contentHeaderTextTitle}>15 REP</Text>
+                </View>
+            </View>
+
         </View>
     )
 }
@@ -55,7 +77,7 @@ const ReviewPostAchievement = () => {
 const ReviewHeader = () => {
     return (
         <View>
-            <ReviewPostHeader nStart={3} />
+            <ReviewPostHeader nStart={3} uName={'David BeckHam'} />
             <ReviewPostAchievement />
         </View>
     );
