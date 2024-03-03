@@ -13,8 +13,17 @@ const PostCard = ({ navigation }) => {
     return (
         <View>
             <TouchableOpacity onPress={ReviewPost}>
-                <Text>David Beckhamds</Text>
-                <Text>What I say : D</Text>
+                {/* Title */}
+                <Text>Get our into new
+                    Sea Heven in Bali</Text>
+                {/* Date */}
+                <Text>16/11/2022</Text>
+
+                {/* Image */}
+                <Image
+                    source={require('../../../assets/logo/DCToken.png')}
+                    style={{ width: 25, height: 25 }}
+                />
             </TouchableOpacity>
         </View>
     );

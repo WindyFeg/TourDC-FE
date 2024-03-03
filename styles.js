@@ -289,7 +289,7 @@ const styles = StyleSheet.create({
 
     tourismPage_contentHeaderTextContent: {
         color: '#000',
-        fontSize: 14,
+        fontSize: 12,
         fontWeight: 'light',
         fontFamily: 'Roboto',
         textAlign: 'center',
@@ -473,6 +473,115 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         margin: 20,
+    },
+
+    MyTrip_header: {
+        width: '100%',
+        height: 200,
+        backgroundColor: '#46adff',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    MyTrip_headerContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 20,
+    },
+
+    MyTrip_headerText: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingTop: 30,
+        fontFamily: 'InterR',
+    },
+
+    MyTrip_headerToken: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#192733',
+        borderRadius: 20,
+        width: 80,
+        height: 30,
+    },
+    MyTrip_headerBackground: {
+
+        // Drop Shadow
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        elevation: 3,
+        shadowOpacity: 0.5,
+        marginBottom: 20,
+
+        borderBottomEndRadius: 20,
+        borderBottomStartRadius: 20,
+        width: '100%',
+    },
+
+    MyTrip_headerIconContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        opacity: 0.8,
+        margin: 10,
+    },
+
+    MyTrip_userAvatar: {
+        width: 70,
+        height: 70,
+        borderRadius: 100,
+    },
+
+    MyTrip_backgroundUserAvatar: {
+        backgroundColor: '#FFF',
+        width: 72,
+        height: 72,
+        borderRadius: 100,
+        alignContent: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    MyTrip_headerIcon: {
+        marginHorizontal: 20,
+        opacity: 0.7,
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+
+    MyTrip_headerStatsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        margin: 20,
+    },
+
+    MyTrip_headerStat: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
+    MyTrip_headerStatText: {
+        fontFamily: 'InterB',
+        fontSize: 12,
+        opacity: 0.7,
+    },
+
+    MyTrip_Navigator:
+    {
+        tabBarActiveTintColor: '#75baf1',
+        tabBarInactiveTintColor: 'gray',
+        tabBarLabelStyle: { fontSize: 10, fontWeight: 'bold' },
+        tabBarIndicatorStyle: { backgroundColor: '#75baf1' },
+        tabBarStyle: { backgroundColor: '#d9d9d9', borderRadius: 10 },
+
     }
 });
 

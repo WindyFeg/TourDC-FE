@@ -5,6 +5,7 @@ import { Button } from 'react-native';
 const CustomBackButton = ({ navigation }) => {
     return (
         <Button title="Go Back" onPress={() => navigation.goBack()} />
+        
     );
 };
 
