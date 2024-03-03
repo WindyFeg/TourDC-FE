@@ -582,7 +582,65 @@ const styles = StyleSheet.create({
         tabBarIndicatorStyle: { backgroundColor: '#75baf1' },
         tabBarStyle: { backgroundColor: '#d9d9d9', borderRadius: 10 },
 
-    }
+    },
+
+    MyTripCard_Container: {
+        height: 120,
+        backgroundColor: '#FFF',
+        borderRadius: 10,
+        margin: 10,
+        // Box Shadow
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+        elevation: 2,
+
+        flexDirection: 'row',
+    },
+
+    MyTripCard_Image: {
+        width: 140,
+        height: 120,
+        borderRadius: 10,
+    },
+
+    Review_BlackBtn: {
+        backgroundColor: '#000',
+        borderRadius: 5,
+        width: 100,
+        height: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: 'white',
+
+    },
+
+    Review_BlackBtn_Text: {
+        color: 'white',
+        fontFamily: 'InterB',
+        fontSize: 12,
+
+    },
+
+    Review_BlueBtn: {
+        backgroundColor: '#39A7FF',
+        borderRadius: 5,
+        width: 100,
+        height: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: 'white',
+    },
+
+    Review_BlueBtn_Text: {
+        color: 'white',
+        fontFamily: 'InterB',
+        fontSize: 12,
+    },
 });
 
 export default styles;
