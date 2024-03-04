@@ -328,9 +328,9 @@ const SvgComponent = (props) => {
         case 'StarSmall1':
             return <StarIcon color="#fff" size="14" />;
         case 'StarBig0':
-            return <StarIcon color="#FFC107" size="20" />;
+            return <StarIcon color="#FFC107" size="30" />;
         case 'StarBig1':
-            return <StarIcon color="#fff" size="20" />;
+            return <StarIcon color="#fff" size="30" />;
         case 'BackArrow':
             return <BackArrowIcon />;
         case 'ThreeDots':

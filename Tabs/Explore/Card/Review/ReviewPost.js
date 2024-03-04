@@ -3,11 +3,14 @@ import { View, Text, Image } from 'react-native';
 import { Button } from 'react-native-web';
 import styles from '../../../../styles';
 import ReviewPostHeader from './ReviewHeader';
+import BackNavigationButton from '../../../Custom/BackNavigationButton';
 /* 
 */
-const ReviewPost = () => {
+const ReviewPost = ({ navigation }) => {
     return (
         <View>
+            <BackNavigationButton navigation={navigation} />
+
             <ReviewPostHeader />
 
             <Text>My Point</Text>

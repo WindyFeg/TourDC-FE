@@ -641,6 +641,29 @@ const styles = StyleSheet.create({
         fontFamily: 'InterB',
         fontSize: 12,
     },
+
+    CreateReview_container: {
+        margin: 20,
+        paddingTop: 20,
+    },
+
+    CreateReview_Text: {
+        fontFamily: 'InterL',
+        fontSize: 20,
+        margin: 10,
+    },
+
+    CreateReview_Input: {
+        height: 100,
+        borderColor: '#b3b3b3',
+        borderWidth: 2,
+        borderRadius: 10,
+        marginBottom: 20,
+        marginVertical: 10,
+        opacity: 0.7,
+        fontFamily: 'InterL',
+        padding: 10,
+    },
 });
 
 export default styles;

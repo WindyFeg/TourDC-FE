@@ -3,8 +3,9 @@ import { Text, View, StyleSheet, Button } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import styles from '../styles.js';
 import CustomBackButton from './Custom/CustomBackButton.js';
+import BackNavigationButton from './Custom/BackNavigationButton.js';
 
-const ScanQR = () => {
+const ScanQR = ({ navigation }) => {
 
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
@@ -33,6 +34,7 @@ const ScanQR = () => {
     return (
         <View style={styles.container}>
             {/* <CustomBackButton /> */}
+            <BackNavigationButton navigation={navigation} />
             <BarCodeScanner
                 onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
                 style={StyleSheet.absoluteFillObject}

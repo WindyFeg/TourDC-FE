@@ -4,6 +4,7 @@ import styles from '../../../../styles.js';
 import SvgComponent from '../../../../assets/SvgComponent.js';
 import React, { useState, useCallback } from 'react';
 import WhatPeopleSay from '../Review/WhatPeopleSay.js';
+import BackNavigationButton from '../../../Custom/BackNavigationButton.js';
 
 const TourismPage = ({ navigation }) => {
 
@@ -179,7 +180,7 @@ const TourismPage = ({ navigation }) => {
     return (
         <ScrollView style={{ backgroundColor: '#fff' }}>
             {/* Back Button and Options Button */}
-            <NavigationBar />
+            <BackNavigationButton navigation={navigation} />
 
             {/* Destination Page Image */}
             <DestinationImage />

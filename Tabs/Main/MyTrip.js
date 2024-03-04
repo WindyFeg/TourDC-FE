@@ -22,20 +22,29 @@ const MyTrip = ({ navigation }) => {
                 <Stack.Screen name="MyTrip"
                     component={MainMyTrip}
                     options={{ headerShown: false }}
+                    navigation={navigation}
                 />
                 <Stack.Screen name="ScanQR"
                     component={ScanQR}
+                    options={{ headerShown: false }}
+                    navigation={navigation}
                 />
                 <Stack.Screen name="TourismPage"
                     component={TourismPage}
+                    options={{ headerShown: false }}
+                    navigation={navigation}
                 />
 
                 <Stack.Screen name="CreateReview"
                     component={CreateReview}
+                    options={{ headerShown: false }}
+                    navigation={navigation}
                 />
 
                 <Stack.Screen name="ReviewPost"
                     component={ReviewPost}
+                    options={{ headerShown: false }}
+                    navigation={navigation}
                 />
 
             </Stack.Navigator>
