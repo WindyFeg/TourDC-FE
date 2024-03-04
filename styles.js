@@ -664,6 +664,45 @@ const styles = StyleSheet.create({
         fontFamily: 'InterL',
         padding: 10,
     },
+
+    CreateReview_imageContainer: {
+    }
+    ,
+
+    CreateReview_image: {
+        width: 100,
+        height: 100,
+        borderRadius: 10,
+    },
+
+    CreateReview_errorText: {
+        color: 'red',
+        fontFamily: 'InterL',
+        fontSize: 12,
+    },
+
+    CreateReview_uploadImageButtonText: {
+    },
+
+    CreateReview_uploadImageButton: {
+        backgroundColor: '#39A7FF',
+        borderRadius: 5,
+        width: 100,
+        height: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: 'white',
+    },
+
+    CreateReview_uploadImageHeader: {
+        fontFamily: 'InterL',
+        fontSize: 20,
+        margin: 10,
+    },
+
+    CreateReview_uploadImageContainer: {
+        margin: 20,
+    },
 });
 
 export default styles;
