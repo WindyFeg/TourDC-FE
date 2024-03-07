@@ -5,8 +5,10 @@ import SvgComponent from '../../../../assets/SvgComponent.js';
 import React, { useState, useCallback } from 'react';
 import WhatPeopleSay from '../Review/WhatPeopleSay.js';
 import BackNavigationButton from '../../../Custom/BackNavigationButton.js';
+const GLOBAL = require('../../../Custom/Globals.js');
 
-const TourismPage = ({ navigation }) => {
+const TourismPage = ({ route, navigation }) => {
+    const { id, name, address, rate, thumbnail, list_imgs } = route.params;
 
     const NavigationBar = () => {
         return (
@@ -30,18 +32,18 @@ const TourismPage = ({ navigation }) => {
     const DestinationImage = () => {
         return (<View>
             <ImageBackground
-                source={require('../../../../assets/destinations/dc_dalat.jpg')}
+                source={{ uri: `${GLOBAL.BASE_URL}/api/destination/getDestinationPicture/${thumbnail}` }}
                 style={styles.tourismPageImage}
                 imageStyle={styles.tourismPageImage}
             >
                 <Text
                     style={styles.tourismPageName}>
-                    Da Lat
+                    {name}
                 </Text>
 
                 <View style={styles.tourismPageRating}>
                     {
-                        Array.from({ length: 5 }, (_, i) => (
+                        Array.from({ length: rate }, (_, i) => (
                             <SvgComponent key={i} name="StarSmall0" />
                         ))
                     }
@@ -55,7 +57,7 @@ const TourismPage = ({ navigation }) => {
                 </View>
 
             </ImageBackground>
-        </View>)
+        </View >)
     }
 
     const DestinationContentHeader = () => {
@@ -70,7 +72,7 @@ const TourismPage = ({ navigation }) => {
                 <View style={styles.tourismPage_contentHeaderIcons}>
                     <SvgComponent name="Location" />
                     <Text style={styles.tourismPage_contentHeaderTextTitle}>Address |</Text>
-                    <Text style={styles.tourismPage_contentHeaderText}>Lam Dong, Viet Nam </Text>
+                    <Text style={styles.tourismPage_contentHeaderText}>{address} </Text>
                 </View>
             </View>
         )
