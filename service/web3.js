@@ -74,13 +74,13 @@ const account3 = '0x9E0E58F9052aDc53986eA9ca7cf8389b0EdE364f'
 // account Tourist 3: 0x9E0E58F9052aDc53986eA9ca7cf8389b0EdE364f
 const test = async() => {
   // console.log(await getBalanceOf("0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74"))
-  // console.log("getTouristInfor function: ",await getTouristInfor("0x1a620c351c07763f430897AeaA2883E37cA0aaCD"))
+  // console.log("getTouristInfor function: ",await getTouristInfor(account1))
   // console.log("get all reviews of tourist: ", await getTouristReviews("0x1a620c351c07763f430897AeaA2883E37cA0aaCD"))
   // console.log("get all review of destination: ", await getDestinationReviews("1"))
   // console.log("get all rates of destination: ", await getDestinationRates("1"))
-  console.log("get all votes of review: ", await getVotesOfReview("0x26eecb00ddef76d58362552f4fd2e782ae49d1e064ccd5b06bd70dcd8039ec35"))
-  console.log("calculation Total reward: ", await calculationTotalReward("0x26eecb00ddef76d58362552f4fd2e782ae49d1e064ccd5b06bd70dcd8039ec35"))
-  console.log("Get Post ID can get Reward of an user: ", await rewardListOfTourist(account2))
+  // console.log("get all votes of review: ", await getVotesOfReview("0x26eecb00ddef76d58362552f4fd2e782ae49d1e064ccd5b06bd70dcd8039ec35"))
+  // console.log("calculation Total reward: ", await calculationTotalReward("0x26eecb00ddef76d58362552f4fd2e782ae49d1e064ccd5b06bd70dcd8039ec35"))
+  // console.log("Get Post ID can get Reward of an user: ", await rewardListOfTourist(account2))
   console.log("Get reward number of an post by user: ", await touristRewardPointOnPostID(account1, '0x26eecb00ddef76d58362552f4fd2e782ae49d1e064ccd5b06bd70dcd8039ec35'))
 }
 
