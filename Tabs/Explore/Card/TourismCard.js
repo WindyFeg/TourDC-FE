@@ -13,7 +13,7 @@ const TourismCard = ({ score, name, address, navigation }) => {
 
         <View style={styles.destinationCard}>
             <ImageBackground
-                source={require('../../../assets/destinations/dc_dalat.jpg')}
+                source={URL = 'http://localhost:5500/api/destination/getDestinationThumbnailById/65d6ec325ecf27cb3d803d87'}
                 style={styles.bcDestinationImage}
                 imageStyle={styles.bcDestinationImage}
             >
