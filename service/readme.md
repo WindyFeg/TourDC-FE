@@ -11,7 +11,7 @@
 - **Input:**
   *user_address*: địa chỉ của người dùng (string)
 - **output**: bigint?
-  *example:*
+- *example:*
 ```bash
   await getBalanceOf("0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74")
   1000000n
@@ -22,7 +22,7 @@
 - **Input:**
   *user_address*: địa chỉ của người dùng (string)
 - output: Object 
-  **example:**
+- **example:**
 ```bash
 await getTouristInfor(account1)
   {
@@ -43,7 +43,7 @@ await getTouristInfor(account1)
 ### getTouristReviews(user_address)
 - Trả về tất cả bài reviews của một người đung
 - **output**: Array objects
-  *example:* 
+- *example:* 
 ```bash
 await getTouristReviews("0x1a620c351c07763f430897AeaA2883E37cA0aaCD")
   [
@@ -78,7 +78,7 @@ await getTouristReviews("0x1a620c351c07763f430897AeaA2883E37cA0aaCD")
 - **input:**
   *place_id:* id của địa danh ==> lấy từ database qua
 - **output:** Array objects
-  *Example:*
+- *Example:*
 
 ```bash
 await getDestinationReviews("1")
@@ -113,7 +113,7 @@ await getDestinationReviews("1")
 - **input:**
   *place_id:* id của địa danh ==> lấy từ database qua
 - **output:** Array BigInt
-  *example*
+- *example*
 
 ```bash
 await getDestinationRates("1")
@@ -126,7 +126,7 @@ await getDestinationRates("1")
 - **input:**
   *post_id:* Id của bài review ==> lấy từ database qua???
 - **output**: array objects
-  *example:*
+- *example:*
 ```bash
 await getVotesOfReview("0x26eecb00ddef76d58362552f4fd2e782ae49d1e064ccd5b06bd70dcd8039ec35")
 [
@@ -156,7 +156,7 @@ await getVotesOfReview("0x26eecb00ddef76d58362552f4fd2e782ae49d1e064ccd5b06bd70d
 - **input:**
   *post_id:* Id của bài review ==> lấy từ database qua???
 - **output**: big int number
-  *example:*
+- *example:*
 ```bash
 await calculationTotalReward("0x26eecb00ddef76d58362552f4fd2e782ae49d1e064ccd5b06bd70dcd8039ec35")
 45n
@@ -167,7 +167,7 @@ await calculationTotalReward("0x26eecb00ddef76d58362552f4fd2e782ae49d1e064ccd5b0
 - **Input:**
   *user_address*: địa chỉ của người dùng (string)
 - **output:** Array String
-  *example*
+- *example*
 ```bash
 await rewardListOfTourist(account2)
 [
@@ -181,7 +181,7 @@ await rewardListOfTourist(account2)
   *user_address*: địa chỉ của người dùng (string)
   *post_id:* Id của bài review ==> lấy từ database qua???
 - **Output:**
-  *example*: big int number
+- *example*: big int number
 ```bash
   console.log("Get reward number of an post by user: ", await touristRewardPointOnPostID(account1, '0x26eecb00ddef76d58362552f4fd2e782ae49d1e064ccd5b06bd70dcd8039ec35'))
   Get reward number of an post by user:  33750000000000000000n
