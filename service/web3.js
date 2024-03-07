@@ -6,13 +6,13 @@
 
 // admin: 0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74
 
-// import Web3 from "web3";
-// import DCToken_abi from "./DCToken_ABI.json"
-// import Tourism_abi from "./Tourism_ABI.json"
+import Web3 from "web3";
+import DCToken_abi from "./DCToken_ABI.json"
+import Tourism_abi from "./Tourism_ABI.json"
 
-const { Web3 } = require('web3');
-const DCToken_abi = require("./DCToken_ABI.json")
-const Tourism_abi = require("./Tourism_ABI.json")
+// const { Web3 } = require('web3');
+// const DCToken_abi = require("./DCToken_ABI.json")
+// const Tourism_abi = require("./Tourism_ABI.json")
 
 const VBCProvider = "https://agd-seed-1.vbchain.vn/"
 const InfuraProvider = 'https://sepolia.infura.io/v3/c6b95d3b003e40cda8dcf76f7ba58be8'
@@ -85,3 +85,16 @@ const test = async() => {
 }
 
 test()
+
+exports = {
+  getBalanceOf,
+  getTouristInfor,
+  getTouristReviews,
+  getDestinationReviews,
+  getDestinationRates,
+  getVotesOfReview,
+  getVotesOfReview,
+  calculationTotalReward,
+  rewardListOfTourist,
+  touristRewardPointOnPostID
+}
