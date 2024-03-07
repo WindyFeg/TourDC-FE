@@ -2,7 +2,7 @@
 
 # How to run
 
-## import {functions} from web3.js file
+## import {functions_name} from "./service/web3.js"
 
 ## functions is the below:
 
