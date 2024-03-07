@@ -2,25 +2,25 @@ import React from 'react';
 import { View, Text, Image, Button, TouchableOpacity, ImageBackground } from 'react-native';
 import styles from '../../../styles';
 import SvgComponent from '../../../assets/SvgComponent';
-
+import axios from 'axios';
+const GLOBAL = require('../../Custom/Globals.js');
 /* 
 ! Card 
 $ Contains basic information of a destination, hotel, restaurant, or activity
 */
-const TourismCard = ({ score, name, address, navigation }) => {
-    return (
-        // Destination Card
+const TourismCard = ({ id, navigation, name, address, rate, thumbnail, list_imgs }) => {
 
+    return (
         <View style={styles.destinationCard}>
             <ImageBackground
-                source={URL = 'http://localhost:5500/api/destination/getDestinationThumbnailById/65d6ec325ecf27cb3d803d87'}
+                source={{ uri: `${GLOBAL.BASE_URL}/api/destination/getDestinationPicture/${thumbnail}` }}
                 style={styles.bcDestinationImage}
                 imageStyle={styles.bcDestinationImage}
             >
                 <View>
                     <TouchableOpacity onPress={() => navigation.navigate('TourismPage')}>
                         <Text style={styles.bcDestinationScore}>
-                            {score}
+                            {/* {props.rate} */}
                             <SvgComponent
                                 name="StarSmall0"
                                 style={styles.bcDestinationStar}
@@ -40,7 +40,7 @@ const TourismCard = ({ score, name, address, navigation }) => {
                     </TouchableOpacity>
                 </View>
             </ImageBackground>
-        </View>
+        </View >
     );
 };
 

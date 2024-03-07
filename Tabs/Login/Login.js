@@ -5,7 +5,7 @@ import { Text, View, Image, TextInput, TouchableOpacity, Button, ImageBackground
 import loginBackground from '../../assets/background/login_background.png';
 import TourDCLogo from '../../assets/logo/TourDCLogo.png';
 import TourismLogo from '../../assets/logo/TourismLogo.png';
-
+import axios from 'axios';
 
 const Login = ({ navigation }) => {
     const [username, setUsername] = useState('');
@@ -88,7 +88,7 @@ const Login = ({ navigation }) => {
                 <View style={styles.loginBackgroundOverlay}>
                     <Text style={{
                         color: 'rgba(0, 0, 0, 0.70)',
-                        fontFamily: 'Inter',
+                        // fontFamily: 'Inter',
                         fontSize: 18,
                         fontStyle: 'normal',
                         fontWeight: '400',
