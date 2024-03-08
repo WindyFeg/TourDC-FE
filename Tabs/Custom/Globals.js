@@ -5,3 +5,5 @@ module.exports = {
         DARKGRAY: '#999',
     },
 };
+
+global.TextEncoder = require('text-encoding').TextEncoder;

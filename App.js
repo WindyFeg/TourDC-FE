@@ -10,6 +10,7 @@ import Register from './Tabs/Login/Register';
 import Main from './Main.js';
 import ForgotPassword from './Tabs/Login/ForgotPassword';
 import { useFonts } from 'expo-font';
+import './Tabs/Custom/Globals.js';
 
 const Stack = createStackNavigator();
 

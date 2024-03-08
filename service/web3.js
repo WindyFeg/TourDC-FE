@@ -20,45 +20,44 @@ const InfuraProvider = 'https://sepolia.infura.io/v3/c6b95d3b003e40cda8dcf76f7ba
 // var web3Provider = Web3.providers.HttpProvider(InfuraProvider);
 var web3 = new Web3(InfuraProvider);
 
-contract_DCToken = new web3.eth.Contract(DCToken_abi,'0x1A4091614adA249f08390E4836087A8cAC2f018A')
+contract_DCToken = new web3.eth.Contract(DCToken_abi, '0x1A4091614adA249f08390E4836087A8cAC2f018A')
 
-contract_4R = new web3.eth.Contract(Tourism_abi,'0xd3e7B4BF6FB03bdECbe5Db0b348285A22bF33Bf6')
+contract_4R = new web3.eth.Contract(Tourism_abi, '0xd3e7B4BF6FB03bdECbe5Db0b348285A22bF33Bf6')
 
-
-const getBalanceOf = async(user_address) => {
+const getBalanceOf = async (user_address) => {
   return await contract_DCToken.methods.balanceOf(user_address).call()
 }
 
-const getTouristInfor = async(user_address) => {
+const getTouristInfor = async (user_address) => {
   return await contract_4R.methods.touristIdentify(user_address).call()
 }
 
-const getTouristReviews = async(user_address) => {
+const getTouristReviews = async (user_address) => {
   return await contract_4R.methods.getAllReviewsOfTourist(user_address).call()
 }
 
 
-const getDestinationReviews = async(place_id) => {
+const getDestinationReviews = async (place_id) => {
   return await contract_4R.methods.getAllReviewsOfDestinations(place_id).call()
 }
 
-const getDestinationRates = async(place_id) => {
+const getDestinationRates = async (place_id) => {
   return await contract_4R.methods.getDestinationRates(place_id).call()
 }
 
-const getVotesOfReview = async(post_id) => {
+const getVotesOfReview = async (post_id) => {
   return await contract_4R.methods.getVoteOfReview(post_id).call()
 }
 
-const calculationTotalReward = async(post_id) => {
+const calculationTotalReward = async (post_id) => {
   return await contract_4R.methods.calculateTotalReward(post_id).call()
 }
 
-const rewardListOfTourist = async(user_address) => {
-  return await contract_4R.methods.seeRewardLists().call({from: user_address});
+const rewardListOfTourist = async (user_address) => {
+  return await contract_4R.methods.seeRewardLists().call({ from: user_address });
 }
 
-const touristRewardPointOnPostID = async(user_address, post_id) => {
+const touristRewardPointOnPostID = async (user_address, post_id) => {
   return await contract_4R.methods.touristRewardOnPostID(user_address, post_id).call()
 }
 
@@ -72,7 +71,7 @@ const account3 = '0x9E0E58F9052aDc53986eA9ca7cf8389b0EdE364f'
 
 // account tourist 2: 0x2936E9fACfF3fb5DDc08d13DB19659ec093cdE69
 // account Tourist 3: 0x9E0E58F9052aDc53986eA9ca7cf8389b0EdE364f
-const test = async() => {
+const test = async () => {
   // console.log(await getBalanceOf("0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74"))
   // console.log("getTouristInfor function: ",await getTouristInfor(account1))
   // console.log("get all reviews of tourist: ", await getTouristReviews("0x1a620c351c07763f430897AeaA2883E37cA0aaCD"))
@@ -86,13 +85,12 @@ const test = async() => {
 
 test()
 
-exports = {
+module.exports = {
   getBalanceOf,
   getTouristInfor,
   getTouristReviews,
   getDestinationReviews,
   getDestinationRates,
-  getVotesOfReview,
   getVotesOfReview,
   calculationTotalReward,
   rewardListOfTourist,

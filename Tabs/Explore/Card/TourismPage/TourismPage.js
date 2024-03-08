@@ -6,9 +6,35 @@ import React, { useState, useCallback } from 'react';
 import WhatPeopleSay from '../Review/WhatPeopleSay.js';
 import BackNavigationButton from '../../../Custom/BackNavigationButton.js';
 const GLOBAL = require('../../../Custom/Globals.js');
+import { getDestinationReviews, touristRewardPointOnPostID, testWeb3 } from '../../../../service/web3.js'
+// import { EventTarget } from 'event-target-shim'
+// global.EventTarget = EventTarget
+
 
 const TourismPage = ({ route, navigation }) => {
     const { id, name, address, rate, thumbnail, list_imgs } = route.params;
+
+    // const fetchReviews = async () => {
+    //     try {
+    //         const place_id = '1'; // Replace with your place_id
+    //         const reviews = await getDestinationReviews(place_id);
+    //         console.log(reviews);
+    //     } catch (error) {
+    //         console.error('Error fetching reviews:', error);
+    //     }
+    // };
+
+    // fetchReviews();
+
+
+    // ...
+/
+    const fetchRewards = async () => {
+        console.log("call");
+        const reviews = await touristRewardPointOnPostID('0x1a620c351c07763f430897AeaA2883E37cA0aaCD', '0x26eecb00ddef76d58362552f4fd2e782ae49d1e064ccd5b06bd70dcd8039ec35');
+        console.log(reviews);
+    };
+    fetchRewards();
 
     const NavigationBar = () => {
         return (
