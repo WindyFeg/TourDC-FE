@@ -6,7 +6,7 @@ import React, { useState, useCallback } from 'react';
 import WhatPeopleSay from '../Review/WhatPeopleSay.js';
 import BackNavigationButton from '../../../Custom/BackNavigationButton.js';
 const GLOBAL = require('../../../Custom/Globals.js');
-import { getDestinationReviews, touristRewardPointOnPostID, testWeb3 } from '../../../../service/web3.js'
+import { getDestinationReviews, touristRewardPointOnPostID, testWeb3, getBalanceOf, getTouristInfor} from '../../../../service/web3.js'
 // import { EventTarget } from 'event-target-shim'
 // global.EventTarget = EventTarget
 
@@ -33,6 +33,8 @@ const TourismPage = ({ route, navigation }) => {
         console.log("call");
         const reviews = await touristRewardPointOnPostID('0x1a620c351c07763f430897AeaA2883E37cA0aaCD', '0x26eecb00ddef76d58362552f4fd2e782ae49d1e064ccd5b06bd70dcd8039ec35');
         console.log(reviews);
+        console.log(await getTouristInfor("0x1a620c351c07763f430897AeaA2883E37cA0aaCD"));
+    
     };
     fetchRewards();
 

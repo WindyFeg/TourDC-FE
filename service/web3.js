@@ -9,7 +9,7 @@
 import Web3 from "web3";
 import DCToken_abi from "./DCToken_ABI.json"
 import Tourism_abi from "./Tourism_ABI.json"
-
+import 'react-native-get-random-values';
 // const { Web3 } = require('web3');
 // const DCToken_abi = require("./DCToken_ABI.json")
 // const Tourism_abi = require("./Tourism_ABI.json")
@@ -19,46 +19,95 @@ const InfuraProvider = 'https://sepolia.infura.io/v3/c6b95d3b003e40cda8dcf76f7ba
 
 // var web3Provider = Web3.providers.HttpProvider(InfuraProvider);
 var web3 = new Web3(InfuraProvider);
-
 contract_DCToken = new web3.eth.Contract(DCToken_abi, '0x1A4091614adA249f08390E4836087A8cAC2f018A')
-
 contract_4R = new web3.eth.Contract(Tourism_abi, '0xd3e7B4BF6FB03bdECbe5Db0b348285A22bF33Bf6')
 
 const getBalanceOf = async (user_address) => {
-  return await contract_DCToken.methods.balanceOf(user_address).call()
+  try {
+    return await contract_DCToken.methods.balanceOf(user_address).call()
+  } catch (error) {
+    console.error("Error in getBalanceOf:", error);
+    throw error; // Re-throw the error if needed
+  }
+  
 }
 
 const getTouristInfor = async (user_address) => {
-  return await contract_4R.methods.touristIdentify(user_address).call()
+  try {
+    return await contract_4R.methods.touristIdentify(user_address).call()
+  } catch (error) {
+    console.error("Error in getTouristInfor:", error);
+    throw error; // Re-throw the error if needed
+  }
 }
 
 const getTouristReviews = async (user_address) => {
-  return await contract_4R.methods.getAllReviewsOfTourist(user_address).call()
+  try {
+    return await contract_4R.methods.getAllReviewsOfTourist(user_address).call()
+  } catch (error) {
+    console.error("Error in getTouristReviews:", error);
+    throw error; // Re-throw the error if needed
+  }
 }
 
 
 const getDestinationReviews = async (place_id) => {
-  return await contract_4R.methods.getAllReviewsOfDestinations(place_id).call()
+  try {
+    return await contract_4R.methods.getAllReviewsOfDestinations(place_id).call()
+  } catch (error) {
+    console.error("Error in getDestinationReviews:", error);
+    throw error; // Re-throw the error if needed
+  }
+  
 }
 
 const getDestinationRates = async (place_id) => {
-  return await contract_4R.methods.getDestinationRates(place_id).call()
+  try {
+    return await contract_4R.methods.getDestinationRates(place_id).call()
+  } catch (error) {
+    console.error("Error in getDestinationRates:", error);
+    throw error; // Re-throw the error if needed
+  }
+  
 }
 
 const getVotesOfReview = async (post_id) => {
-  return await contract_4R.methods.getVoteOfReview(post_id).call()
+  try {
+    return await contract_4R.methods.getVoteOfReview(post_id).call()
+  } catch (error) {
+    console.error("Error in getVotesOfReview:", error);
+    throw error; // Re-throw the error if needed
+  }
+  
 }
 
 const calculationTotalReward = async (post_id) => {
-  return await contract_4R.methods.calculateTotalReward(post_id).call()
+  try {
+    return await contract_4R.methods.calculateTotalReward(post_id).call()
+  } catch (error) {
+    console.error("Error in calculationTotalReward:", error);
+    throw error; // Re-throw the error if needed
+  }
+  
 }
 
 const rewardListOfTourist = async (user_address) => {
-  return await contract_4R.methods.seeRewardLists().call({ from: user_address });
+  try{
+    return await contract_4R.methods.seeRewardLists().call({ from: user_address });
+  } catch (error) {
+    console.error("Error in rewardListOfTourist:", error);
+    throw error; // Re-throw the error if needed
+  }
+
 }
 
 const touristRewardPointOnPostID = async (user_address, post_id) => {
-  return await contract_4R.methods.touristRewardOnPostID(user_address, post_id).call()
+  try {
+    return await contract_4R.methods.touristRewardOnPostID(user_address, post_id).call();
+  } catch (error) {
+    console.error("Error in touristRewardPointOnPostID:", error);
+    throw error; // Re-throw the error if needed
+  }
 }
 
 const account1 = '0x1a620c351c07763f430897AeaA2883E37cA0aaCD'
@@ -96,3 +145,5 @@ module.exports = {
   rewardListOfTourist,
   touristRewardPointOnPostID
 }
+
+// export default getBalanceOf;
