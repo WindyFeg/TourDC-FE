@@ -32,7 +32,7 @@
     "react-native-webview": "^13.8.1",
     "text-encoding": "^0.7.0",
     "text-encoding-polyfill": "^0.6.7",
-    "web3": "^4.1.2"
+    "web3": "^1.8.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

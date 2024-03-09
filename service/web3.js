@@ -5,11 +5,11 @@
 // 0xd3e7B4BF6FB03bdECbe5Db0b348285A22bF33Bf6
 
 // admin: 0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74
-
+// import 'react-native-get-random-values';
 import Web3 from "web3";
 import DCToken_abi from "./DCToken_ABI.json"
 import Tourism_abi from "./Tourism_ABI.json"
-import 'react-native-get-random-values';
+
 // const { Web3 } = require('web3');
 // const DCToken_abi = require("./DCToken_ABI.json")
 // const Tourism_abi = require("./Tourism_ABI.json")
