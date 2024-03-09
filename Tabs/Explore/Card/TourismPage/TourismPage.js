@@ -1,3 +1,4 @@
+import 'react-native-get-random-values';
 import { Button, View, Text, Image, ImageBackground, TouchableOpacity, ScrollView } from 'react-native';
 import ReviewShort from '../Review/ReviewShort.js';
 import styles from '../../../../styles.js';
@@ -30,11 +31,10 @@ const TourismPage = ({ route, navigation }) => {
     // ...
 
     const fetchRewards = async () => {
-        console.log("call");
+        console.log("calls");
         const reviews = await touristRewardPointOnPostID('0x1a620c351c07763f430897AeaA2883E37cA0aaCD', '0x26eecb00ddef76d58362552f4fd2e782ae49d1e064ccd5b06bd70dcd8039ec35');
         console.log(reviews);
-        console.log(await getTouristInfor("0x1a620c351c07763f430897AeaA2883E37cA0aaCD"));
-    
+        console.log(await getTouristInfor('0x2936E9fACfF3fb5DDc08d13DB19659ec093cdE69'))
     };
     fetchRewards();
 
