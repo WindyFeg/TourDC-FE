@@ -21,7 +21,7 @@ const WhatPeopleSay = ({ navigation }) => {
 
                 {
                     Array.from({ length: 5 }).map((_, i) => (
-                        <SvgComponent key={i} name={i < props.nStart ? "StarBig0" : "StarBig1"} />
+                        <SvgComponent key={i} name={i < props.nStart ? "StarSmall0" : "StarSmall1"} />
                     ))
                 }
 

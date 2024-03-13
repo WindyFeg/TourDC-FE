@@ -8,9 +8,27 @@ const GLOBAL = require('../../Custom/Globals.js');
 ! Card 
 $ Contains basic information of a destination, hotel, restaurant, or activity
 */const TourismCard = (props) => {
+    // ! Variables
     const { id, navigation, name, address, rate, thumbnail, list_imgs } = props;
     const modifiedRate = Math.floor(rate / 10);
 
+    // ! Components
+    /*
+        Pass the short Tourism page's information to Full Tourism Page
+    */
+    const TourismPage = () => {
+        navigation.navigate('TourismPage',
+            {
+                id: id,
+                name: name,
+                address: address,
+                rate: modifiedRate,
+                thumbnail: thumbnail,
+                list_imgs: list_imgs
+            });
+    }
+
+    // ! Render
     return (
         <View style={styles.destinationCard}>
             <ImageBackground
@@ -19,15 +37,7 @@ $ Contains basic information of a destination, hotel, restaurant, or activity
                 imageStyle={styles.bcDestinationImage}
             >
                 <View>
-                    <TouchableOpacity onPress={() => navigation.navigate('TourismPage',
-                        {
-                            id: id,
-                            name: name,
-                            address: address,
-                            rate: modifiedRate,
-                            thumbnail: thumbnail,
-                            list_imgs: list_imgs
-                        })}>
+                    <TouchableOpacity onPress={TourismPage}>
                         <Text style={styles.bcDestinationScore}>
                             {modifiedRate}
                             <SvgComponent

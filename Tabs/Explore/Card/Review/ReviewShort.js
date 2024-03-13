@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, ImageBackground } from 'react-native';
 import { Button } from 'react-native-web';
 import ReviewPost from './ReviewPost';
 import styles from '../../../../styles';
 import ReviewHeader from './ReviewHeader';
 import SvgComponent from '../../../../assets/SvgComponent';
+import * as web3 from '../../../../service/web3.js';
+
 /* 
 */
 const ReviewShort = (props) => {
+    // ! Variables
     const {
         navigation,
         author,
@@ -23,8 +26,26 @@ const ReviewShort = (props) => {
 
     const [isHeartSelected, setHeartSelected] = useState(false);
 
+    // ! Components
+    /*
+    Pass the short post's information to ReviewPost
+    */
     const ReviewPost = () => {
-        navigation.navigate('ReviewPost');
+        navigation.navigate('ReviewPost',
+            {
+                navigation: navigation,
+                author: author,
+                postID: postID,
+                placeId: placeId,
+                placeName: placeName,
+                arrivalDate: arrivalDate,
+                createTime: createTime,
+                review: review,
+                rate: rate,
+                title: title,
+                upvoteNum: upvoteNum
+            }
+        );
     }
 
     const ReviewPostShortContent = (props) => {
@@ -33,7 +54,7 @@ const ReviewShort = (props) => {
         </View>
     }
 
-    const ReviewPostShortFooter = (props) => {
+    const ReviewPostShortFooter = () => {
         return (
             <View style={styles.ReviewPostFooter}>
                 <View style={styles.UpvoteButtonContainer}>
@@ -43,20 +64,22 @@ const ReviewShort = (props) => {
                     >
                         <SvgComponent name={isHeartSelected ? 'Heart1' : 'Heart0'} />
                     </TouchableOpacity >
-                    <Text style={styles.UpvoteButtonText}>500</Text>
+                    <Text style={styles.UpvoteButtonText}>{upvoteNum}</Text>
                 </View>
-                <Text style={styles.UpvoteButtonText}> 12/5/2020</Text>
+                <Text style={styles.UpvoteButtonText}>
+                    {new Date(arrivalDate * 1000).toISOString()}
+                </Text>
             </View >
         )
     }
 
-
+    // ! Render
     return (
         <View style={styles.ReviewPostShort_container}>
             {/* Thumbnail, user and achievement */}
             <ReviewHeader
+                authorID={author}
                 title={title}
-                username={author}
                 rating={rate}
                 REP={100}
                 userVerification={true}

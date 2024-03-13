@@ -11,6 +11,9 @@ const GLOBAL = require('../../../Custom/Globals.js');
 
 const TourismPage = ({ route, navigation }) => {
     //! Variables
+    /*
+    Get the information from the TourismCard
+    */
     const { id,
         rate,
         name,
@@ -82,6 +85,9 @@ const TourismPage = ({ route, navigation }) => {
         </View >)
     }
 
+    /*
+    Show the time and location of the destination
+    */
     const DestinationContentHeader = () => {
         return (
             <View style={styles.tourismPage_contentHeader}>
@@ -100,6 +106,10 @@ const TourismPage = ({ route, navigation }) => {
         )
     }
 
+    /*
+    Show the content of the page
+    If the content is more than 4 lines, show the "Read more" button
+    */
     const DestinationContent = (props) => {
         const [textShown, setTextShown] = useState(false); //To show ur remaining Text
         const [lengthMore, setLengthMore] = useState(false); //to show the "Read more & Less Line"
@@ -172,6 +182,9 @@ const TourismPage = ({ route, navigation }) => {
         )
     }
 
+    /*
+    Show the review section of the page
+    */
     const WhatPeopleSayContainer = () => {
         return (
             <View>
@@ -189,6 +202,9 @@ const TourismPage = ({ route, navigation }) => {
         );
     }
 
+    /*
+    Show the review section of the page
+    */
     const ReviewContainer = () => {
         return (
             <View>

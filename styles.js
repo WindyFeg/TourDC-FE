@@ -703,6 +703,11 @@ const styles = StyleSheet.create({
     CreateReview_uploadImageContainer: {
         margin: 20,
     },
+
+    ReviewPostShort_achievement: {
+        margin: 20,
+        backgroundColor: 'white',
+    },
 });
 
 export default styles;

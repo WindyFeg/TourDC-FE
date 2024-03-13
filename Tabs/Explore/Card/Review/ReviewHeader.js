@@ -1,12 +1,36 @@
-import React from 'react';
+import { React, useState, useEffect } from 'react';
 import { View, Text, Image, ImageBackground } from 'react-native';
 import { Button } from 'react-native-web';
 import styles from '../../../../styles.js';
 import SvgComponent from '../../../../assets/SvgComponent.js';
+import * as web3 from '../../../../service/web3.js';
+
 /* 
 */
-
 const ReviewHeader = (props) => {
+
+    // ! Variables
+    const { authorID,
+        title,
+        rating,
+        REP,
+        userVerification,
+        ticketVerified,
+        blockchainVerified,
+        reputationVerified } = props;
+    const [username, setUsername] = useState("username");
+
+
+    //! Smart Contract
+    useEffect(() => {
+        const fetchTourismPage = async () => {
+            // TODO
+            const response = await web3.getTouristInfor(authorID);
+            setUsername(response.firstName + " " + response.lastName);
+        };
+        fetchTourismPage();
+    }, []);
+
 
     const ReviewPostHeader = () => {
         return (
@@ -18,7 +42,7 @@ const ReviewHeader = (props) => {
             >
                 <Text
                     style={styles.ReviewPostHeader_title}>
-                    {props.title}
+                    {title}
                 </Text>
 
                 {/* User profile*/}
@@ -30,11 +54,11 @@ const ReviewHeader = (props) => {
                         />
                     </View>
                     <View style={{ flexDirection: 'column', alignItems: 'center' }}>
-                        <Text style={styles.ReviewPostHeader_username}>{props.username}</Text>
+                        <Text style={styles.ReviewPostHeader_username}>{username}</Text>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             {
                                 Array.from({ length: 5 }).map((_, i) => (
-                                    <SvgComponent key={i} name={i < props.rating ? "StarBig0" : "StarBig1"} />
+                                    <SvgComponent key={i} name={i < rating ? "StarSmall0" : "StarSmall1"} />
                                 ))
                             }
                         </View>
@@ -52,28 +76,28 @@ const ReviewHeader = (props) => {
         return (
             <View style={styles.ReviewPostShort_achievement}>
                 <View style={styles.ReviewPost_achievementContainer}>
-                    {props.userVerification && (
+                    {userVerification && (
                         <View style={styles.tourismPage_contentHeaderIcons}>
                             <SvgComponent name='UserVerification' />
                             <Text style={styles.tourismPage_contentHeaderTextTitle}>User Verified</Text>
                         </View>
                     )}
-                    {props.ticketVerified && (
+                    {ticketVerified && (
                         <View style={styles.tourismPage_contentHeaderIcons}>
                             <SvgComponent name='Ticket' />
                             <Text style={styles.tourismPage_contentHeaderTextTitle}>Ticket Verified</Text>
                         </View>
                     )}
-                    {props.blockchainVerified && (
+                    {blockchainVerified && (
                         <View style={styles.tourismPage_contentHeaderIcons}>
                             <SvgComponent name='Blockchain' />
                             <Text style={styles.tourismPage_contentHeaderTextTitle}>Blockchain Verified</Text>
                         </View>
                     )}
-                    {props.reputationVerified && (
+                    {reputationVerified && (
                         <View style={styles.tourismPage_contentHeaderIcons}>
                             <SvgComponent name='Reputation' />
-                            <Text style={styles.tourismPage_contentHeaderTextTitle}>{props.REP} REP</Text>
+                            <Text style={styles.tourismPage_contentHeaderTextTitle}>{REP} REP</Text>
                         </View>
                     )}
                 </View>
@@ -81,11 +105,9 @@ const ReviewHeader = (props) => {
         )
     }
     return (
-        <View>
-            <ReviewPostHeader
-            />
-            <ReviewPostAchievement
-            />
+        <View style={{ backgroundColor: 'white' }}>
+            <ReviewPostHeader />
+            <ReviewPostAchievement />
         </View>
     );
 };
