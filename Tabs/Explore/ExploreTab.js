@@ -39,13 +39,11 @@ const ExploreTab = ({ navigation }) => {
                     <TourismCard
                         key={i}
                         navigation={navigation}
-
                         // Props
                         name={exploreTabData[i].name}
                         address={exploreTabData[i].address}
                         rate={exploreTabData[i].rate}
                         thumbnail={exploreTabData[i].thumbnail}
-
                         id={exploreTabData[i]._id}
                         list_imgs={exploreTabData[i].list_imgs}
                     />

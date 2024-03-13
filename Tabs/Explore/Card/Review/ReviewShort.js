@@ -3,20 +3,33 @@ import { View, Text, Image, TouchableOpacity, ImageBackground } from 'react-nati
 import { Button } from 'react-native-web';
 import ReviewPost from './ReviewPost';
 import styles from '../../../../styles';
-import ReviewPostHeader from './ReviewHeader';
+import ReviewHeader from './ReviewHeader';
 import SvgComponent from '../../../../assets/SvgComponent';
 /* 
 */
-const ReviewShort = ({ navigation }) => {
+const ReviewShort = (props) => {
+    const {
+        navigation,
+        author,
+        postID,
+        placeId,
+        placeName,
+        arrivalDate,
+        createTime,
+        review,
+        rate,
+        title,
+        upvoteNum } = props;
+
     const [isHeartSelected, setHeartSelected] = useState(false);
 
     const ReviewPost = () => {
         navigation.navigate('ReviewPost');
     }
 
-    const ReviewPostShortContent = () => {
+    const ReviewPostShortContent = (props) => {
         return <View >
-            <Text style={styles.ReviewPostShort_content}>This week we move on to Week 5 of Season 13 of the Steemit Engagement Challenge. There are seven more contests from the Engagement Challenge Communities. Make sure you enter as many of the contests as you can, and vote and comment on other entries, to be in with a chance of winning the prize votes from</Text>
+            <Text style={styles.ReviewPostShort_content}>{review}</Text>
         </View>
     }
 
@@ -41,7 +54,16 @@ const ReviewShort = ({ navigation }) => {
     return (
         <View style={styles.ReviewPostShort_container}>
             {/* Thumbnail, user and achievement */}
-            <ReviewPostHeader />
+            <ReviewHeader
+                title={title}
+                username={author}
+                rating={rate}
+                REP={100}
+                userVerification={true}
+                ticketVerified={true}
+                blockchainVerified={true}
+                reputationVerified={true}
+            />
 
             {/* Content */}
             <TouchableOpacity onPress={ReviewPost}>
