@@ -3,40 +3,37 @@ import { Button, View, Text, Image, ImageBackground, TouchableOpacity, ScrollVie
 import ReviewShort from '../Review/ReviewShort.js';
 import styles from '../../../../styles.js';
 import SvgComponent from '../../../../assets/SvgComponent.js';
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import WhatPeopleSay from '../Review/WhatPeopleSay.js';
 import BackNavigationButton from '../../../Custom/BackNavigationButton.js';
+import * as web3 from '../../../../service/web3.js';
 const GLOBAL = require('../../../Custom/Globals.js');
-import { getDestinationReviews, touristRewardPointOnPostID, testWeb3, getBalanceOf, getTouristInfor} from '../../../../service/web3.js'
-// import { EventTarget } from 'event-target-shim'
-// global.EventTarget = EventTarget
-
 
 const TourismPage = ({ route, navigation }) => {
-    const { id, name, address, rate, thumbnail, list_imgs } = route.params;
+    //! Variables
+    /*
+    Get the information from the TourismCard
+    */
+    const { id,
+        rate,
+        name,
+        address,
+        thumbnail,
+        list_imgs } = route.params;
+    const [reviews, setReviews] = useState([]);
 
-    // const fetchReviews = async () => {
-    //     try {
-    //         const place_id = '1'; // Replace with your place_id
-    //         const reviews = await getDestinationReviews(place_id);
-    //         console.log(reviews);
-    //     } catch (error) {
-    //         console.error('Error fetching reviews:', error);
-    //     }
-    // };
+    //! Smart Contract
+    useEffect(() => {
+        const fetchTourismPage = async () => {
+            // TODO
+            // const response = await web3.getDestinationReviews(id);
+            const response = await web3.getDestinationReviews("1");
+            setReviews(response);
+        };
+        fetchTourismPage();
+    }, []);
 
-    // fetchReviews();
-
-
-    // ...
-
-    const fetchRewards = async () => {
-        console.log("calls");
-        const reviews = await touristRewardPointOnPostID('0x1a620c351c07763f430897AeaA2883E37cA0aaCD', '0x26eecb00ddef76d58362552f4fd2e782ae49d1e064ccd5b06bd70dcd8039ec35');
-        console.log(reviews);
-        console.log(await getTouristInfor('0x2936E9fACfF3fb5DDc08d13DB19659ec093cdE69'))
-    };
-    fetchRewards();
+    //! Components
 
     const NavigationBar = () => {
         return (
@@ -88,6 +85,9 @@ const TourismPage = ({ route, navigation }) => {
         </View >)
     }
 
+    /*
+    Show the time and location of the destination
+    */
     const DestinationContentHeader = () => {
         return (
             <View style={styles.tourismPage_contentHeader}>
@@ -106,6 +106,10 @@ const TourismPage = ({ route, navigation }) => {
         )
     }
 
+    /*
+    Show the content of the page
+    If the content is more than 4 lines, show the "Read more" button
+    */
     const DestinationContent = (props) => {
         const [textShown, setTextShown] = useState(false); //To show ur remaining Text
         const [lengthMore, setLengthMore] = useState(false); //to show the "Read more & Less Line"
@@ -178,6 +182,9 @@ const TourismPage = ({ route, navigation }) => {
         )
     }
 
+    /*
+    Show the review section of the page
+    */
     const WhatPeopleSayContainer = () => {
         return (
             <View>
@@ -195,18 +202,36 @@ const TourismPage = ({ route, navigation }) => {
         );
     }
 
+    /*
+    Show the review section of the page
+    */
     const ReviewContainer = () => {
         return (
             <View>
                 {
-                    Array.from({ length: 4 }, (_, i) => (
-                        <ReviewShort key={i} navigation={navigation} />
+                    Array.from({ length: reviews.length }, (_, i) => (
+                        <ReviewShort
+                            key={i}
+                            navigation={navigation}
+                            // props
+                            author={reviews[i].author}
+                            postID={reviews[i].postID}
+                            placeId={reviews[i].placeId}
+                            placeName={reviews[i].placeName}
+                            arrivalDate={reviews[i].arrivalDate}
+                            createTime={reviews[i].createTime}
+                            review={reviews[i].review}
+                            rate={reviews[i].rate}
+                            title={reviews[i].title}
+                            upvoteNum={reviews[i].upvoteNum}
+                        />
                     ))
                 }
             </View>
         )
     }
 
+    //! Render
     return (
         <ScrollView style={{ backgroundColor: '#fff' }}>
             {/* Back Button and Options Button */}

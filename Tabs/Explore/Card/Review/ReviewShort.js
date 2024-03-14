@@ -1,26 +1,60 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, ImageBackground } from 'react-native';
 import { Button } from 'react-native-web';
 import ReviewPost from './ReviewPost';
 import styles from '../../../../styles';
-import ReviewPostHeader from './ReviewHeader';
+import ReviewHeader from './ReviewHeader';
 import SvgComponent from '../../../../assets/SvgComponent';
+import * as web3 from '../../../../service/web3.js';
+
 /* 
 */
-const ReviewShort = ({ navigation }) => {
+const ReviewShort = (props) => {
+    // ! Variables
+    const {
+        navigation,
+        author,
+        postID,
+        placeId,
+        placeName,
+        arrivalDate,
+        createTime,
+        review,
+        rate,
+        title,
+        upvoteNum } = props;
+
     const [isHeartSelected, setHeartSelected] = useState(false);
 
+    // ! Components
+    /*
+    Pass the short post's information to ReviewPost
+    */
     const ReviewPost = () => {
-        navigation.navigate('ReviewPost');
+        navigation.navigate('ReviewPost',
+            {
+                navigation: navigation,
+                author: author,
+                postID: postID,
+                placeId: placeId,
+                placeName: placeName,
+                arrivalDate: arrivalDate,
+                createTime: createTime,
+                review: review,
+                rate: rate,
+                title: title,
+                upvoteNum: upvoteNum
+            }
+        );
     }
 
-    const ReviewPostShortContent = () => {
+    const ReviewPostShortContent = (props) => {
         return <View >
-            <Text style={styles.ReviewPostShort_content}>This week we move on to Week 5 of Season 13 of the Steemit Engagement Challenge. There are seven more contests from the Engagement Challenge Communities. Make sure you enter as many of the contests as you can, and vote and comment on other entries, to be in with a chance of winning the prize votes from</Text>
+            <Text style={styles.ReviewPostShort_content}>{review}</Text>
         </View>
     }
 
-    const ReviewPostShortFooter = (props) => {
+    const ReviewPostShortFooter = () => {
         return (
             <View style={styles.ReviewPostFooter}>
                 <View style={styles.UpvoteButtonContainer}>
@@ -30,18 +64,29 @@ const ReviewShort = ({ navigation }) => {
                     >
                         <SvgComponent name={isHeartSelected ? 'Heart1' : 'Heart0'} />
                     </TouchableOpacity >
-                    <Text style={styles.UpvoteButtonText}>500</Text>
+                    <Text style={styles.UpvoteButtonText}>{upvoteNum}</Text>
                 </View>
-                <Text style={styles.UpvoteButtonText}> 12/5/2020</Text>
+                <Text style={styles.UpvoteButtonText}>
+                    {new Date(arrivalDate * 1000).toISOString()}
+                </Text>
             </View >
         )
     }
 
-
+    // ! Render
     return (
         <View style={styles.ReviewPostShort_container}>
             {/* Thumbnail, user and achievement */}
-            <ReviewPostHeader />
+            <ReviewHeader
+                authorID={author}
+                title={title}
+                rating={rate}
+                REP={100}
+                userVerification={true}
+                ticketVerified={true}
+                blockchainVerified={true}
+                reputationVerified={true}
+            />
 
             {/* Content */}
             <TouchableOpacity onPress={ReviewPost}>

@@ -33,7 +33,7 @@ const getBalanceOf = async (user_address) => {
     console.error("Error in getBalanceOf:", error);
     throw error; // Re-throw the error if needed
   }
-  
+
 }
 
 const getTouristInfor = async (user_address) => {
@@ -62,7 +62,7 @@ const getDestinationReviews = async (place_id) => {
     console.error("Error in getDestinationReviews:", error);
     throw error; // Re-throw the error if needed
   }
-  
+
 }
 
 const getDestinationRates = async (place_id) => {
@@ -72,7 +72,7 @@ const getDestinationRates = async (place_id) => {
     console.error("Error in getDestinationRates:", error);
     throw error; // Re-throw the error if needed
   }
-  
+
 }
 
 const getVotesOfReview = async (post_id) => {
@@ -82,7 +82,7 @@ const getVotesOfReview = async (post_id) => {
     console.error("Error in getVotesOfReview:", error);
     throw error; // Re-throw the error if needed
   }
-  
+
 }
 
 const calculationTotalReward = async (post_id) => {
@@ -92,11 +92,11 @@ const calculationTotalReward = async (post_id) => {
     console.error("Error in calculationTotalReward:", error);
     throw error; // Re-throw the error if needed
   }
-  
+
 }
 
 const rewardListOfTourist = async (user_address) => {
-  try{
+  try {
     return await contract_4R.methods.seeRewardLists().call({ from: user_address });
   } catch (error) {
     console.error("Error in rewardListOfTourist:", error);

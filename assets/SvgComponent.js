@@ -309,6 +309,13 @@ const Heart1Icon = (props) => (
 
 )
 
+const SendIcon = (props) => (
+    <Svg width={props.size} height={props.size} viewBox="0 0 512 456" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <Path d="M481.508 210.336L68.4139 38.9261C51.0109 31.7041 31.3499 34.8811 17.1049 47.2131C2.85991 59.5471 -3.09809 78.5511 1.55791 96.8081L38.3269 241H218.353C226.637 241 233.354 247.716 233.354 256.001C233.354 264.285 226.638 271.002 218.353 271.002H38.3269L1.55791 415.193C-3.09809 433.451 2.85891 452.455 17.1049 464.788C31.3789 477.145 51.0419 480.283 68.4149 473.075L481.509 301.666C500.317 293.862 512 276.364 512 256.001C512 235.638 500.317 218.139 481.508 210.336Z" fill="#39A7FF" />
+    </Svg>
+
+)
+
 const SvgComponent = (props) => {
     switch (props.name) {
         case 'Destination':
@@ -324,9 +331,9 @@ const SvgComponent = (props) => {
         case 'Search':
             return <SearchIcon />;
         case 'StarSmall0':
-            return <StarIcon color="#FFC107" size="14" />;
+            return <StarIcon color="#FFC107" size="16" />;
         case 'StarSmall1':
-            return <StarIcon color="#fff" size="14" />;
+            return <StarIcon color="#fff" size="16" />;
         case 'StarBig0':
             return <StarIcon color="#FFC107" size="30" />;
         case 'StarBig1':
@@ -351,6 +358,8 @@ const SvgComponent = (props) => {
             return <Heart0Icon size="25" />;
         case 'Heart1':
             return <Heart1Icon size="25" />;
+        case 'Send':
+            return <SendIcon size="25" />;
         default:
             return <DestinationIcon />;
     }

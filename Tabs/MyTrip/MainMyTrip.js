@@ -10,11 +10,26 @@ import Trips from './Tabs/Trips.js';
 import MyVoucher from './Tabs/MyVoucher.js';
 import Posts from './Tabs/Posts.js';
 import Collections from './Tabs/Collections.js';
+import * as web3 from '../../service/web3.js';
 
 const Tab = createMaterialTopTabNavigator();
 /* 
 */
 const MainMyTrip = () => {
+
+    const fetchRewards = async () => {
+        // console.log("calls");
+        // const reviews = await touristRewardPointOnPostID('0x1a620c351c07763f430897AeaA2883E37cA0aaCD', '0x26eecb00ddef76d58362552f4fd2e782ae49d1e064ccd5b06bd70dcd8039ec35');
+        // console.log(reviews);
+        // console.log(await getTouristInfor('0x1a620c351c07763f430897AeaA2883E37cA0aaCD'));
+        // console.log(await getBalanceOf("0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74"))
+        // console.log(await getTouristInfor('0x2936E9fACfF3fb5DDc08d13DB19659ec093cdE69'))
+        // console.log(await getDestinationReviews("1"))
+        console.log(await web3.getTouristInfor('0x1a620c351c07763f430897AeaA2883E37cA0aaCD'))
+        console.log("Get Destination Reviews")
+        console.log(await web3.getDestinationReviews("1"))
+    };
+    fetchRewards();
 
     const HeaderMyTrip = (props) => (
         <View>
