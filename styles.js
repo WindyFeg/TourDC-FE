@@ -708,6 +708,75 @@ const styles = StyleSheet.create({
         margin: 20,
         backgroundColor: 'white',
     },
+
+    CommentContainer: {
+        margin: 5,
+    },
+
+    CommentHeader: {
+        margin: 10,
+        flexDirection: 'row',
+        // alignItems: 'center',
+    },
+
+    Comment_avatar: {
+        width: 50,
+        height: 50,
+        borderRadius: 100,
+        marginRight: 10,
+    },
+    CommentContentContainer: {
+        backgroundColor: '#ececec',
+        maxWidth: "90%",
+        borderRadius: 10,
+        padding: 5,
+    },
+
+    Comment_username: {
+        fontFamily: 'InterM',
+        fontSize: 15,
+    },
+
+    Comment_text: {
+        fontFamily: 'InterR',
+        fontSize: 15,
+    },
+
+    CommentFooterContainer: {
+        flexDirection: 'row',
+        opacity: 0.7,
+        justifyContent: 'space-evenly',
+    },
+
+    CommentSection: {
+        backgroundColor: 'white',
+        padding: 10,
+        margin: 10,
+    },
+
+    CommentInputContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+        padding: 10,
+        // borderColor: '#D9D9D9',
+        borderRadius: 10,
+    },
+
+    Comment_BlueBtn: {
+        backgroundColor: 'white',
+        borderRadius: 5,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 30,
+        height: 30,
+    },
+
+    Comment_Input: {
+        width: '80%',
+        height: 40,
+        marginLeft: 10,
+    },
 });
 
 export default styles;
