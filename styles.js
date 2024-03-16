@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: '#FFF',
-        width: 284,
+        width: "85%",
         height: 44,
         paddingHorizontal: 10,
     },
@@ -778,8 +778,13 @@ const styles = StyleSheet.create({
         marginLeft: 10,
     },
 
+    MyAccount_Container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        padding: 10,
+    },
+
     UserHeader_Info: {
-        margin: 20,
         height: 170,
         borderRadius: 5,
         borderWidth: 1,
@@ -839,6 +844,63 @@ const styles = StyleSheet.create({
 
     UserHeader_ProfileButtonText: {
         color: 'white',
+    },
+
+    TourDC_Button: {
+        backgroundColor: '#000',
+        borderRadius: 5,
+        height: 30,
+        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingHorizontal: 10,
+        height: 42,
+        marginVertical: 20,
+    },
+
+    TourDC_ButtonText: {
+        color: 'white',
+    },
+
+    MyAccount_Button: {
+        backgroundColor: '#fff',
+        borderColor: '#D9D9D9',
+        height: 30,
+        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingHorizontal: 10,
+        height: 42,
+    },
+
+    MyAccount_Inline: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+
+    MyAccount_Text: {
+        color: 'white',
+    },
+
+    MyAccount_BtnTitle: {
+        fontFamily: 'InterB',
+        fontSize: 16,
+    },
+
+    MyAccount_BtnDescription: {
+        fontFamily: 'InterM',
+        fontSize: 14,
+        color: '#828282',
+    },
+
+    MyAccount_DoubleButton: {
+        flexDirection: 'column',
+        justifyContent: 'space-evenly',
+        height: 118,
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: '#D9D9D9',
+        marginVertical: 10,
     },
 
 });

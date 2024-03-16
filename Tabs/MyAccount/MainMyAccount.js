@@ -8,7 +8,9 @@ import styles from '../../styles.js';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import ExchangeVoucher from './ExchangeVoucher.js';
-
+import { SearchBarHeader } from '../Explore/MainExplore.js';
+import { Svg } from 'react-native-svg';
+import MyVoucher from '../MyTrip/Tabs/MyVoucher.js';
 
 /* 
 ! Tourism Page
@@ -50,6 +52,71 @@ const MainMyAccount = ({ navigation }) => {
         );
     }
 
+    const MyAccount_TourDCButton = () => {
+        return (
+            <TouchableOpacity>
+                <View style={styles.TourDC_Button}>
+                    <Text style={styles.TourDC_ButtonText}>Be a part of TourDC member
+                    </Text>
+                    <SvgComponent name="PreviousWhite" />
+                </View>
+            </TouchableOpacity>
+        );
+    }
+
+    const MyAccount_Button = (props) => {
+        return (
+            <TouchableOpacity
+                onPress={props.onPress}
+            >
+                <View style={styles.MyAccount_Button}>
+                    <View style={styles.MyAccount_Inline}>
+                        {/* Options Icon */}
+                        <SvgComponent name={props.iconName} />
+
+                        {/* Options Text */}
+                        <View>
+                            <Text style={styles.MyAccount_BtnTitle}>{props.Title}</Text>
+                            <Text style={styles.MyAccount_BtnDescription}>{props.Description}</Text>
+                        </View>
+
+                        {/* Previous Icon */}
+                        <SvgComponent name="PreviousBlue" />
+                    </View>
+                </View>
+            </TouchableOpacity>
+        );
+    }
+
+    const MyAccount_DoubleButton = (props) => {
+        return (<View style={styles.MyAccount_DoubleButton}>
+            <MyAccount_Button
+                iconName={props.iconName1}
+                Title={props.Title1}
+                Description={props.Description1}
+                onPress={props.Nav1}
+            />
+            <Separator />
+            <MyAccount_Button
+                iconName={props.iconName2}
+                Title={props.Title2}
+                Description={props.Description2}
+                onPress={props.Nav2}
+            />
+        </View>)
+    }
+
+    const Separator = () => (
+        (< Text style={{
+            borderBottomWidth: 1,
+            borderColor: '#D9D9D9',
+            opacity: 1,
+            height: 1,
+            width: '100%',
+        }
+        }></Text >)
+    )
+
 
     //! Navigation
     const Profile = () => {
@@ -73,28 +140,37 @@ const MainMyAccount = ({ navigation }) => {
 
 
     return (
-        <View>
+        <View style={styles.MyAccount_Container}>
+            <SearchBarHeader />
             <UserHeaderInfo />
 
-            <TouchableOpacity style={styles.loginBtn} >
-                <Text style={styles.loginText}>Be Part of TourDC member</Text>
-            </TouchableOpacity>
+            <MyAccount_TourDCButton />
 
-            <TouchableOpacity style={styles.loginBtn} onPress={() => Settings()}>
-                <Text style={styles.loginText}>Settings</Text>
-            </TouchableOpacity>
+            <MyAccount_DoubleButton
+                iconName1="Settings"
+                Title1="Settings"
+                Description1="View and set your account preference"
+                Nav1={() => Settings()}
 
-            <TouchableOpacity style={styles.loginBtn} onPress={() => HelpCentre()}>
-                <Text style={styles.loginText}>Help Centre?</Text>
-            </TouchableOpacity>
+                iconName2="Help"
+                Title2="Help Centre"
+                Description2="Find the best answer to your questions"
+                Nav2={() => HelpCentre()}
+            />
 
-            <TouchableOpacity style={styles.loginBtn} onPress={() => MyPoint()}>
-                <Text style={styles.loginText}>Points</Text>
-            </TouchableOpacity>
+            <Text>My Rewards</Text>
 
-            <TouchableOpacity style={styles.loginBtn} onPress={() => ExchangeVoucher()} >
-                <Text style={styles.loginText}>Exchange Voucher</Text>
-            </TouchableOpacity>
+            <MyAccount_DoubleButton
+                iconName1="History"
+                Title1="Transaction History"
+                Description1="Trade points for coupons and learn how to earn more!"
+                Nav1={() => History()}
+
+                iconName2="Voucher"
+                Title2="Exchange Vouchers"
+                Description2="View vouchers that you can use now"
+                Nav2={() => ExchangeVoucher()}
+            />
         </View >
     );
 };

@@ -8,7 +8,7 @@ import styles from '../../styles.js';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import ScanQR from '../ScanQR';
-import MainExplore from '../Explore/MainExplore';
+import { MainExplore } from '../Explore/MainExplore';
 import TourismPage from '../Explore/Card/TourismPage/TourismPage.js';
 import ReviewPost from '../Explore/Card/Review/ReviewPost.js';
 

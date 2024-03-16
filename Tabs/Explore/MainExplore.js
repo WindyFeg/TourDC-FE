@@ -11,6 +11,25 @@ const Tab = createMaterialTopTabNavigator();
 ! Explore page
 $ Contain Explore Tabs
 */
+const SearchBarHeader = () => {
+    {/* Header View */ }
+    return (<View style={styles.headerContainer}>
+        <TouchableOpacity style={styles.qrCodeBtn} onPress={() => QRCode()}>
+            <SvgComponent name="QRCode" />
+        </TouchableOpacity>
+
+        <View style={styles.SearchBar}>
+            <TouchableOpacity onPress={() => QRCode()}>
+                <SvgComponent name="Search" />
+            </TouchableOpacity>
+
+            <TextInput
+                style={styles.SearchInput}
+                placeholder="Search"
+            />
+        </View>
+    </View>)
+}
 const MainExplore = ({ navigation }) => {
 
     const QRCode = () => {
@@ -19,23 +38,8 @@ const MainExplore = ({ navigation }) => {
 
     return (
         <View style={styles.mainExploreContainer}>
-            {/* Header View */}
-            <View style={styles.headerContainer}>
-                <TouchableOpacity style={styles.qrCodeBtn} onPress={() => QRCode()}>
-                    <SvgComponent name="QRCode" />
-                </TouchableOpacity>
-
-                <View style={styles.SearchBar}>
-                    <TouchableOpacity onPress={() => QRCode()}>
-                        <SvgComponent name="Search" />
-                    </TouchableOpacity>
-
-                    <TextInput
-                        style={styles.SearchInput}
-                        placeholder="Search"
-                    />
-                </View>
-            </View>
+            {/* Header */}
+            <SearchBarHeader />
 
             {/* Explore Tabs */}
             <Tab.Navigator
@@ -67,4 +71,9 @@ const MainExplore = ({ navigation }) => {
 };
 
 
-export default MainExplore;
+// export default MainExplore;
+
+module.exports = {
+    MainExplore,
+    SearchBarHeader
+}
