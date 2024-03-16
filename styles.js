@@ -777,6 +777,70 @@ const styles = StyleSheet.create({
         height: 40,
         marginLeft: 10,
     },
+
+    UserHeader_Info: {
+        margin: 20,
+        height: 170,
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: '#D9D9D9',
+    },
+    UserHeader_Inline: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        margin: 20,
+    },
+    UserHeader_Avatar: {
+        width: 70,
+        height: 70,
+        borderRadius: 100,
+    },
+    UserHeader_Text: {
+        width: 170,
+    },
+    UserHeader_UserName: {
+        fontFamily: 'InterB',
+        fontSize: 18,
+    },
+    UserHeader_Phone: {
+        fontFamily: 'InterM',
+        fontSize: 14,
+        color: '#828282',
+    },
+    UserHeader_Verify: {
+        backgroundColor: '#5cca60',
+        width: 70,
+        height: 20,
+        textAlign: 'center',
+        borderRadius: 50,
+        color: 'white',
+    },
+
+    UserHeader_NotVerify: {
+        backgroundColor: '#39A7FF',
+    },
+
+    UserHeader_NumberPost: {
+        fontFamily: 'InterM',
+        fontSize: 14,
+        color: '#828282',
+    },
+    UserHeader_QRCode: {},
+
+    UserHeader_ProfileButton: {
+        backgroundColor: '#39a7ff',
+        borderRadius: 5,
+        height: 30,
+        marginHorizontal: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    UserHeader_ProfileButtonText: {
+        color: 'white',
+    },
+
 });
 
 export default styles;

@@ -16,6 +16,42 @@ $ Contains information of a destination, hotel, restaurant, or activity
 */
 const MainMyAccount = ({ navigation }) => {
 
+    //! Components
+    const UserHeaderInfo = () => {
+        return (
+            <View style={styles.UserHeader_Info}>
+
+                <View style={styles.UserHeader_Inline}>
+                    <Image
+                        style={styles.UserHeader_Avatar}
+                        source={require('../../assets/background/bai-bien-bali-2.jpg')}
+                    />
+
+                    <View
+                        style={styles.UserHeader_Text}
+                    >
+                        <Text style={styles.UserHeader_UserName}>User Name</Text>
+                        <Text style={styles.UserHeader_Phone}>0903045124</Text>
+                        <Text style={styles.UserHeader_Verify}>Verify</Text>
+                        <Text style={styles.UserHeader_NumberPost}>0 Post</Text>
+                    </View>
+
+                    <View>
+                        <SvgComponent name="QRCode" style={styles.UserHeader_QRCode} />
+                    </View>
+                </View>
+                <TouchableOpacity
+                    onPress={() => Profile()}
+                    style={styles.UserHeader_ProfileButton}
+                >
+                    <Text style={styles.UserHeader_ProfileButtonText}>View My Profile</Text>
+                </TouchableOpacity>
+            </View>
+        );
+    }
+
+
+    //! Navigation
     const Profile = () => {
         navigation.navigate('MyProfile');
     }
@@ -38,9 +74,7 @@ const MainMyAccount = ({ navigation }) => {
 
     return (
         <View>
-            <Button title="View My Profile"
-                onPress={() => Profile()}>
-            </Button>
+            <UserHeaderInfo />
 
             <TouchableOpacity style={styles.loginBtn} >
                 <Text style={styles.loginText}>Be Part of TourDC member</Text>

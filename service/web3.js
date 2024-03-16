@@ -10,7 +10,8 @@
 // import DCToken_abi from "./DCToken_ABI.json"
 // import Tourism_abi from "./Tourism_ABI.json"
 
-const { Web3 } = require('web3');
+// const { Web3 } = require('web3');
+import Web3 from "web3";
 const DCToken_abi = require("../contracts/ERC20With4RMechanism.json")
 const Tourism_abi = require("../contracts/Tourism.json")
 const DCToken_address = require("../contracts/ERC20With4RMechanism-address.json")
@@ -125,7 +126,7 @@ const getReviewByPostID = async (postID) => {
 
 const getRewardListsPostID = async (userAddress) => {
   try {
-    return await contract_4R.methods.seeRewardLists().call({from: userAddress});
+    return await contract_4R.methods.seeRewardLists().call({ from: userAddress });
   } catch (error) {
     console.error("Error in touristRewardPointOnPostID:", error);
     throw error; // Re-throw the error if needed
@@ -152,7 +153,7 @@ const account3 = '0x9E0E58F9052aDc53986eA9ca7cf8389b0EdE364f'
 // account Tourist 3: 0x9E0E58F9052aDc53986eA9ca7cf8389b0EdE364f
 const test = async () => {
   console.log(await getBalanceOf("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"))
-  console.log("getTouristInfor function: ",await getTouristInfor("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"))
+  console.log("getTouristInfor function: ", await getTouristInfor("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"))
   console.log("get all reviews of tourist: ", await getTouristReviews("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"))
   console.log("get all review of destination: ", await getDestinationReviews("65d6ec325ecf27cb3d803d87"))
   console.log("get review By Post ID: ", await getReviewByPostID("0x8a8fa558cfc4192cb2010346a807b80881e0e81cf94547ec50d93cfce17a3c78"))
@@ -160,8 +161,8 @@ const test = async () => {
   console.log("see reward of one postID of acc1: ", await getRewardPoinFromPostID("0x8a8fa558cfc4192cb2010346a807b80881e0e81cf94547ec50d93cfce17a3c78", "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"))
   console.log("see reward of one postID of acc2: ", await getRewardPoinFromPostID("0x8a8fa558cfc4192cb2010346a807b80881e0e81cf94547ec50d93cfce17a3c78", "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"))
   console.log("see reward of one postID of acc3: ", await getRewardPoinFromPostID("0x8a8fa558cfc4192cb2010346a807b80881e0e81cf94547ec50d93cfce17a3c78", "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"))
-  
-  
+
+
   // console.log("get all rates of destination: ", await getDestinationRates("1"))
   // console.log("get all votes of review: ", await getVotesOfReview("0x26eecb00ddef76d58362552f4fd2e782ae49d1e064ccd5b06bd70dcd8039ec35"))
   // console.log("calculation Total reward: ", await calculationTotalReward("0x26eecb00ddef76d58362552f4fd2e782ae49d1e064ccd5b06bd70dcd8039ec35"))
