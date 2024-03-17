@@ -12,9 +12,33 @@ import ForgotPassword from './Tabs/Login/ForgotPassword';
 import { useFonts } from 'expo-font';
 import './Tabs/Custom/Globals.js';
 
+import "node-libs-expo/globals";
+import "react-native-url-polyfill/auto";
+import "react-native-get-random-values";
+import { useSDK } from "@metamask/sdk-react";
+
+const { connect, disconnect, account, chainId, ethereum } = useSDK();
+
+
+
 const Stack = createStackNavigator();
 
 export default function App() {
+
+  const connectWallet = async () => {
+    try {
+      await connect();
+    } catch (error) {
+      console.error("Failed to connect wallet:", error);
+    }
+  };
+
+  useEffect(() => {
+    // Use the 'account' and 'chainId' returned by 'useSDK'
+    if (account && chainId) {
+      // Handle account and network changes
+    }
+  }, [account, chainId]);
 
   const [loaded] = useFonts({
     InterM: require('./assets/fonts/Inter/Inter-Medium.ttf'),
@@ -23,6 +47,10 @@ export default function App() {
     InterSB: require('./assets/fonts/Inter/Inter-SemiBold.ttf'),
     InterL: require('./assets/fonts/Inter/Inter-Light.ttf'),
   });
+
+  const disconnectWallet = async () => {
+    await disconnect();
+  };
 
   if (!loaded) {
     return null;
