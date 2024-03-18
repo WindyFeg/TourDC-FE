@@ -5,7 +5,7 @@ import "react-native-get-random-values";
 // import text encoding
 import 'text-encoding';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import styles from '../../styles.js';
 import { Text, View, Image, TextInput, TouchableOpacity, Button, ImageBackground } from 'react-native';
@@ -22,6 +22,24 @@ const Login = ({ navigation }) => {
     const [Wrong, setWrong] = useState(false);
     const { connect, disconnect, account, chainId, ethereum } = useSDK();
 
+    const connectWallet = async () => {
+        try {
+            await connect();
+        } catch (error) {
+            console.error("Failed to connect wallet:", error);
+        }
+    };
+
+    useEffect(() => {
+        // Use the 'account' and 'chainId' returned by 'useSDK'
+        if (account && chainId) {
+            // Handle account and network changes
+        }
+    }, [account, chainId]);
+
+    const disconnectWallet = async () => {
+        await disconnect();
+    };
 
     const Authentication = () => {
         navigation.navigate('TourDC_Main');
@@ -123,7 +141,7 @@ const Login = ({ navigation }) => {
                     <Text>  By registering, you agree to our Terms & Conditions and that you have read our Privacy Policy.</Text>
                     <Text>_________Other_Method_________</Text>
 
-                    <CustomButton style={styles.loginBtn} onPress={MetaMask}>
+                    <CustomButton style={styles.loginBtn} onPress={connectWallet}>
                         MetaMask
                     </CustomButton>
                 </View>
