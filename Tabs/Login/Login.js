@@ -1,3 +1,7 @@
+import "node-libs-expo/globals";
+import "react-native-url-polyfill/auto";
+import "react-native-get-random-values";
+
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import styles from '../../styles.js';
