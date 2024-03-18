@@ -12,6 +12,12 @@ import ForgotPassword from './Tabs/Login/ForgotPassword';
 import { useFonts } from 'expo-font';
 import './Tabs/Custom/Globals.js';
 
+// import text encoding
+import 'react-native-get-random-values';
+import 'text-encoding';
+import 'react-native-url-polyfill/auto';
+import 'text-encoding-polyfill';
+
 const Stack = createStackNavigator();
 
 export default function App() {

@@ -2,6 +2,9 @@ import "node-libs-expo/globals";
 import "react-native-url-polyfill/auto";
 import "react-native-get-random-values";
 
+// import text encoding
+import 'text-encoding';
+
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import styles from '../../styles.js';
@@ -10,12 +13,14 @@ import loginBackground from '../../assets/background/login_background.png';
 import TourDCLogo from '../../assets/logo/TourDCLogo.png';
 import TourismLogo from '../../assets/logo/TourismLogo.png';
 import axios from 'axios';
+import { useSDK } from "@metamask/sdk-react";
+
 
 const Login = ({ navigation }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [Wrong, setWrong] = useState(false);
-
+    const { connect, disconnect, account, chainId, ethereum } = useSDK();
 
 
     const Authentication = () => {
