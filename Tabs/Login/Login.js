@@ -14,7 +14,9 @@ import TourDCLogo from '../../assets/logo/TourDCLogo.png';
 import TourismLogo from '../../assets/logo/TourismLogo.png';
 import axios from 'axios';
 import { useSDK } from "@metamask/sdk-react";
-
+// import MetaMaskSDK from '@metamask/sdk';
+// import { Linking } from 'react-native';
+// import BackgroundTimer from 'react-native-background-timer';
 
 const Login = ({ navigation }) => {
     const [username, setUsername] = useState('');
