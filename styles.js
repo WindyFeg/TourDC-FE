@@ -24,19 +24,73 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
 
+    loginLogoContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    forgotPasswordBtn: {
+        color: '#39A7FF',
+        fontWeight: 'bold',
+        fontSize: 14,
+        textAlign: 'right',
+    },
+
+    loginInput: {
+        height: 44,
+        borderRadius: 5,
+        borderColor: '#D9D9D9',
+        borderWidth: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#FFF',
+        height: 44,
+        paddingHorizontal: 10,
+    },
+
+    loginTextInput: {
+        marginLeft: 10,
+        opacity: 0.7,
+        color: '#878282',
+    },
+
     loginLabel: {
         display: 'flex',
         width: 290,
-        height: 32,
+        height: 28,
         flexDirection: 'column',
         justifyContent: 'center',
         flexShrink: 0,
         color: '#878282',
-        // fontFamily: 'Inter',
+        fontFamily: 'InterM',
         fontSize: 14,
+    },
+
+    loginText: {
+        color: '#878282',
+        fontSize: 12,
+        fontFamily: 'InterM',
         fontStyle: 'normal',
+        fontWeight: '400',
+        // center
+        textAlign: 'center',
+        marginVertical: 5,
+    },
+
+    loginBigText: {
+        color: '#000',
+        fontSize: 18,
+        fontFamily: 'InterR',
+        margin: 10,
+        opacity: 0.7,
+    },
+
+    btnText: {
+        color: 'white',
         fontWeight: '500',
-        lineHeight: 17, // You need to specify a numeric value for lineHeight
+        fontSize: 16,
+        margin: 10,
     },
 
     SearchBar: {
@@ -65,6 +119,31 @@ const styles = StyleSheet.create({
         height: 44,
         justifyContent: 'center',
         alignItems: 'center',
+        flexDirection: 'row',
+        marginVertical: 5,
+    },
+
+    metaMaskBtn: {
+        borderRadius: 10,
+        backgroundColor: 'black',
+        width: '80%',
+        height: 44,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginVertical: 5,
+    },
+
+    metaMaskText: {
+        color: 'white',
+        fontWeight: '400',
+        fontSize: 16,
+        margin: 10,
+    },
+
+    metaMaskIcon: {
+        width: 40,
+        height: 40,
     },
 
     qrCodeBtn: {
@@ -86,14 +165,11 @@ const styles = StyleSheet.create({
 
     loginBackgroundOverlay: {
         flex: 1,
-        justifyContent: "center",
         alignItems: "center",
         width: '95%',
-        // height: '90%',
         backgroundColor: 'white',
         borderRadius: 20,
-        // marginBottom: 20,
-
+        paddingTop: 20,
     },
 
     pinkOverlay: {

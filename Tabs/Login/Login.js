@@ -1,18 +1,46 @@
 import React, { useState } from 'react';
-import { StatusBar } from 'expo-status-bar';
-import styles from '../../styles.js';
-import { Text, View, Image, TextInput, TouchableOpacity, Button, ImageBackground } from 'react-native';
-import loginBackground from '../../assets/background/login_background.png';
-import TourDCLogo from '../../assets/logo/TourDCLogo.png';
-import TourismLogo from '../../assets/logo/TourismLogo.png';
-import axios from 'axios';
+import { PROJECT_ID, WALLET_ID } from '../../Globals.js';
+import {
+    Text,
+    View,
+    Image,
+    TextInput,
+    TouchableOpacity,
+    ImageBackground
+} from 'react-native';
+import {
+    SvgComponent,
+    styles,
+    TourDCLogo,
+    TourismLogo,
+    loginBackground,
+    StatusBar
+} from '../../Globals.js';
+import {
+    WalletConnectModal,
+    useWalletConnectModal,
+} from '@walletconnect/modal-react-native';
+
+
 
 const Login = ({ navigation }) => {
+    //* WalletConnect
+    const providerMetadata = {
+        name: 'TourDC',
+    };
+    const { open, isConnected, address, provider } = useWalletConnectModal();
+
+    //* Normal Login
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [Wrong, setWrong] = useState(false);
 
-
+    const handleButtonPress = async () => {
+        if (isConnected) {
+            return provider?.disconnect();
+        }
+        return open();
+    };
 
     const Authentication = () => {
         navigation.navigate('TourDC_Main');
@@ -35,20 +63,20 @@ const Login = ({ navigation }) => {
             <View>
                 <Text style={styles.loginLabel}>Email/Mobile phone</Text>
                 <StatusBar style="auto" />
-                <View style={styles.inputView}>
+                <View style={styles.loginInput}>
                     <TextInput
-                        style={styles.TextInput}
-                        placeholder="Tên đăng nhập"
+                        style={styles.loginTextInput}
+                        placeholder="Enter your mobile phone or email"
                         placeholderTextColor="#003f5c"
                         onChangeText={(username) => setUsername(username)}
                     />
                 </View>
 
                 <Text style={styles.loginLabel}>Password</Text>
-                <View style={styles.inputView}>
+                <View style={styles.loginInput}>
                     <TextInput
-                        style={styles.TextInput}
-                        placeholder="Mật Khẩu"
+                        style={styles.loginTextInput}
+                        placeholder="* * * * *"
                         placeholderTextColor="#003f5c"
                         secureTextEntry={true}
                         onChangeText={(password) => setPassword(password)}
@@ -59,68 +87,80 @@ const Login = ({ navigation }) => {
         )
     }
 
-    const CustomButton = ({ onPress, children, style }) => (
-        <TouchableOpacity style={[styles.loginBtn, style]} onPress={onPress}>
-            <Text style={styles.loginText}>{children}</Text>
+    const CustomButton = ({ onPress, text, style }) => (
+        <TouchableOpacity style={[style]} onPress={onPress}>
+            {
+                text === 'METAMASK' ?
+                    <SvgComponent name="MetaMask" /> :
+                    null
+            }
+            <Text style={styles.btnText}>{text}</Text>
         </TouchableOpacity>
     );
 
     return (
         <View style={styles.container}>
             <ImageBackground source={loginBackground} resizeMode="cover" style={styles.loginBackground}>
-                {/* import image */}
 
-                <View style={styles.pinkOverlay}>
-                </View>
-
-                <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                {/* Logo Section */}
+                <View style={styles.pinkOverlay} />
+                <View style={styles.loginLogoContainer}>
                     <Image
                         style={styles.tourismLogo}
                         source={TourismLogo}
                     />
-
                     <Image
                         style={styles.tourDCLogo}
                         source={TourDCLogo}
                     />
                 </View>
 
+                {/* Login Section */}
                 <View style={styles.loginBackgroundOverlay}>
-                    <Text style={{
-                        color: 'rgba(0, 0, 0, 0.70)',
-                        // fontFamily: 'Inter',
-                        fontSize: 18,
-                        fontStyle: 'normal',
-                        fontWeight: '400',
-                        lineHeight: 22,
-                    }}>
+                    <Text style={styles.loginBigText}>
                         Login/Register
                     </Text>
 
                     <LoginInputUI />
 
-                    <CustomButton onPress={ForgotPassword}>
-                        Forgot Password?
-                    </CustomButton>
+                    <TouchableOpacity onPress={ForgotPassword}>
+                        <Text style={styles.loginText}>
+                            Forgot Password?
+                        </Text>
+                    </TouchableOpacity>
 
-                    <CustomButton style={styles.loginBtn} onPress={Authentication}>
-                        LOGIN
-                    </CustomButton>
+                    <CustomButton
+                        style={styles.loginBtn}
+                        onPress={Authentication}
+                        text={'LOGIN'}
+                    />
 
-                    <CustomButton style={styles.registerBtn} onPress={Register}>
-                        REGISTER
-                    </CustomButton>
+                    <CustomButton
+                        style={styles.loginBtn}
+                        onPress={Register}
+                        text={'REGISTER'}
+                    />
 
-                    <Text>  By registering, you agree to our Terms & Conditions and that you have read our Privacy Policy.</Text>
-                    <Text>_________Other_Method_________</Text>
+                    {/* Other method section */}
+                    <Text style={styles.loginText}>  By registering, you agree to our Terms & Conditions and that you have read our Privacy Policy.</Text>
+                    <Text style={styles.loginText}>_________Other method_________</Text>
 
-                    <CustomButton style={styles.loginBtn} onPress={MetaMask}>
-                        MetaMask
-                    </CustomButton>
+                    <CustomButton
+                        style={styles.metaMaskBtn}
+                        onPress={handleButtonPress}
+                        text={'METAMASK'}
+                    />
+
+                    <WalletConnectModal
+                        explorerRecommendedWalletIds={[WALLET_ID]}
+                        explorerExcludedWalletIds={'ALL'}
+                        projectId={PROJECT_ID}
+                        providerMetadata={providerMetadata}
+                    />
                 </View>
 
-            </ImageBackground>
-        </View>
+            </ImageBackground >
+        </View >
     )
 }
 
