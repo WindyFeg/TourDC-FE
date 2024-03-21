@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { PROJECT_ID, WALLET_ID } from '../../Globals.js';
+import { W3mButton } from '@web3modal/wagmi-react-native'
+// import { PROJECT_ID, WALLET_ID } from '../../Globals.js';
 import {
     Text,
     View,
@@ -16,31 +17,31 @@ import {
     loginBackground,
     StatusBar
 } from '../../Globals.js';
-import {
-    WalletConnectModal,
-    useWalletConnectModal,
-} from '@walletconnect/modal-react-native';
+// import {
+//     WalletConnectModal,
+//     useWalletConnectModal,
+// } from '@walletconnect/modal-react-native';
 
 
 
 const Login = ({ navigation }) => {
     //* WalletConnect
-    const providerMetadata = {
-        name: 'TourDC',
-    };
-    const { open, isConnected, address, provider } = useWalletConnectModal();
+    // const providerMetadata = {
+    //     name: 'TourDC',
+    // };
+    // const { open, isConnected, address, provider } = useWalletConnectModal();
 
     //* Normal Login
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [Wrong, setWrong] = useState(false);
 
-    const handleButtonPress = async () => {
-        if (isConnected) {
-            return provider?.disconnect();
-        }
-        return open();
-    };
+    // const handleButtonPress = async () => {
+    //     if (isConnected) {
+    //         return provider?.disconnect();
+    //     }
+    //     return open();
+    // };
 
     const Authentication = () => {
         navigation.navigate('TourDC_Main');
@@ -145,18 +146,23 @@ const Login = ({ navigation }) => {
                     <Text style={styles.loginText}>  By registering, you agree to our Terms & Conditions and that you have read our Privacy Policy.</Text>
                     <Text style={styles.loginText}>_________Other method_________</Text>
 
-                    <CustomButton
+                    {/* <CustomButton
                         style={styles.metaMaskBtn}
-                        onPress={handleButtonPress}
+                        onPress={MetaMask}
+                        text={'METAMASK'}
+                    /> */}
+                    <W3mButton 
+                        balance='show'
+                        style={styles.metaMaskBtn}
+                        onPress={MetaMask}
                         text={'METAMASK'}
                     />
-
-                    <WalletConnectModal
+                    {/* <WalletConnectModal
                         explorerRecommendedWalletIds={[WALLET_ID]}
                         explorerExcludedWalletIds={'ALL'}
                         projectId={PROJECT_ID}
                         providerMetadata={providerMetadata}
-                    />
+                    /> */}
                 </View>
 
             </ImageBackground >

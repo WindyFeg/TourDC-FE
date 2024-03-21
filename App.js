@@ -11,6 +11,36 @@ import Main from './Main.js';
 import ForgotPassword from './Tabs/Login/ForgotPassword';
 import { useFonts } from 'expo-font';
 import './Tabs/Custom/Globals.js';
+import { PROJECT_ID, WALLET_ID } from './Globals.js';
+
+import '@walletconnect/react-native-compat'
+import { WagmiConfig } from 'wagmi'
+import { mainnet, polygon, arbitrum } from 'viem/chains'
+import { createWeb3Modal, defaultWagmiConfig, Web3Modal } from '@web3modal/wagmi-react-native'
+import Vibichain from './defineChain.js';
+const projectId = PROJECT_ID
+
+const metadata = {
+  name: 'TourDC',
+  description: 'TourDC Connect Wallet',
+  url: 'https://tourdc.com',
+  icons: ['https://avatars.githubusercontent.com/u/37784886'],
+  redirect: {
+    native: 'YOUR_APP_SCHEME://',
+    universal: 'YOUR_APP_UNIVERSAL_LINK.com'
+  }
+}
+
+const chains = [mainnet, polygon, arbitrum]
+
+const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata })
+
+createWeb3Modal({
+  projectId,
+  chains,
+  wagmiConfig,
+  enableAnalytics: true // Optional - defaults to your Cloud configuration
+})
 
 const Stack = createStackNavigator();
 
@@ -28,6 +58,8 @@ export default function App() {
     return null;
   }
   return (
+    <WagmiConfig config={wagmiConfig}>
+    
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
 
@@ -55,5 +87,8 @@ export default function App() {
 
       </Stack.Navigator>
     </NavigationContainer>
+     <Web3Modal />
+    </WagmiConfig>
+    
   );
 }
