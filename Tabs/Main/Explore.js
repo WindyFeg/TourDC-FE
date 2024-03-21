@@ -1,6 +1,4 @@
 import React from 'react';
-import { Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import ExploreTab from '../Explore/ExploreTab';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SvgComponent from '../../assets/SvgComponent';

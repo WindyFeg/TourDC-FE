@@ -1,3 +1,14 @@
+import React from 'react';
+import {
+    Text,
+    View,
+    Image,
+    TextInput,
+    TouchableOpacity
+} from 'react-native';
+import { useFonts } from 'expo-font';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import SvgComponent from './assets/SvgComponent'
 import TourismLogo from './assets/logo/TourismLogo.png'
 import TourDCLogo from './assets/logo/TourDCLogo.png'
@@ -6,6 +17,12 @@ import styles from './styles'
 
 import axios from 'axios';
 import { StatusBar } from 'expo-status-bar';
+
+//* TourDC
+import Login from './Tabs/Login/Login';
+import Register from './Tabs/Login/Register';
+import Main from './Main.js';
+import ForgotPassword from './Tabs/Login/ForgotPassword';
 
 module.exports = {
     //* GLOBALS
@@ -28,8 +45,23 @@ module.exports = {
     loginBackground,
 
     //* PACKAGES
+    React,
+    Text,
+    View,
+    Image,
+    TextInput,
+    TouchableOpacity,
     axios,
-    StatusBar
+    useFonts,
+    StatusBar,
+    NavigationContainer,
+    createStackNavigator,
+
+    //* TOURDC
+    Login,
+    Register,
+    Main,
+    ForgotPassword
 };
 
 global.TextEncoder = require('text-encoding').TextEncoder;

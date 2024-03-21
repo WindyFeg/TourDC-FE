@@ -26,8 +26,8 @@ const TourismPage = ({ route, navigation }) => {
     useEffect(() => {
         const fetchTourismPage = async () => {
             // TODO
-            // const response = await web3.getDestinationReviews(id);
-            const response = await web3.getDestinationReviews("1");
+            const response = await web3.getDestinationReviews(id);
+            // const response = await web3.getDestinationReviews("1");
             setReviews(response);
         };
         fetchTourismPage();
