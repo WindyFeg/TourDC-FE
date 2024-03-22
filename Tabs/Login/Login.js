@@ -1,30 +1,45 @@
-import '@walletconnect/react-native-compat';
-import { WagmiConfig } from 'wagmi';
-import { mainnet } from 'viem/chains';
-import {
-    W3mButton,
-    useWeb3Modal,
-    createWeb3Modal,
-    defaultWagmiConfig,
-    Web3Modal
-} from '@web3modal/wagmi-react-native'
-import React, { useState } from 'react';
+import { W3mButton, W3mConnectButton } from '@web3modal/wagmi-react-native'
+import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
+import { useSignMessage, useAccount } from 'wagmi'
 import styles from '../../styles.js';
-import { Text, View, Image, TextInput, TouchableOpacity, Button, ImageBackground } from 'react-native';
+import { Text, View, Pressable, Image, TextInput, TouchableOpacity, Button, ImageBackground } from 'react-native';
 import loginBackground from '../../assets/background/login_background.png';
 import TourDCLogo from '../../assets/logo/TourDCLogo.png';
 import TourismLogo from '../../assets/logo/TourismLogo.png';
+import SvgComponent from '../../assets/SvgComponent';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = ({ navigation }) => {
     //* Normal Login
-
+    const { address, isConnecting, isDisconnected } = useAccount()
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [Wrong, setWrong] = useState(false);
 
+    useEffect(() => {
+        const storeData = async () => {
+            try {
+                await AsyncStorage.setItem('address', address);
+                console.log("Save address: " + address);
+            } catch (error) {
+                console.log(error);
+            }
+        };
 
+        if (address) {
+            navigation.navigate('TourDC_Main');
+            storeData();
+        }
+    }, [address]);
+
+    useEffect(() => {
+        if (isDisconnected) {
+            console.log("Disconnected");
+            navigation.navigate.Login;
+        }
+    }, [isDisconnected]);
 
     const Authentication = () => {
         navigation.navigate('TourDC_Main');
@@ -130,13 +145,16 @@ const Login = ({ navigation }) => {
                     <Text style={styles.loginText}>  By registering, you agree to our Terms & Conditions and that you have read our Privacy Policy.</Text>
                     <Text style={styles.loginText}>_________Other method_________</Text>
 
-                    {/* <CustomButton
-                            style={styles.metaMaskBtn}
-                            // onPress={handleButtonPress}
-                            text={'METAMASK'}
-                        /> */}
-
-                    <W3mButton />
+                    <W3mConnectButton
+                        style={styles.metaMaskBtn}
+                        label={
+                            <View style={styles.metaMaskView} >
+                                <SvgComponent name="MetaMask" />
+                                <Text style={styles.btnText}>METAMASK</Text>
+                            </View>
+                        }
+                        testID="button-connect"
+                    />
                 </View>
 
             </ImageBackground >

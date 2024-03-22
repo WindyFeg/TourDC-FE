@@ -24,6 +24,8 @@ import Register from './Tabs/Login/Register';
 import Main from './Main.js';
 import ForgotPassword from './Tabs/Login/ForgotPassword';
 
+
+
 module.exports = {
     //* GLOBALS
     STORE_KEY: 'a56z0fzrNpl^2',

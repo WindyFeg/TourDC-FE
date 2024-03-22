@@ -35,7 +35,7 @@ const ExploreTab = ({ navigation }) => {
         <View>
             <ScrollView>
                 {Array.from({ length: numberDestinations }, (_, i) => (
-                    console.log('ExploreTabData:', exploreTabData[i]),
+                    console.log('ExploreTabData:', exploreTabData[i]._id),
                     <TourismCard
                         key={i}
                         navigation={navigation}

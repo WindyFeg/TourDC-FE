@@ -124,10 +124,17 @@ const styles = StyleSheet.create({
     },
 
     metaMaskBtn: {
-        borderRadius: 10,
         backgroundColor: 'black',
         width: '80%',
-        height: 44,
+        height: 50,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        // marginVertical: 5,
+        borderRadius: 10,
+    },
+
+    metaMaskView: {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',

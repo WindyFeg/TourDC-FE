@@ -11,13 +11,14 @@ import ExchangeVoucher from './ExchangeVoucher.js';
 import { SearchBarHeader } from '../Explore/MainExplore.js';
 import { Svg } from 'react-native-svg';
 import MyVoucher from '../MyTrip/Tabs/MyVoucher.js';
-
+import { useWeb3Modal } from '@web3modal/wagmi-react-native'
+import { ScrollView } from 'react-native-gesture-handler';
 /* 
 ! Tourism Page
 $ Contains information of a destination, hotel, restaurant, or activity
 */
 const MainMyAccount = ({ navigation }) => {
-
+    const { open, close } = useWeb3Modal()
     //! Components
     const UserHeaderInfo = () => {
         return (
@@ -54,7 +55,7 @@ const MainMyAccount = ({ navigation }) => {
 
     const MyAccount_TourDCButton = () => {
         return (
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => open({ view: 'Networks' })}>
                 <View style={styles.TourDC_Button}>
                     <Text style={styles.TourDC_ButtonText}>Be a part of TourDC member
                     </Text>
@@ -119,6 +120,10 @@ const MainMyAccount = ({ navigation }) => {
 
 
     //! Navigation
+    const Logout = () => {
+        open()
+    }
+
     const Profile = () => {
         navigation.navigate('MyProfile');
     }
@@ -140,7 +145,7 @@ const MainMyAccount = ({ navigation }) => {
 
 
     return (
-        <View style={styles.MyAccount_Container}>
+        <ScrollView style={styles.MyAccount_Container}>
             <SearchBarHeader />
             <UserHeaderInfo />
 
@@ -155,7 +160,7 @@ const MainMyAccount = ({ navigation }) => {
                 iconName2="Help"
                 Title2="Help Centre"
                 Description2="Find the best answer to your questions"
-                Nav2={() => HelpCentre()}
+                Nav2={() => open({ view: 'WhatIsAWallet' })}
             />
 
             <Text>My Rewards</Text>
@@ -171,7 +176,14 @@ const MainMyAccount = ({ navigation }) => {
                 Description2="View vouchers that you can use now"
                 Nav2={() => ExchangeVoucher()}
             />
-        </View >
+
+            <MyAccount_Button
+                iconName={"Help"}
+                Title={"Logout"}
+                Description={"Sign out of your account"}
+                onPress={() => Logout()}
+            />
+        </ScrollView >
     );
 };
 
