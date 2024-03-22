@@ -16,10 +16,10 @@ const ExploreTab = ({ navigation }) => {
         }).then((response) => {
             setNumberDestinations(response.data.length);
             setExploreTabData(response.data);
-            setIsLoading(false); // Add this line
+            setIsLoading(false);
         }).catch((error) => {
-            console.error('Error:', error); // Log any errors
-            setIsLoading(false); // Add this line
+            console.error('Error:', error);
+            setIsLoading(false);
         });
     }, []);
 

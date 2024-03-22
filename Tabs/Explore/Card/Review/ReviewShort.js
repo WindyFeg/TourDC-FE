@@ -67,7 +67,8 @@ const ReviewShort = (props) => {
                     <Text style={styles.UpvoteButtonText}>{upvoteNum}</Text>
                 </View>
                 <Text style={styles.UpvoteButtonText}>
-                    {new Date(arrivalDate * 1000).toISOString()}
+                    {/* {new Date(arrivalDate * 1000).toISOString()} */}
+                    {arrivalDate}
                 </Text>
             </View >
         )

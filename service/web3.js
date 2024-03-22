@@ -45,7 +45,7 @@ const getTouristReviews = async (user_address) => {
     return await contract_4R.methods.getAllReviewsOfTourist(user_address).call()
   } catch (error) {
     console.error("Error in getTouristReviews:", error);
-    throw error; // Re-throw the error if needed
+    throw error;
   }
 }
 
@@ -55,7 +55,7 @@ const getDestinationReviews = async (place_id) => {
     return await contract_4R.methods.getAllReviewsOfDestinations(place_id).call()
   } catch (error) {
     console.error("Error in getDestinationReviews:", error);
-    throw error; // Re-throw the error if needed
+    throw error;
   }
 
 }

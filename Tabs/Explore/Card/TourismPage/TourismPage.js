@@ -25,9 +25,8 @@ const TourismPage = ({ route, navigation }) => {
     //! Smart Contract
     useEffect(() => {
         const fetchTourismPage = async () => {
-            // TODO
             const response = await web3.getDestinationReviews(id);
-            // const response = await web3.getDestinationReviews("1");
+            console.log("All review of id: " + id + "\n", response);
             setReviews(response);
         };
         fetchTourismPage();

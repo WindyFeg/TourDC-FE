@@ -18,30 +18,6 @@ import TourismLogo from '../../assets/logo/TourismLogo.png';
 import axios from 'axios';
 
 const Login = ({ navigation }) => {
-    //* WalletConnect
-    // const { open, close } = useWeb3Modal()
-    const providerMetadata = {
-        name: 'TourDC',
-        icons: ['https://avatars.githubusercontent.com/u/37784886'],
-        redirect: {
-            // native: 'localhost://'
-        }
-    };
-
-    // open()
-
-    const wagmiConfig = defaultWagmiConfig({
-        chains: [mainnet],
-        projectId: '8b6eb1cee75ca1dc62be65c01eef5cc7',
-        providerMetadata
-    })
-    createWeb3Modal({
-        projectId: '8b6eb1cee75ca1dc62be65c01eef5cc7',
-        chains: [mainnet],
-        wagmiConfig: wagmiConfig,
-        enableAnalytics: true
-    })
-
     //* Normal Login
 
     const [username, setUsername] = useState('');
@@ -107,68 +83,66 @@ const Login = ({ navigation }) => {
     );
 
     return (
-        <WagmiConfig config={wagmiConfig}>
 
-            <View style={styles.container}>
-                <ImageBackground source={loginBackground} resizeMode="cover" style={styles.loginBackground}>
+        <View style={styles.container}>
+            <ImageBackground source={loginBackground} resizeMode="cover" style={styles.loginBackground}>
 
-                    {/* Logo Section */}
-                    <View style={styles.pinkOverlay} />
-                    <View style={styles.loginLogoContainer}>
-                        <Image
-                            style={styles.tourismLogo}
-                            source={TourismLogo}
-                        />
-                        <Image
-                            style={styles.tourDCLogo}
-                            source={TourDCLogo}
-                        />
-                    </View>
+                {/* Logo Section */}
+                <View style={styles.pinkOverlay} />
+                <View style={styles.loginLogoContainer}>
+                    <Image
+                        style={styles.tourismLogo}
+                        source={TourismLogo}
+                    />
+                    <Image
+                        style={styles.tourDCLogo}
+                        source={TourDCLogo}
+                    />
+                </View>
 
-                    {/* Login Section */}
-                    <View style={styles.loginBackgroundOverlay}>
-                        <Text style={styles.loginBigText}>
-                            Login/Register
+                {/* Login Section */}
+                <View style={styles.loginBackgroundOverlay}>
+                    <Text style={styles.loginBigText}>
+                        Login/Register
+                    </Text>
+
+                    <LoginInputUI />
+
+                    <TouchableOpacity onPress={ForgotPassword}>
+                        <Text style={styles.loginText}>
+                            Forgot Password?
                         </Text>
+                    </TouchableOpacity>
 
-                        <LoginInputUI />
+                    <CustomButton
+                        style={styles.loginBtn}
+                        onPress={Authentication}
+                        text={'LOGIN'}
+                    />
 
-                        <TouchableOpacity onPress={ForgotPassword}>
-                            <Text style={styles.loginText}>
-                                Forgot Password?
-                            </Text>
-                        </TouchableOpacity>
+                    <CustomButton
+                        style={styles.loginBtn}
+                        onPress={Register}
+                        text={'REGISTER'}
+                    />
 
-                        <CustomButton
-                            style={styles.loginBtn}
-                            onPress={Authentication}
-                            text={'LOGIN'}
-                        />
+                    {/* Other method section */}
+                    <Text style={styles.loginText}>  By registering, you agree to our Terms & Conditions and that you have read our Privacy Policy.</Text>
+                    <Text style={styles.loginText}>_________Other method_________</Text>
 
-                        <CustomButton
-                            style={styles.loginBtn}
-                            onPress={Register}
-                            text={'REGISTER'}
-                        />
-
-                        {/* Other method section */}
-                        <Text style={styles.loginText}>  By registering, you agree to our Terms & Conditions and that you have read our Privacy Policy.</Text>
-                        <Text style={styles.loginText}>_________Other method_________</Text>
-
-                        {/* <CustomButton
+                    {/* <CustomButton
                             style={styles.metaMaskBtn}
                             // onPress={handleButtonPress}
                             text={'METAMASK'}
                         /> */}
 
-                        <W3mButton />
-                    </View>
+                    <W3mButton />
+                </View>
 
-                </ImageBackground >
-            </View >
+            </ImageBackground >
+        </View >
 
-            <Web3Modal />
-        </WagmiConfig>
+
     )
 }
 
