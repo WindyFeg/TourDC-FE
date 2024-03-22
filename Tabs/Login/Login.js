@@ -9,23 +9,13 @@ import {
     Web3Modal
 } from '@web3modal/wagmi-react-native'
 import React, { useState } from 'react';
-import { PROJECT_ID, WALLET_ID } from '../../Globals.js';
-import {
-    Text,
-    View,
-    Image,
-    TextInput,
-    TouchableOpacity,
-    ImageBackground
-} from 'react-native';
-import {
-    SvgComponent,
-    styles,
-    TourDCLogo,
-    TourismLogo,
-    loginBackground,
-    StatusBar
-} from '../../Globals.js';
+import { StatusBar } from 'expo-status-bar';
+import styles from '../../styles.js';
+import { Text, View, Image, TextInput, TouchableOpacity, Button, ImageBackground } from 'react-native';
+import loginBackground from '../../assets/background/login_background.png';
+import TourDCLogo from '../../assets/logo/TourDCLogo.png';
+import TourismLogo from '../../assets/logo/TourismLogo.png';
+import axios from 'axios';
 
 const Login = ({ navigation }) => {
     //* WalletConnect
@@ -42,11 +32,11 @@ const Login = ({ navigation }) => {
 
     const wagmiConfig = defaultWagmiConfig({
         chains: [mainnet],
-        projectId: PROJECT_ID,
+        projectId: '8b6eb1cee75ca1dc62be65c01eef5cc7',
         providerMetadata
     })
     createWeb3Modal({
-        projectId: PROJECT_ID,
+        projectId: '8b6eb1cee75ca1dc62be65c01eef5cc7',
         chains: [mainnet],
         wagmiConfig: wagmiConfig,
         enableAnalytics: true
@@ -54,10 +44,11 @@ const Login = ({ navigation }) => {
 
     //* Normal Login
 
-
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [Wrong, setWrong] = useState(false);
+
+
 
     const Authentication = () => {
         navigation.navigate('TourDC_Main');
