@@ -1,6 +1,15 @@
+import '@walletconnect/react-native-compat';
+import { WagmiConfig } from 'wagmi';
+import { mainnet } from 'viem/chains';
+import {
+    W3mButton,
+    useWeb3Modal,
+    createWeb3Modal,
+    defaultWagmiConfig,
+    Web3Modal
+} from '@web3modal/wagmi-react-native'
 import React, { useState } from 'react';
-import { W3mButton } from '@web3modal/wagmi-react-native'
-// import { PROJECT_ID, WALLET_ID } from '../../Globals.js';
+import { PROJECT_ID, WALLET_ID } from '../../Globals.js';
 import {
     Text,
     View,
@@ -17,31 +26,38 @@ import {
     loginBackground,
     StatusBar
 } from '../../Globals.js';
-// import {
-//     WalletConnectModal,
-//     useWalletConnectModal,
-// } from '@walletconnect/modal-react-native';
-
-
 
 const Login = ({ navigation }) => {
     //* WalletConnect
-    // const providerMetadata = {
-    //     name: 'TourDC',
-    // };
-    // const { open, isConnected, address, provider } = useWalletConnectModal();
+    // const { open, close } = useWeb3Modal()
+    const providerMetadata = {
+        name: 'TourDC',
+        icons: ['https://avatars.githubusercontent.com/u/37784886'],
+        redirect: {
+            // native: 'localhost://'
+        }
+    };
+
+    // open()
+
+    const wagmiConfig = defaultWagmiConfig({
+        chains: [mainnet],
+        projectId: PROJECT_ID,
+        providerMetadata
+    })
+    createWeb3Modal({
+        projectId: PROJECT_ID,
+        chains: [mainnet],
+        wagmiConfig: wagmiConfig,
+        enableAnalytics: true
+    })
 
     //* Normal Login
+
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [Wrong, setWrong] = useState(false);
-
-    // const handleButtonPress = async () => {
-    //     if (isConnected) {
-    //         return provider?.disconnect();
-    //     }
-    //     return open();
-    // };
 
     const Authentication = () => {
         navigation.navigate('TourDC_Main');
@@ -100,73 +116,68 @@ const Login = ({ navigation }) => {
     );
 
     return (
-        <View style={styles.container}>
-            <ImageBackground source={loginBackground} resizeMode="cover" style={styles.loginBackground}>
+        <WagmiConfig config={wagmiConfig}>
 
-                {/* Logo Section */}
-                <View style={styles.pinkOverlay} />
-                <View style={styles.loginLogoContainer}>
-                    <Image
-                        style={styles.tourismLogo}
-                        source={TourismLogo}
-                    />
-                    <Image
-                        style={styles.tourDCLogo}
-                        source={TourDCLogo}
-                    />
-                </View>
+            <View style={styles.container}>
+                <ImageBackground source={loginBackground} resizeMode="cover" style={styles.loginBackground}>
 
-                {/* Login Section */}
-                <View style={styles.loginBackgroundOverlay}>
-                    <Text style={styles.loginBigText}>
-                        Login/Register
-                    </Text>
+                    {/* Logo Section */}
+                    <View style={styles.pinkOverlay} />
+                    <View style={styles.loginLogoContainer}>
+                        <Image
+                            style={styles.tourismLogo}
+                            source={TourismLogo}
+                        />
+                        <Image
+                            style={styles.tourDCLogo}
+                            source={TourDCLogo}
+                        />
+                    </View>
 
-                    <LoginInputUI />
-
-                    <TouchableOpacity onPress={ForgotPassword}>
-                        <Text style={styles.loginText}>
-                            Forgot Password?
+                    {/* Login Section */}
+                    <View style={styles.loginBackgroundOverlay}>
+                        <Text style={styles.loginBigText}>
+                            Login/Register
                         </Text>
-                    </TouchableOpacity>
 
-                    <CustomButton
-                        style={styles.loginBtn}
-                        onPress={Authentication}
-                        text={'LOGIN'}
-                    />
+                        <LoginInputUI />
 
-                    <CustomButton
-                        style={styles.loginBtn}
-                        onPress={Register}
-                        text={'REGISTER'}
-                    />
+                        <TouchableOpacity onPress={ForgotPassword}>
+                            <Text style={styles.loginText}>
+                                Forgot Password?
+                            </Text>
+                        </TouchableOpacity>
 
-                    {/* Other method section */}
-                    <Text style={styles.loginText}>  By registering, you agree to our Terms & Conditions and that you have read our Privacy Policy.</Text>
-                    <Text style={styles.loginText}>_________Other method_________</Text>
+                        <CustomButton
+                            style={styles.loginBtn}
+                            onPress={Authentication}
+                            text={'LOGIN'}
+                        />
 
-                    {/* <CustomButton
-                        style={styles.metaMaskBtn}
-                        onPress={MetaMask}
-                        text={'METAMASK'}
-                    /> */}
-                    <W3mButton 
-                        balance='show'
-                        style={styles.metaMaskBtn}
-                        onPress={MetaMask}
-                        text={'METAMASK'}
-                    />
-                    {/* <WalletConnectModal
-                        explorerRecommendedWalletIds={[WALLET_ID]}
-                        explorerExcludedWalletIds={'ALL'}
-                        projectId={PROJECT_ID}
-                        providerMetadata={providerMetadata}
-                    /> */}
-                </View>
+                        <CustomButton
+                            style={styles.loginBtn}
+                            onPress={Register}
+                            text={'REGISTER'}
+                        />
 
-            </ImageBackground >
-        </View >
+                        {/* Other method section */}
+                        <Text style={styles.loginText}>  By registering, you agree to our Terms & Conditions and that you have read our Privacy Policy.</Text>
+                        <Text style={styles.loginText}>_________Other method_________</Text>
+
+                        {/* <CustomButton
+                            style={styles.metaMaskBtn}
+                            // onPress={handleButtonPress}
+                            text={'METAMASK'}
+                        /> */}
+
+                        <W3mButton />
+                    </View>
+
+                </ImageBackground >
+            </View >
+
+            <Web3Modal />
+        </WagmiConfig>
     )
 }
 

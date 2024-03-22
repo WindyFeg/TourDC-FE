@@ -1,46 +1,13 @@
-// App.js
-import React from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { View, Text, Image, ScrollView, TextInput, SafeAreaView } from 'react-native'; // Import SafeAreaView
-import styles from './styles';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import Login from './Tabs/Login/Login';
-import Register from './Tabs/Login/Register';
-import Main from './Main.js';
-import ForgotPassword from './Tabs/Login/ForgotPassword';
-import { useFonts } from 'expo-font';
-import './Tabs/Custom/Globals.js';
-import { PROJECT_ID, WALLET_ID } from './Globals.js';
-
-import '@walletconnect/react-native-compat'
-import { WagmiConfig } from 'wagmi'
-import { mainnet, polygon, arbitrum } from 'viem/chains'
-import { createWeb3Modal, defaultWagmiConfig, Web3Modal } from '@web3modal/wagmi-react-native'
-import Vibichain from './defineChain.js';
-const projectId = PROJECT_ID
-
-const metadata = {
-  name: 'TourDC',
-  description: 'TourDC Connect Wallet',
-  url: 'https://tourdc.com',
-  icons: ['https://avatars.githubusercontent.com/u/37784886'],
-  redirect: {
-    native: 'YOUR_APP_SCHEME://',
-    universal: 'YOUR_APP_UNIVERSAL_LINK.com'
-  }
-}
-
-const chains = [mainnet, polygon, arbitrum]
-
-const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata })
-
-createWeb3Modal({
-  projectId,
-  chains,
-  wagmiConfig,
-  enableAnalytics: true // Optional - defaults to your Cloud configuration
-})
+import {
+  React,
+  NavigationContainer,
+  createStackNavigator,
+  useFonts,
+  Login,
+  Main,
+  Register,
+  ForgotPassword
+} from './Globals.js';
 
 const Stack = createStackNavigator();
 
@@ -58,8 +25,6 @@ export default function App() {
     return null;
   }
   return (
-    <WagmiConfig config={wagmiConfig}>
-    
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
 
@@ -87,8 +52,5 @@ export default function App() {
 
       </Stack.Navigator>
     </NavigationContainer>
-     <Web3Modal />
-    </WagmiConfig>
-    
   );
 }
