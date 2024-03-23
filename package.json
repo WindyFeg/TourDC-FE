@@ -18,6 +18,7 @@
     "@react-navigation/native": "^6.1.9",
     "@react-navigation/native-stack": "^6.9.17",
     "@react-navigation/stack": "^6.3.20",
+    "@types/react": "~18.2.14",
     "@walletconnect/modal-react-native": "^1.0.0-rc.11",
     "@walletconnect/react-native-compat": "^2.11.3",
     "@web3modal/wagmi-react-native": "^1.2.1",
@@ -40,6 +41,7 @@
     "react-native-webview": "13.2.2",
     "text-encoding": "^0.7.0",
     "text-encoding-polyfill": "^0.6.7",
+    "typescript": "^5.4.3",
     "viem": "1.21.4",
     "wagmi": "1.4.13",
     "web3": "^4.6.0"

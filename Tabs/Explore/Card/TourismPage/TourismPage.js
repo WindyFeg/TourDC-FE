@@ -7,6 +7,11 @@ import React, { useState, useCallback, useEffect } from 'react';
 import WhatPeopleSay from '../Review/WhatPeopleSay.js';
 import BackNavigationButton from '../../../Custom/BackNavigationButton.js';
 import * as web3 from '../../../../service/web3.js';
+import { getNetwork } from '@wagmi/core'
+import { useContractWrite, usePrepareContractWrite} from 'wagmi'
+import Tourism_abi from "../../../../contracts/Tourism.json"
+import Tourism_address from "../../../../contracts/Tourism-address.json"
+import { useContractRead } from 'wagmi'
 const GLOBAL = require('../../../Custom/Globals.js');
 
 const TourismPage = ({ route, navigation }) => {
@@ -14,6 +19,9 @@ const TourismPage = ({ route, navigation }) => {
     /*
     Get the information from the TourismCard
     */
+    
+
+
     const { id,
         rate,
         name,
@@ -229,6 +237,47 @@ const TourismPage = ({ route, navigation }) => {
             </View>
         )
     }
+    const { chain, chains } = getNetwork()
+    console.log("chain: ", chain)
+    // const { data,error, isError, isLoading, isSuccess, write } = useContractWrite({
+    //     address: Tourism_address.Token,
+    //     abi: Tourism_abi.abi,
+    //     functionName: 'reviews', // contract method
+    //     args: ['65f2c80ef60b126cb248752b', 'Romantic', '49', 'Beautifullll'], // [postID, title, rate, review]
+        // account: '0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74', // current address
+    //   })
+
+    //   const { data,error, isError, isLoading, isSuccess, write } = useContractRead({
+    //     address: Tourism_address.Token,
+    //     abi: (Tourism_abi.abi),
+    //     functionName: 'touristIdentify', // contract method
+    //     args: ['0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74'], // [postID, title, rate, review]
+    //     // account: '0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74', // current address
+    //   })
+
+    const { config } = usePrepareContractWrite({
+        address: Tourism_address.Token,
+        abi: Tourism_abi.abi,
+        functionName: 'reviews',
+        args: ['65f2c80ef60b126cb248752b', 'Romantic', '49', 'Beautifullll'], // [postID, title, rate, review]
+        account: '0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74', // current address
+        chainId: 306,
+        gas: 1_000_000n,
+        gasPrice: 69420n,
+        onError(error) {
+            console.log('Error', error)
+          },
+      })
+    const { data,error, isError, isLoading, isSuccess, write } = useContractWrite(config)
+    // reviews();
+    console.log("isSuccess:", isSuccess)
+    console.log("isLoading:", isLoading)
+    console.log("isError:", isError)
+
+    console.log("write:", write)
+    console.log("error:", error)
+    console.log("data:", data)
+
 
     //! Render
     return (

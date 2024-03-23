@@ -1,8 +1,8 @@
 
 import Web3 from "web3";
 import DCToken_abi from "../contracts/ERC20With4RMechanism.json"
-import Tourism_abi from "../contracts/Tourism.json"
 import DCToken_address from "../contracts/ERC20With4RMechanism-address.json"
+import Tourism_abi from "../contracts/Tourism.json"
 import Tourism_address from "../contracts/Tourism-address.json"
 
 // const { Web3 } = require('web3');

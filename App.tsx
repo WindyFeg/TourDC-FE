@@ -2,20 +2,29 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import Login from './Tabs/Login/Login';
-import Register from './Tabs/Login/Register';
+import Login from './Tabs/Login/Login.js';
+import Register from './Tabs/Login/Register.js';
 import Main from './Main.js';
-import ForgotPassword from './Tabs/Login/ForgotPassword';
+import ForgotPassword from './Tabs/Login/ForgotPassword.js';
 import { useFonts } from 'expo-font';
 import './Tabs/Custom/Globals.js';
-import { PROJECT_ID, WALLET_ID } from './Globals.js';
 
 import '@walletconnect/react-native-compat'
 import { WagmiConfig } from 'wagmi'
-import { mainnet, polygon, arbitrum } from 'viem/chains'
+import { mainnet, polygon, arbitrum, sepolia } from 'viem/chains'
 import { createWeb3Modal, defaultWagmiConfig, Web3Modal } from '@web3modal/wagmi-react-native'
-import Vibichain from './defineChain.js';
-const projectId = PROJECT_ID
+import {vibiChain} from './defineChain.tsx'
+import { useNetwork, useSwitchNetwork } from 'wagmi'
+// import { createPublicClient, http } from 'viem'
+// import { fantom } from 'viem/chains'
+ 
+// const vibiChain = createPublicClient({ 
+//   chain: fantom, 
+//   transport: http('https://vibi.vbchain.vn/​') 
+// }) 
+
+
+const projectId = '8b6eb1cee75ca1dc62be65c01eef5cc7'
 
 const metadata = {
   name: 'TourDC',
@@ -28,7 +37,9 @@ const metadata = {
   }
 }
 
-const chains = [mainnet, polygon, arbitrum]
+
+
+const chains = [vibiChain, sepolia, polygon, arbitrum, mainnet]
 
 const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata })
 
@@ -36,7 +47,7 @@ createWeb3Modal({
   projectId,
   chains,
   wagmiConfig,
-  enableAnalytics: true // Optional - defaults to your Cloud configuration
+  // enableAnalytics: true // Optional - defaults to your Cloud configuration
 })
 
 const Stack = createStackNavigator();
@@ -50,7 +61,8 @@ export default function App() {
     InterSB: require('./assets/fonts/Inter/Inter-SemiBold.ttf'),
     InterL: require('./assets/fonts/Inter/Inter-Light.ttf'),
   });
-
+  // const { chain } = useNetwork()
+  // const { chains, error, isLoading, pendingChainId, switchNetwork } = useSwitchNetwork()
   if (!loaded) {
     return null;
   }
