@@ -11,7 +11,7 @@ import MyTrip from './Tabs/Main/MyTrip';
 
 import Home_Icon from './assets/icons/home.svg';
 import Explore_Icon from './assets/icons/explore.svg';
-
+import ReviewSection from './service/reviewSections'
 const Tab = createBottomTabNavigator();
 
 const Main = ({ navigation }) => {
@@ -65,6 +65,7 @@ const Main = ({ navigation }) => {
                         options={{ headerShown: false }}
                     />
                 </Tab.Navigator>
+                <ReviewSection />
             </NavigationContainer>
         </SafeAreaView >
     );
