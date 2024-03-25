@@ -3,27 +3,65 @@ import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { useSignMessage, useAccount } from 'wagmi'
 import styles from '../../styles.js';
-import { Text, View, Pressable, Image, TextInput, TouchableOpacity, Button, ImageBackground } from 'react-native';
+import { Text, View, Pressable, Image, TextInput, TouchableOpacity, Button, ImageBackground, SafeAreaView } from 'react-native';
 import loginBackground from '../../assets/background/login_background.png';
 import TourDCLogo from '../../assets/logo/TourDCLogo.png';
 import TourismLogo from '../../assets/logo/TourismLogo.png';
 import SvgComponent from '../../assets/SvgComponent';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const GLOBAL = require('../../Globals.js');
+const GLOBAL = require('../Custom/Globals.js');
+
+const LoginInputUI = ({ username, setUsername, password, setPassword }) => {
+    return (
+        <SafeAreaView>
+            <Text style={styles.loginLabel}>Email/Mobile phone</Text>
+            <StatusBar style="auto" />
+            <View style={styles.loginInput}>
+                <TextInput
+                    style={styles.loginTextInput}
+                    placeholder="Enter your mobile phone or email"
+                    placeholderTextColor="#003f5c"
+                    onChangeText={setUsername}
+                    value={username}
+                />
+            </View>
+
+            <Text style={styles.loginLabel}>Password</Text>
+            <View style={styles.loginInput}>
+                <TextInput
+                    style={styles.loginTextInput}
+                    placeholder="* * * * *"
+                    placeholderTextColor="#003f5c"
+                    secureTextEntry={true}
+                    onChangeText={setPassword}
+                    value={password}
+                />
+            </View>
+
+        </SafeAreaView>
+    )
+}
 
 const Login = ({ navigation }) => {
     //* Normal Login
     const { address, isConnecting, isDisconnected } = useAccount()
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [tourdcAddress, setTourdcAddress] = useState('');
+    const [refreshToken, setRefreshToken] = useState('');
     const [Wrong, setWrong] = useState(false);
 
     useEffect(() => {
         const storeData = async () => {
+            let userAddress = address ? address : tourdcAddress;
+            let refreshToken = refreshToken ? refreshToken : null;
             try {
-                await AsyncStorage.setItem('address', address);
-                console.log("Save address: " + address);
+                await Promise.all([
+                    AsyncStorage.setItem('address', userAddress),
+                    AsyncStorage.setItem('refreshToken', refreshToken)
+                ]);
+                console.log("Save address: " + userAddress);
             } catch (error) {
                 console.log(error);
             }
@@ -33,12 +71,11 @@ const Login = ({ navigation }) => {
             navigation.navigate('TourDC_Main');
             storeData();
         }
-    }, [address]);
+    }, [address, tourdcAddress]);
 
     useEffect(() => {
         if (isDisconnected) {
             console.log("Disconnected");
-            navigation.navigate.Login;
         }
     }, [isDisconnected]);
 
@@ -49,16 +86,20 @@ const Login = ({ navigation }) => {
                 username: username,
                 password: password
             });
-            console.log(response.data);
             if (response.data === "Invalid credentials") {
                 setWrong(true);
             }
             else {
-                console.log(response.data);
+                console.log("User login data: \n" + response.data);
+
+                setTourdcAddress(response.data.address);
+                setRefreshToken(response.data.refreshToken);
+
                 navigation.navigate('TourDC_Main');
             }
         } catch (error) {
             console.error(error);
+            setWrong(true);
         }
     }
 
@@ -76,37 +117,6 @@ const Login = ({ navigation }) => {
 
     const MetaMask = () => {
         navigation.navigate('TourDC_Main');
-    }
-
-    const LoginInputUI = () => {
-        return (
-            <View>
-                <Text style={styles.loginLabel}>Email/Mobile phone</Text>
-                <StatusBar style="auto" />
-                <View style={styles.loginInput}>
-                    <TextInput
-                        style={styles.loginTextInput}
-                        placeholder="Enter your mobile phone or email"
-                        placeholderTextColor="#003f5c"
-                        onChangeText={setUsername}
-                        value={username}
-                    />
-                </View>
-
-                <Text style={styles.loginLabel}>Password</Text>
-                <View style={styles.loginInput}>
-                    <TextInput
-                        style={styles.loginTextInput}
-                        placeholder="* * * * *"
-                        placeholderTextColor="#003f5c"
-                        secureTextEntry={true}
-                        onChangeText={setPassword}
-                        value={password}
-                    />
-                </View>
-
-            </View>
-        )
     }
 
     const CustomButton = ({ onPress, text, style }) => (
@@ -144,7 +154,16 @@ const Login = ({ navigation }) => {
                         Login/Register
                     </Text>
 
-                    <LoginInputUI />
+                    {Wrong && <Text style={{ color: "red" }}>
+                        Wrong username or password
+                    </Text>}
+
+                    <LoginInputUI
+                        username={username}
+                        setUsername={setUsername}
+                        password={password}
+                        setPassword={setPassword}
+                    />
 
                     <TouchableOpacity onPress={ForgotPassword}>
                         <Text style={styles.loginText}>

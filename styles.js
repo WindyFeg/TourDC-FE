@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.25,
         shadowRadius: 4,
-        elevation: 5,
+        // elevation: 5,
     },
 
     tourDCLogo: {
@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.25,
         shadowRadius: 4,
-        elevation: 5,
+        // elevation: 5,
     },
 
     destinationCard: {
@@ -1046,6 +1046,22 @@ const styles = StyleSheet.create({
         fontFamily: 'InterB',
         fontSize: 12,
     },
+
+    MyAccount_BtnLogout: {
+        backgroundColor: '#ff0000',
+        borderRadius: 5,
+        height: 30,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginVertical: 20,
+        opacity: 0.8,
+    },
+
+    MyAccount_LogoutButtonText: {
+        fontFamily: 'InterR',
+        fontSize: 14,
+        color: 'white',
+    }
 
 });
 

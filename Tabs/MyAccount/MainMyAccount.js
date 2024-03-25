@@ -76,7 +76,7 @@ const MainMyAccount = ({ navigation }) => {
                         <SvgComponent name={props.iconName} />
 
                         {/* Options Text */}
-                        <View>
+                        <View style={{ marginLeft: 10 }}>
                             <Text style={styles.MyAccount_BtnTitle}>{props.Title}</Text>
                             <Text style={styles.MyAccount_BtnDescription}>{props.Description}</Text>
                         </View>
@@ -177,12 +177,12 @@ const MainMyAccount = ({ navigation }) => {
                 Nav2={() => ExchangeVoucher()}
             />
 
-            <MyAccount_Button
-                iconName={"Help"}
-                Title={"Logout"}
-                Description={"Sign out of your account"}
+            <TouchableOpacity
                 onPress={() => Logout()}
-            />
+                style={styles.MyAccount_BtnLogout}
+            >
+                <Text style={styles.MyAccount_LogoutButtonText}>Logout</Text>
+            </TouchableOpacity>
         </ScrollView >
     );
 };
