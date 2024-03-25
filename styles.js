@@ -986,6 +986,49 @@ const styles = StyleSheet.create({
         marginVertical: 10,
     },
 
+    tourismPage_checkInBtn: {
+        // center
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: 10,
+        backgroundColor: 'white',
+        borderRadius: 5,
+        // Drop Shadow
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        elevation: 1,
+        shadowOpacity: 0.7,
+        // height: 360,
+        padding: 10,
+    },
+
+    tourismPage_checkInBtnContainer: {
+        backgroundColor: '#39A7FF',
+        margin: 5,
+        width: "100%",
+        borderRadius: 5,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 30,
+
+    },
+
+    tourismPage_checkInLocationText: {
+        color: '#828282',
+        fontFamily: 'InterR',
+        fontSize: 12,
+        margin: 10,
+    },
+
+    tourismPage_checkInBtnText: {
+        color: 'white',
+        fontFamily: 'InterB',
+        fontSize: 12,
+    },
+
 });
 
 export default styles;

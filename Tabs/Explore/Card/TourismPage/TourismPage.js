@@ -1,5 +1,5 @@
 import 'react-native-get-random-values';
-import { Button, View, Text, Image, ImageBackground, TouchableOpacity, ScrollView } from 'react-native';
+import { Button, View, Text, Image, ImageBackground, TouchableOpacity, ScrollView, Platform } from 'react-native';
 import ReviewShort from '../Review/ReviewShort.js';
 import styles from '../../../../styles.js';
 import SvgComponent from '../../../../assets/SvgComponent.js';
@@ -8,6 +8,7 @@ import WhatPeopleSay from '../Review/WhatPeopleSay.js';
 import BackNavigationButton from '../../../Custom/BackNavigationButton.js';
 import * as web3 from '../../../../service/web3.js';
 import { getNetwork } from '@wagmi/core'
+import * as Location from 'expo-location';
 
 const GLOBAL = require('../../../Custom/Globals.js');
 
@@ -16,9 +17,9 @@ const TourismPage = ({ route, navigation }) => {
     /*
     Get the information from the TourismCard
     */
-    
-
-
+    const [locationDetails, setLocationDetails] = useState(null);
+    const [location, setLocation] = useState(null);
+    const [errorMsg, setErrorMsg] = useState(null);
     const { id,
         rate,
         name,
@@ -26,6 +27,31 @@ const TourismPage = ({ route, navigation }) => {
         thumbnail,
         list_imgs } = route.params;
     const [reviews, setReviews] = useState([]);
+
+    //! Location
+    useEffect(() => {
+        (async () => {
+
+            let { status } = await Location.requestForegroundPermissionsAsync();
+            if (status !== 'granted') {
+                setErrorMsg('Permission to access location was denied');
+                return;
+            }
+
+            let location = await Location.getCurrentPositionAsync({});
+            setLocation(location);
+            let geocode = await Location.reverseGeocodeAsync(location.coords);
+            setLocationDetails(geocode[0]);
+        })();
+    }, []);
+
+    let text = 'Waiting..';
+    if (errorMsg) {
+        text = errorMsg;
+    } else if (location) {
+        text = JSON.stringify(location.coords.longitude) + ", " + JSON.stringify(location.coords.latitude);
+        // console.log("Location: ", location);
+    }
 
     //! Smart Contract
     useEffect(() => {
@@ -36,6 +62,16 @@ const TourismPage = ({ route, navigation }) => {
         };
         fetchTourismPage();
     }, []);
+
+    //! Functions
+    const CheckIn = async () => {
+        // try {
+        //     const response = await web3.getTouristInfor(GLOBAL.USER_ADDRESS);
+        //     console.log("Tourist Information: ", response);
+        // } catch (error) {
+        //     console.error("Error in CheckIn: ", error);
+        // }
+    }
 
     //! Components
 
@@ -234,50 +270,60 @@ const TourismPage = ({ route, navigation }) => {
             </View>
         )
     }
+
+    const CheckInButton = () => {
+        return (
+            <View style={styles.tourismPage_checkInBtn}>
+                {locationDetails && (<Text style={styles.tourismPage_checkInLocationText}>
+                    Current Location:
+                    {locationDetails.name},
+                    {locationDetails.street},
+                    {locationDetails.region},
+                    {locationDetails.country}
+                </Text>)}
+                <TouchableOpacity
+                    style={styles.tourismPage_checkInBtnContainer}
+                >
+
+                    <Text style={styles.tourismPage_checkInBtnText}
+                        onPress={() => CheckIn()}
+                    >
+                        Check-in
+                    </Text>
+                </TouchableOpacity>
+            </View>
+        )
+    }
+
     const { chain, chains } = getNetwork()
     console.log("chain: ", chain)
-    // const { data,error, isError, isLoading, isSuccess, write } = useContractWrite({
-    //     address: Tourism_address.Token,
-    //     abi: Tourism_abi.abi,
-    //     functionName: 'reviews', // contract method
-    //     args: ['65f2c80ef60b126cb248752b', 'Romantic', '49', 'Beautifullll'], // [postID, title, rate, review]
-        // account: '0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74', // current address
-    //   })
-
-    //   const { data,error, isError, isLoading, isSuccess, write } = useContractRead({
-    //     address: Tourism_address.Token,
-    //     abi: (Tourism_abi.abi),
-    //     functionName: 'touristIdentify', // contract method
-    //     args: ['0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74'], // [postID, title, rate, review]
-    //     // account: '0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74', // current address
-    //   })
-
-   
-
 
     //! Render
-    return (
-        <ScrollView style={{ backgroundColor: '#fff' }}>
-            {/* Back Button and Options Button */}
-            <BackNavigationButton navigation={navigation} />
+    return (<ScrollView
+        style={{
+            backgroundColor: '#fff',
+        }}
+        stickyHeaderIndices={[3]} // Add this line
+    >
+        {/* Back Button and Options Button */}
+        <BackNavigationButton navigation={navigation} />
 
-            {/* Destination Page Image */}
-            <DestinationImage />
+        {/* Destination Page Image */}
+        <DestinationImage />
 
-            {/* Destination Page Content */}
-            <View>
-                {/* Big 2 icon for time and location */}
-                <DestinationContentHeader />
+        {/* Big 2 icon for time and location */}
+        <DestinationContentHeader />
 
-                {/* Main Description of the page */}
-                <DestinationContent />
+        <CheckInButton />
 
-                {/* Review section*/}
-                <WhatPeopleSayContainer />
+        {/* Main Description of the page */}
+        <DestinationContent />
 
-                <ReviewContainer />
-            </View>
-        </ScrollView >
+        {/* Review section*/}
+        <WhatPeopleSayContainer />
+
+        <ReviewContainer />
+    </ScrollView>
     );
 };
 

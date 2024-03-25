@@ -44,7 +44,8 @@
     "typescript": "^5.4.3",
     "viem": "1.21.4",
     "wagmi": "1.4.13",
-    "web3": "^4.6.0"
+    "web3": "^4.6.0",
+    "expo-location": "~16.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
