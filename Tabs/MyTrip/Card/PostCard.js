@@ -35,7 +35,9 @@ const PostCard = ({ navigation }) => {
 
     return (
         <View style={styles.PostCard_Container}>
-            <TouchableOpacity onPress={ReviewPost} style={{ flexDirection: 'row', alignItems: 'center', width: "60%" }}>
+            <TouchableOpacity
+                onPress={ReviewPost}
+                style={{ flexDirection: 'row', alignItems: 'center', width: "60%" }}>
                 {/* Image */}
                 <Image
                     source={require('../../../assets/background/bai-bien-bali-2.jpg')}

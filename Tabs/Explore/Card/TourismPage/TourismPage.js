@@ -197,25 +197,13 @@ const TourismPage = ({ route, navigation }) => {
                     }
 
                     <View style={styles.tourismPage_contentImages}>
-                        <Image
-                            source={require('../../../../assets/destinations/dc_dalat.jpg')}
-                            style={styles.tourismPage_contentImage}
-                        />
-                        <Image
-                            source={require('../../../../assets/destinations/dc_dalat.jpg')}
-                            style={styles.tourismPage_contentImage}
-                        />
-                    </View>
-
-                    <View style={styles.tourismPage_contentImages}>
-                        <Image
-                            source={require('../../../../assets/destinations/dc_dalat.jpg')}
-                            style={styles.tourismPage_contentImage}
-                        />
-                        <Image
-                            source={require('../../../../assets/destinations/dc_dalat.jpg')}
-                            style={styles.tourismPage_contentImage}
-                        />
+                        {list_imgs.map((img, index) => (
+                            <Image
+                                key={index}
+                                source={{ uri: `${GLOBAL.BASE_URL}/api/destination/getDestinationPicture/${thumbnail}` }}
+                                style={styles.tourismPage_contentImage}
+                            />
+                        ))}
                     </View>
                 </View>
             </View>

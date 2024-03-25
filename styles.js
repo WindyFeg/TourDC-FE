@@ -408,9 +408,11 @@ const styles = StyleSheet.create({
 
     tourismPage_contentImages: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-start',
+        flexWrap: 'wrap', // Add this line
         marginHorizontal: 20,
         marginBottom: 20,
+        justifyContent: 'space-between',
     },
 
     tourismPage_contentImage: {
@@ -683,6 +685,22 @@ const styles = StyleSheet.create({
         elevation: 2,
 
         flexDirection: 'row',
+    },
+    PostCard_Container: {
+        height: 120,
+        backgroundColor: '#FFF',
+        borderRadius: 10,
+        margin: 10,
+        // Box Shadow
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+        elevation: 2,
+
     },
 
     MyTripCard_Image: {
