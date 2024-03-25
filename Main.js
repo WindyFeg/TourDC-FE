@@ -65,7 +65,7 @@ const Main = ({ navigation }) => {
                         options={{ headerShown: false }}
                     />
                 </Tab.Navigator>
-                <ReviewSection />
+                {/* <ReviewSection /> */}
             </NavigationContainer>
         </SafeAreaView >
     );

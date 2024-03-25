@@ -10,6 +10,7 @@ import TourismLogo from '../../assets/logo/TourismLogo.png';
 import SvgComponent from '../../assets/SvgComponent';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+const GLOBAL = require('../../Globals.js');
 
 const Login = ({ navigation }) => {
     //* Normal Login
@@ -41,8 +42,28 @@ const Login = ({ navigation }) => {
         }
     }, [isDisconnected]);
 
+    // fetch login data http://localhost:5500/api/user/login
+    const fetchLoginData = async () => {
+        try {
+            const response = await axios.post(`${GLOBAL.BASE_URL}/api/user/login`, {
+                username: username,
+                password: password
+            });
+            console.log(response.data);
+            if (response.data === "Invalid credentials") {
+                setWrong(true);
+            }
+            else {
+                console.log(response.data);
+                navigation.navigate('TourDC_Main');
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     const Authentication = () => {
-        navigation.navigate('TourDC_Main');
+        fetchLoginData();
     }
 
     const Register = () => {
@@ -67,7 +88,8 @@ const Login = ({ navigation }) => {
                         style={styles.loginTextInput}
                         placeholder="Enter your mobile phone or email"
                         placeholderTextColor="#003f5c"
-                        onChangeText={(username) => setUsername(username)}
+                        onChangeText={setUsername}
+                        value={username}
                     />
                 </View>
 
@@ -78,7 +100,8 @@ const Login = ({ navigation }) => {
                         placeholder="* * * * *"
                         placeholderTextColor="#003f5c"
                         secureTextEntry={true}
-                        onChangeText={(password) => setPassword(password)}
+                        onChangeText={setPassword}
+                        value={password}
                     />
                 </View>
 

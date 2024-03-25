@@ -10,7 +10,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import ScanQR from '../ScanQR';
 import TourismPage from '../Explore/Card/TourismPage/TourismPage.js';
 import MainMyTrip from '../MyTrip/MainMyTrip.js';
-import CreateReview from '../MyTrip/CreateReview.js';
+import CreateReview from '../MyTrip/CreateReview';
 import ReviewPost from '../Explore/Card/Review/ReviewPost.js';
 
 const Stack = createStackNavigator();

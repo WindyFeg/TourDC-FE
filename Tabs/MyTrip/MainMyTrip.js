@@ -5,20 +5,22 @@ import ExploreTab from '../Explore/ExploreTab';
 import SvgComponent from '../../assets/SvgComponent';
 import styles from '../../styles.js';
 import DCToken from './DCToken.js';
-
 import Trips from './Tabs/Trips.js';
 import MyVoucher from './Tabs/MyVoucher.js';
 import Posts from './Tabs/Posts.js';
 import Collections from './Tabs/Collections.js';
 import * as web3 from '../../service/web3.js';
+import { useAccount } from 'wagmi';
 
 const Tab = createMaterialTopTabNavigator();
 /* 
 */
 const MainMyTrip = () => {
+    const { address, isConnecting, isDisconnected } = useAccount()
+
 
     const fetchRewards = async () => {
-        console.log(await web3.getTouristInfor('0x1a620c351c07763f430897AeaA2883E37cA0aaCD'))
+        console.log(await web3.getTouristInfor('address'))
         console.log("Get Destination Reviews")
         console.log(await web3.getDestinationReviews("1"))
     };
