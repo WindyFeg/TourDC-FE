@@ -10,12 +10,13 @@ import * as web3 from '../../../../service/web3.js';
 import { getNetwork } from '@wagmi/core'
 import * as Location from 'expo-location';
 import {
+    useAccount,
     useContractRead,
     useContractWrite,
     usePrepareContractWrite,
-  } from "wagmi";
+} from "wagmi";
 const GLOBAL = require('../../../Custom/Globals.js');
-import checkIn from './CheckIn.tsx';
+import CheckIn from './CheckIn.tsx';
 
 const TourismPage = ({ route, navigation }) => {
     //! Variables
@@ -25,13 +26,14 @@ const TourismPage = ({ route, navigation }) => {
     const [locationDetails, setLocationDetails] = useState(null);
     const [location, setLocation] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
-    const { id,
-        rate,
-        name,
-        address,
-        thumbnail,
-        list_imgs } = route.params;
+    const { placeId,
+        placeRate,
+        placeName,
+        placeAddress,
+        placeThumbnail,
+        placeList_imgs } = route.params;
     const [reviews, setReviews] = useState([]);
+    const { address, isConnecting, isDisconnected } = useAccount()
 
     //! Location
     useEffect(() => {
@@ -69,15 +71,7 @@ const TourismPage = ({ route, navigation }) => {
     }, []);
 
     //! Functions
-    const CheckIn = async () => {
-        // try {
-        //     const response = await web3.getTouristInfor(GLOBAL.USER_ADDRESS);
-        //     console.log("Tourist Information: ", response);
-        // } catch (error) {
-        //     console.error("Error in CheckIn: ", error);
-        // }
-        checkIn()
-    }
+
 
     //! Components
 
@@ -103,18 +97,18 @@ const TourismPage = ({ route, navigation }) => {
     const DestinationImage = () => {
         return (<View>
             <ImageBackground
-                source={{ uri: `${GLOBAL.BASE_URL}/api/destination/getDestinationPicture/${thumbnail}` }}
+                source={{ uri: `${GLOBAL.BASE_URL}/api/destination/getDestinationPicture/${placeThumbnail}` }}
                 style={styles.tourismPageImage}
                 imageStyle={styles.tourismPageImage}
             >
                 <Text
                     style={styles.tourismPageName}>
-                    {name}
+                    {placeName}
                 </Text>
 
                 <View style={styles.tourismPageRating}>
                     {
-                        Array.from({ length: rate }, (_, i) => (
+                        Array.from({ length: placeRate }, (_, i) => (
                             <SvgComponent key={i} name="StarSmall0" />
                         ))
                     }
@@ -146,7 +140,7 @@ const TourismPage = ({ route, navigation }) => {
                 <View style={styles.tourismPage_contentHeaderIcons}>
                     <SvgComponent name="Location" />
                     <Text style={styles.tourismPage_contentHeaderTextTitle}>Address |</Text>
-                    <Text style={styles.tourismPage_contentHeaderText}>{address} </Text>
+                    <Text style={styles.tourismPage_contentHeaderText}>{placeAddress} </Text>
                 </View>
             </View>
         )
@@ -203,7 +197,7 @@ const TourismPage = ({ route, navigation }) => {
                     }
 
                     <View style={styles.tourismPage_contentImages}>
-                        {list_imgs.map((img, index) => (
+                        {placeList_imgs.map((img, index) => (
                             <Image
                                 key={index}
                                 source={{ uri: `${GLOBAL.BASE_URL}/api/destination/getDestinationPicture/${thumbnail}` }}
@@ -249,9 +243,9 @@ const TourismPage = ({ route, navigation }) => {
                             navigation={navigation}
                             // props
                             author={reviews[i].author}
-                            postID={reviews[i].postID}
                             placeId={reviews[i].placeId}
                             placeName={reviews[i].placeName}
+                            postID={reviews[i].postID}
                             arrivalDate={reviews[i].arrivalDate}
                             createTime={reviews[i].createTime}
                             review={reviews[i].review}
@@ -275,17 +269,14 @@ const TourismPage = ({ route, navigation }) => {
                     {locationDetails.region},
                     {locationDetails.country}
                 </Text>)}
-                <TouchableOpacity
-                    style={styles.tourismPage_checkInBtnContainer}
-                >
 
-                    <Text style={styles.tourismPage_checkInBtnText}
-                        onPress={() => CheckIn()}
-                    >
-                        Check-in
-                    </Text>
-                </TouchableOpacity>
-            
+
+                <CheckIn
+                    placeId={placeId}
+                    placeName={placeName}
+                    location={location}
+                    userAddress={address}
+                />
             </View>
         )
     }

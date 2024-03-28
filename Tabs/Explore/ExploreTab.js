@@ -7,7 +7,7 @@ const GLOBAL = require('../Custom/Globals.js');
 const ExploreTab = ({ navigation }) => {
     const [numberDestinations, setNumberDestinations] = useState(0);
     const [exploreTabData, setExploreTabData] = useState([]);
-    const [isLoading, setIsLoading] = useState(true); // Add this line
+    const [isLoading, setIsLoading] = useState(true); 
 
     useEffect(() => {
         axios({
@@ -31,6 +31,14 @@ const ExploreTab = ({ navigation }) => {
         );
     }
 
+    /*
+
+        ExploreTab ExploreTab ExploreTab ExploreTab
+        TourismCard
+        TourismCard
+        TourismCard
+            ->TourismPage
+    */
     return (
         <View>
             <ScrollView>
@@ -40,12 +48,12 @@ const ExploreTab = ({ navigation }) => {
                         key={i}
                         navigation={navigation}
                         // Props
-                        name={exploreTabData[i].name}
-                        address={exploreTabData[i].address}
-                        rate={exploreTabData[i].rate}
-                        thumbnail={exploreTabData[i].thumbnail}
-                        id={exploreTabData[i]._id}
-                        list_imgs={exploreTabData[i].list_imgs}
+                        placeName={exploreTabData[i].name}
+                        placeAddress={exploreTabData[i].address}
+                        placeRate={exploreTabData[i].rate}
+                        placeThumbnail={exploreTabData[i].thumbnail}
+                        placeId={exploreTabData[i]._id}
+                        placeList_imgs={exploreTabData[i].list_imgs}
                     />
                 ))}
             </ScrollView>
