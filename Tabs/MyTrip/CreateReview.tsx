@@ -1,19 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, View, Text, Image, ImageBackground, TouchableOpacity, ScrollView, TextInput, Alert } from 'react-native';
 import BackNavigationButton from '../Custom/BackNavigationButton.js';
 import SvgComponent from '../../assets/SvgComponent.js';
 import styles from '../../styles.js';
 import * as ImagePicker from "expo-image-picker";
 import { StackNavigationProp } from '@react-navigation/stack';
-
 import {
   useContractRead,
   useContractWrite,
   usePrepareContractWrite,
+//   useTransactionReceipt  
 } from "wagmi";
 import Tourism_abi from "../../contracts/Tourism.json"
 import Tourism_address from "../../contracts/Tourism-address.json"
 import { getNetwork } from '@wagmi/core'
+import axios from 'axios';
+import Globals from '../Custom/Globals.js';
+import { hexToBytes } from 'viem';
 
 type Props = {
     navigation: StackNavigationProp<any>;
@@ -37,23 +40,56 @@ const CreateReview: React.FC<Props> = ({ navigation }) => {
       args: ['0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74'], // [postID, title, rate, review]
       // account: '0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74', // current address
     })
-
+    console.log("dâta:", data)
   // Writing to the Contract
+
+//   const { config } = usePrepareContractWrite({
+//     address: Tourism_address.Token as `0x${string}`,
+//     abi: Tourism_abi.abi,
+//     functionName: 'register',
+//     args: [
+//         "Trust",
+//         "Wallet",
+//         "1321321312"
+//         ], // [postID, title, rate, review]
+//     account: '0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74', // current address
+//     chainId: 306,
+//   })
+
   const { config } = usePrepareContractWrite({
     address: Tourism_address.Token as `0x${string}`,
     abi: Tourism_abi.abi,
     functionName: 'reviews',
-    args: [
-        '65f2c80ef60b126cb248752b', 
-        title, 
-        (rating * 10),
-        reviewText
-        ], // [postID, title, rate, review]
+    args: ['65f2c80ef60b126cb248752b',
+            '0x0000000000000000000000000000000000000000000000000000000000000000',
+            'Romantic',
+            '49',
+            'Beautifullll'], // [placeID, postID, title, rate, review]
     account: '0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74', // current address
     chainId: 306,
-
   })
   const { data: reviewData,error: reviewError, isError: isErrorReview, isLoading: isLoadingReview , isSuccess: isSuccessReview, write: review } = useContractWrite(config)
+  useEffect(() => {
+      console.log('reviewData: ', reviewData)
+      console.log('reviewError: ', reviewError)
+      console.log('isErrorReview: ', isErrorReview)
+      console.log('isLoadingReview: ', isLoadingReview)
+      console.log('isSuccess: ', isSuccess)
+    //   if (reviewData) {
+    //     axios({
+    //         method: 'post',
+    //         url: `${Globals.BASE_URL}/api/post/add`,
+    //         data: {
+    //             "hash": reviewData.hash
+    //         }
+    //     }).then((response) => {
+
+    //     }).catch((error) => {
+    //         console.error(error)
+    //     })
+    //   }
+      
+  }, [reviewData, reviewError, isErrorReview, isLoadingReview, isSuccess]); 
 
     const Rating: React.FC = () => {
         const stars = [5, 4, 3, 2, 1];

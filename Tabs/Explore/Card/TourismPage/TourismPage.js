@@ -9,8 +9,13 @@ import BackNavigationButton from '../../../Custom/BackNavigationButton.js';
 import * as web3 from '../../../../service/web3.js';
 import { getNetwork } from '@wagmi/core'
 import * as Location from 'expo-location';
-
+import {
+    useContractRead,
+    useContractWrite,
+    usePrepareContractWrite,
+  } from "wagmi";
 const GLOBAL = require('../../../Custom/Globals.js');
+import checkIn from './CheckIn.tsx';
 
 const TourismPage = ({ route, navigation }) => {
     //! Variables
@@ -71,6 +76,7 @@ const TourismPage = ({ route, navigation }) => {
         // } catch (error) {
         //     console.error("Error in CheckIn: ", error);
         // }
+        checkIn()
     }
 
     //! Components
@@ -279,6 +285,7 @@ const TourismPage = ({ route, navigation }) => {
                         Check-in
                     </Text>
                 </TouchableOpacity>
+            
             </View>
         )
     }

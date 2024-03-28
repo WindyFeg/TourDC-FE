@@ -1,5 +1,5 @@
 import { Text, View, StyleSheet, Pressable } from "react-native";
-import React from 'react'
+import React, { useEffect } from 'react';
 import {
   useContractRead,
   useContractWrite,
@@ -8,7 +8,8 @@ import {
 import Tourism_abi from "../contracts/Tourism.json"
 import Tourism_address from "../contracts/Tourism-address.json"
 import { getNetwork } from '@wagmi/core'
-
+import axios from 'axios';
+import GLOBAL from '../Globals';
 export default function ReviewSection() {
   // Reading the Contract
     const { chain, chains } = getNetwork()
@@ -27,20 +28,38 @@ export default function ReviewSection() {
     address: Tourism_address.Token as `0x${string}`,
     abi: Tourism_abi.abi,
     functionName: 'reviews',
-    args: ['65f2c80ef60b126cb248752b', 'Romantic', '49', 'Beautifullll'], // [postID, title, rate, review]
+    args: ['65f2c80ef60b126cb248752b',
+            '0x0000000000000000000000000000000000000000000000000000000000000000',
+            'Romantic',
+            '49',
+            'Beautifullll'], // [placeID, postID, title, rate, review]
     account: '0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74', // current address
     chainId: 306,
 
   })
   const { data: reviewData,error: reviewError, isError: isErrorReview, isLoading: isLoadingReview , isSuccess: isSuccessReview, write: review } = useContractWrite(config)
   // reviews();
-  console.log("isSuccess:", isSuccess)
+  console.log("isSuccess:", isSuccessReview)
   console.log("isLoading:", isLoadingReview)
-  console.log("isError:", isError)
-
-  console.log("error:", isErrorReview)
-  console.log("data:", data)
-
+  console.log("isError:", isErrorReview)
+  console.log("error:", reviewError)
+  console.log("data:", reviewData)
+  useEffect(() => {
+    axios({
+        method: 'post',
+        url: `${GLOBAL.BASE_URL}/api/post/add`,
+        data: {
+          "postID": reviewData
+        }
+    }).then((response) => {
+        // setNumberDestinations(response.data.length);
+        // setExploreTabData(response.data);
+        // setIsLoading(false);
+    }).catch((error) => {
+        // console.error('Error:', error);
+        // setIsLoading(false);
+    });
+  }, [reviewData]);
   return (
     <View style={styles.marginVertical}>
       <View style={styles.marginVertical}>
