@@ -96,6 +96,23 @@ export default function CheckIn(
    )
   }
 
+  const CheckInStatusNotify = ({status}) => {
+    return (
+      <>
+        <Text style={styles.tourismPage_checkInLocationText}>
+          {status}
+        </Text>
+        <TouchableOpacity
+          style={styles.tourismPage_checkInBtnContainer}
+          onPress={() => setModalVisible(false)}>
+          <Text style={styles.tourismPage_checkInBtnText}>
+            Close
+          </Text>
+        </TouchableOpacity>
+    </>
+    )
+  }
+
   const CheckInNotify = () => {
     return (
     <Modal
@@ -117,23 +134,15 @@ export default function CheckIn(
               Your Transaction Hash: {checkInData?.hash}
               </Text>
 
-              {
-                isSuccesscheckIn ? 
-                <View style={styles.centeredView}>
-                  <LoadingIcon />
-                </View> :
-                <View>
-                  <Text style={styles.tourismPage_checkInLocationText}>
-                    CheckIn Success you can closed this
-                  </Text>
-                  <Pressable
-                    style={styles.tourismPage_checkInBtnContainer}
-                    onPress={() => setModalVisible(!modalVisible)}>
-                    <Text style={styles.tourismPage_checkInBtnText}>
-                      Close
-                    </Text>
-                  </Pressable>
-              </View>
+              { 
+                isLoadingcheckIn ?
+                <LoadingIcon /> :
+                  (isSuccesscheckIn ?
+                <CheckInStatusNotify 
+                status={'CheckIn Success you can closed this'}/> 
+                :
+                <CheckInStatusNotify
+                status={'CheckIn Failed you can closed this'}/>) 
               }
           </View>
         </View>
@@ -149,6 +158,7 @@ export default function CheckIn(
 
   return (
 <>
+    {/* Popup Notify */}
     <CheckInNotify />
     {
       isLoadingcheckIn ?
