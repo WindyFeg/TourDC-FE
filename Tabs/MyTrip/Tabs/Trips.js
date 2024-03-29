@@ -8,6 +8,8 @@ const GLOBAL = require('../../Custom/Globals.js');
 /* 
 */
 const Trips = ({ navigation }) => {
+    const [numberOfTrips, setNumberOfTrips] = useState(0);
+    const [response, setResponse] = useState([]);
     const [userAddress, setUserAddress] = useState('');
     const [isLoading, setIsLoading] = useState(true);
 
@@ -23,30 +25,29 @@ const Trips = ({ navigation }) => {
 
         loadData();
     }, []);
+
+    //! Fetch user trips
     useEffect(() => {
         const fetchPosts = async () => {
-            try {
-                console.log("User ss: " + userAddress);
-                const response = await axios.get("http://192.168.1.7:5500/api/post/getCheckInPosts", {
-                    params: {
-                        address: userAddress
-                    },
-                    headers: { 'Content-Type': 'application/json' }
-                });
-                console.log(response);
+            axios({
+                method: 'post',
+                url: `${GLOBAL.BASE_URL}/api/post/getCheckInPosts`,
+                data: {
+                    "address": userAddress
+                }
+            }).then((response) => {
+                setResponse(response.data.data);
+                setNumberOfTrips(response.data.data.length);
                 setIsLoading(false);
-            }
-            catch (error) {
-                console.log("AAAA");
-                console.log(error);
+            }).catch((error) => {
+                console.error('Error:', error);
                 setIsLoading(false);
-            }
+            });
         };
 
         if (userAddress != '') fetchPosts();
     }, [userAddress]);
 
-    console.log("Save address in trips: " + userAddress);
 
     const LoadingIcon = () => {
         return (
@@ -62,8 +63,17 @@ const Trips = ({ navigation }) => {
 
             {
                 isLoading ? <LoadingIcon /> :
-                    Array.from({ length: 4 }, (_, i) => (
-                        <TripCard key={i} navigation={navigation} />
+                    Array.from({ length: numberOfTrips }, (_, i) => (
+                        <TripCard key={i}
+                            navigation={navigation}
+
+                            // Props
+                            postId={response[i]._id}
+                            postList_imgs={response[i].list_imgs}
+                            trHash={response[i].trHash}
+                            placeId={response[i].placeid}
+                            checkInTime={response[i].checkInTime}
+                        />
                     ))
             }
         </ScrollView>
