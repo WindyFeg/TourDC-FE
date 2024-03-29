@@ -1,48 +1,80 @@
-import React, { useState } from 'react';
-import { View, Text, Image, Button, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Image, Button, ScrollView, ActivityIndicator } from 'react-native';
 import PostCard from '../Card/PostCard.js';
 import * as web3 from '../../../service/web3.js';
 import { useAccount } from 'wagmi'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 /* 
 */
 const Posts = ({ navigation }) => {
-    const [userAddress, setUserAddress] = useState('');
     const [numberOfPosts, setNumberOfPosts] = useState(0);
     const [response, setResponse] = useState([]);
-    const { address, isConnecting, isDisconnected } = useAccount()
+    const [userAddress, setUserAddress] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
+
+    //! Load user address
+    useEffect(() => {
+        const loadData = async () => {
+            try {
+                setUserAddress(await AsyncStorage.getItem('address'));
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        loadData();
+    }, []);
+
+    //! Fetch user posts
+    useEffect(() => {
+        const fetchUserPosts = async () => {
+            const response = await web3.getTouristReviews(userAddress);
+            setResponse(response);
+            setNumberOfPosts(response.length);
+            setIsLoading(false);
+        };
+
+        if (userAddress != '') fetchUserPosts();
+    }, [userAddress]);
 
 
-    const fetchUserPosts = async () => {
-        // console.log("all post")
-        // console.log(await web3.getTouristReviews(address))
-        setResponse(await web3.getTouristReviews(address))
-        setNumberOfPosts(response.length)
-    };
-    fetchUserPosts();
+    const LoadingIcon = () => {
+        return (
+            <View style={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+            }}>
+                <ActivityIndicator size="large" color="#39A7FF" />
+            </View>
+        );
+    }
 
     return (
-        <View>
-            <Text>Posts</Text>
+        <ScrollView>
+            <Text>All of your reviews</Text>
 
-            {Array.from({ length: numberOfPosts }, (_, i) => (
-                <PostCard
-                    key={i}
-                    navigation={navigation}
+            {
+                isLoading ? <LoadingIcon /> :
+                    Array.from({ length: numberOfPosts }, (_, i) => (
+                        <PostCard
+                            key={i}
+                            navigation={navigation}
 
-                    // Props
-                    postId={response[i].postId}
-                    postTitle={response[i].title}
-                    postReview={response[i].review}
-                    placeId={response[i].placeId}
-                    placeName={response[i].placeName}
-                    placeRate={response[i].rate}
-                    placeAddress={response[i].placeAddress}
-                    createTime={response[i].createTime}
-                    upvoteNumber={response[i].upvoteNum}
-                />
-            ))}
-        </View>
+                            // Props
+                            postId={response[i].postId}
+                            postTitle={response[i].title}
+                            postReview={response[i].review}
+                            placeId={response[i].placeId}
+                            placeName={response[i].placeName}
+                            placeRate={response[i].rate}
+                            placeAddress={response[i].placeAddress}
+                            createTime={response[i].createTime}
+                            upvoteNumber={response[i].upvoteNum}
+                        />
+                    ))}
+        </ScrollView>
     );
 };
 

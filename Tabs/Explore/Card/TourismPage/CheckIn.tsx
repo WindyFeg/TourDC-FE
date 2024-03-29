@@ -152,7 +152,7 @@ export default function CheckIn(
 
   const LoadingIcon = () => {
     return (
-      <ActivityIndicator size="large" color="#828282" />
+      <ActivityIndicator size="large" color="#39A7FF" />
     )
   }
 
@@ -162,7 +162,7 @@ export default function CheckIn(
     <CheckInNotify />
     {
       isLoadingcheckIn ?
-      <ActivityIndicator size="large" color="#0000ff" /> :
+      <ActivityIndicator size="large" color="#39A7FF" /> :
       <CheckInBtn />
     }
 

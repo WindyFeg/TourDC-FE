@@ -7,7 +7,7 @@ const GLOBAL = require('../Custom/Globals.js');
 const ExploreTab = ({ navigation }) => {
     const [numberDestinations, setNumberDestinations] = useState(0);
     const [exploreTabData, setExploreTabData] = useState([]);
-    const [isLoading, setIsLoading] = useState(true); 
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         axios({
@@ -26,7 +26,7 @@ const ExploreTab = ({ navigation }) => {
     if (isLoading) {
         return (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <ActivityIndicator size="large" color="#0000ff" />
+                <ActivityIndicator size="large" color="#39A7FF" />
             </View>
         );
     }

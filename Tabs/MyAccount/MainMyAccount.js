@@ -41,20 +41,20 @@ const MainMyAccount = ({ navigation }) => {
     fetchToken();
 
     // Fetch user data from backend
-    const fetchUser = async () => {
-        try {
-            const userToken = token;
-            const response = await axios.get(`${GLOBAL.BASE_URL}/api/user/getCurrent`, {
-                headers: {
-                    'Authorization': `Bearer ${userToken}`
-                }
-            });
-            console.log("User Data: " + response.data);
-        } catch (error) {
-            console.error(error);
-        }
-    }
-    fetchUser();
+    // const fetchUser = async () => {
+    //     try {
+    //         const userToken = token;
+    //         const response = await axios.get(`${GLOBAL.BASE_URL}/api/user/getCurrent`, {
+    //             headers: {
+    //                 'Authorization': `Bearer ${userToken}`
+    //             }
+    //         });
+    //         console.log("User Data: " + response.data);
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // }
+    // fetchUser();
 
 
     //! Components
