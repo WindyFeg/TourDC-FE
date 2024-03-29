@@ -5,8 +5,24 @@ import styles from '../../../styles.js';
 import SvgComponent from '../../../assets/SvgComponent.js';
 /* 
 */
-const PostCard = ({ navigation }) => {
+const PostCard = (props) => {
 
+    // ! Variables
+    const { navigation
+        , postId
+        , postTitle
+        , postReview
+        , placeId
+        , placeName
+        , placeRate
+        , placeAddress
+        , createTime
+        , upvoteNumber
+
+    } = props;
+
+
+    // ! Components
     const ReviewPost = () => {
         navigation.navigate('ReviewPost');
     }
@@ -14,15 +30,14 @@ const PostCard = ({ navigation }) => {
     const PostCardContent = () => {
         return <View>
             {/* Title */}
-            <Text>Get our into new
-                Sea Heven in BaliGet our into new
-                Sea Heven in Bali</Text>
+            <Text>{placeName}</Text>
+            <Text>{postTitle}</Text>
             {/* Date */}
-            <Text>16/11/2022</Text>
+            <Text>{createTime}</Text>
 
             {/* Token */}
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text>1000</Text>
+                <Text>{placeRate}</Text>
                 <Image
                     source={require('../../../assets/logo/DCToken.png')}
                     style={{ width: 25, height: 25 }}
