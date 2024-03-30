@@ -9,8 +9,14 @@ const GLOBAL = require('../../Custom/Globals.js');
 $ Contains basic information of a destination, hotel, restaurant, or activity
 */const TourismCard = (props) => {
     // ! Variables
-    const { id, navigation, name, address, rate, thumbnail, list_imgs } = props;
-    const modifiedRate = Math.floor(rate / 10);
+    const { placeId
+        , navigation
+        , placeName
+        , placeAddress
+        , placeRate
+        , placeThumbnail
+        , placeList_imgs } = props;
+    const modifiedRate = Math.floor(placeRate / 10);
 
     // ! Components
     /*
@@ -19,12 +25,12 @@ $ Contains basic information of a destination, hotel, restaurant, or activity
     const TourismPage = () => {
         navigation.navigate('TourismPage',
             {
-                id: id,
-                name: name,
-                address: address,
-                rate: modifiedRate,
-                thumbnail: thumbnail,
-                list_imgs: list_imgs
+                placeId: placeId,
+                placeName: placeName,
+                placeAddress: placeAddress,
+                placeRate: modifiedRate,
+                placeThumbnail: placeThumbnail,
+                placeList_imgs: placeList_imgs
             });
     }
 
@@ -32,7 +38,7 @@ $ Contains basic information of a destination, hotel, restaurant, or activity
     return (
         <View style={styles.destinationCard}>
             <ImageBackground
-                source={{ uri: `${GLOBAL.BASE_URL}/api/destination/getDestinationPicture/${thumbnail}` }}
+                source={{ uri: `${GLOBAL.BASE_URL}/api/destination/getDestinationPicture/${placeThumbnail}` }}
                 style={styles.bcDestinationImage}
                 imageStyle={styles.bcDestinationImage}
             >
@@ -48,11 +54,11 @@ $ Contains basic information of a destination, hotel, restaurant, or activity
 
                         <View style={styles.bcTextContainer}>
                             <Text style={styles.bcDestinationName}>
-                                {name}
+                                {placeName}
                             </Text>
 
                             <Text style={styles.bcDestinationAddress}>
-                                {address}
+                                {placeAddress}
                             </Text>
                         </View>
                         {/* create a button to navigate to Tourism Page */}

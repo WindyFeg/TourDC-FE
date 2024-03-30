@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Text, View, Image, TextInput, TouchableOpacity, Button } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import ExploreTab from '../Explore/ExploreTab';
@@ -13,12 +13,50 @@ import { Svg } from 'react-native-svg';
 import MyVoucher from '../MyTrip/Tabs/MyVoucher.js';
 import { useWeb3Modal } from '@web3modal/wagmi-react-native'
 import { ScrollView } from 'react-native-gesture-handler';
+import axios from 'axios';
+import GLOBAL from '../Custom/Globals.js';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 /* 
 ! Tourism Page
 $ Contains information of a destination, hotel, restaurant, or activity
 */
 const MainMyAccount = ({ navigation }) => {
     const { open, close } = useWeb3Modal()
+    const { token, setToken } = useState('')
+
+    //! Fetch Data
+    // Fetch token from AsyncStorage
+    const fetchToken = async () => {
+        try {
+            const token = await AsyncStorage.getItem('refreshToken');
+            if (token !== null) {
+                console.log("User Token: " + token);
+                setToken(token);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    fetchToken();
+
+    // Fetch user data from backend
+    // const fetchUser = async () => {
+    //     try {
+    //         const userToken = token;
+    //         const response = await axios.get(`${GLOBAL.BASE_URL}/api/user/getCurrent`, {
+    //             headers: {
+    //                 'Authorization': `Bearer ${userToken}`
+    //             }
+    //         });
+    //         console.log("User Data: " + response.data);
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // }
+    // fetchUser();
+
+
     //! Components
     const UserHeaderInfo = () => {
         return (

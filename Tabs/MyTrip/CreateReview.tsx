@@ -25,7 +25,6 @@ type Props = {
 const CreateReview: React.FC<Props> = ({ navigation }) => {
     const [file, setFile] = useState<string | null>(null);
     const [errorText, setErrorText] = useState<string | null>(null);
-
     const [title, onChangeTitle] = useState<string>('This is an title');
     const [reviewText, onChangeReviewText] = useState<string>('This is an review');
     const [rating, setRating] = useState<number>(0);
@@ -37,24 +36,9 @@ const CreateReview: React.FC<Props> = ({ navigation }) => {
       address: Tourism_address.Token as `0x${string}`, 
       abi: Tourism_abi.abi,
       functionName: 'touristIdentify', // contract method
-      args: ['0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74'], // [postID, title, rate, review]
       // account: '0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74', // current address
     })
     console.log("dâta:", data)
-  // Writing to the Contract
-
-//   const { config } = usePrepareContractWrite({
-//     address: Tourism_address.Token as `0x${string}`,
-//     abi: Tourism_abi.abi,
-//     functionName: 'register',
-//     args: [
-//         "Trust",
-//         "Wallet",
-//         "1321321312"
-//         ], // [postID, title, rate, review]
-//     account: '0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74', // current address
-//     chainId: 306,
-//   })
 
   const { config } = usePrepareContractWrite({
     address: Tourism_address.Token as `0x${string}`,
@@ -75,19 +59,6 @@ const CreateReview: React.FC<Props> = ({ navigation }) => {
       console.log('isErrorReview: ', isErrorReview)
       console.log('isLoadingReview: ', isLoadingReview)
       console.log('isSuccess: ', isSuccess)
-    //   if (reviewData) {
-    //     axios({
-    //         method: 'post',
-    //         url: `${Globals.BASE_URL}/api/post/add`,
-    //         data: {
-    //             "hash": reviewData.hash
-    //         }
-    //     }).then((response) => {
-
-    //     }).catch((error) => {
-    //         console.error(error)
-    //     })
-    //   }
       
   }, [reviewData, reviewError, isErrorReview, isLoadingReview, isSuccess]); 
 

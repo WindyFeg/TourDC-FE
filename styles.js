@@ -1047,6 +1047,29 @@ const styles = StyleSheet.create({
         fontSize: 12,
     },
 
+    tourismPage_checkInNotify: {
+        margin: 20,
+        backgroundColor: 'white',
+        borderRadius: 10,
+        padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        // alignItems: 'center',
+        marginTop: 22,
+    },
+
     MyAccount_BtnLogout: {
         backgroundColor: '#ff0000',
         borderRadius: 5,

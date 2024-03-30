@@ -5,7 +5,16 @@ import CreateReview from '../CreateReview';
 import styles from '../../../styles.js';
 /* 
 */
-const TripCard = ({ navigation }) => {
+const TripCard = (props) => {
+    // ! Variables
+    const { navigation
+        , postId
+        , postList_imgs
+        , trHash
+        , placeId
+        , checkInTime
+
+    } = props;
 
     const ReviewPost = () => {
         navigation.navigate('ReviewPost');
@@ -17,9 +26,8 @@ const TripCard = ({ navigation }) => {
 
     const TripCardContent = (props) => {
         return (<View>
-            <Text>Lighthouse
-                Nha Trang City, Vietnam</Text>
-            <Text>Check In date: 12/5/2002</Text>
+            <Text>Post ID: {postId}</Text>
+            <Text>Check In date: {checkInTime}</Text>
 
             <TouchableOpacity
                 onPress={CreateReview}
