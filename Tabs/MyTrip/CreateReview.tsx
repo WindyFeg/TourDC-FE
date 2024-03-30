@@ -60,7 +60,7 @@ const CreateReview: React.FC<Props> = ({ navigation }) => {
     address: Tourism_address.Token as `0x${string}`,
     abi: Tourism_abi.abi,
     functionName: 'reviews',
-    args: ['65f2c80ef60b126cb248752b',
+    args: [ '65f2c80ef60b126cb248752b',
             '0x0000000000000000000000000000000000000000000000000000000000000000',
             'Romantic',
             '49',
