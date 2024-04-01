@@ -115,7 +115,7 @@ const MainMyTrip = () => {
     )
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, padding: 10 }}>
             <HeaderMyTrip
                 username="David BeckHam"
                 REP="100"

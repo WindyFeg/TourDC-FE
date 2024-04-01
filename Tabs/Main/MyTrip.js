@@ -17,7 +17,8 @@ const Stack = createStackNavigator();
 
 const MyTrip = ({ navigation }) => {
     return (
-        <NavigationContainer independent={true}>
+        <NavigationContainer
+            independent={true}>
             <Stack.Navigator initialRouteName="MyTrip" >
                 <Stack.Screen name="MyTrip"
                     component={MainMyTrip}

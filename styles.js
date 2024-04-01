@@ -5,8 +5,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
+        // alignItems: 'center',
+        // justifyContent: 'center',
     },
 
     mainExploreContainer: {
@@ -666,7 +666,7 @@ const styles = StyleSheet.create({
         tabBarLabelStyle: { fontSize: 10, fontWeight: 'bold' },
         tabBarIndicatorStyle: { backgroundColor: '#75baf1' },
         tabBarStyle: { backgroundColor: '#d9d9d9', borderRadius: 10 },
-
+        padding: 10
     },
 
     MyTripCard_Container: {
@@ -1084,7 +1084,32 @@ const styles = StyleSheet.create({
         fontFamily: 'InterR',
         fontSize: 14,
         color: 'white',
-    }
+    },
+
+    HomeTitle: {
+        color: '#FFF',
+        fontSize: 45,
+        fontFamily: 'InterB',
+        top: 50,
+        padding: 20,
+    },
+
+    HomeSubTitle: {
+        color: '#FFF',
+        fontSize: 15,
+        fontFamily: 'InterM',
+        top: 50,
+        paddingHorizontal: 20,
+        margin: 10,
+    },
+
+    HomeTitleBlack: {
+        color: '#000',
+        fontSize: 30,
+        fontFamily: 'InterB',
+        margin: 10,
+    },
+
 
 });
 

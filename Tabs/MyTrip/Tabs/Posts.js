@@ -52,7 +52,9 @@ const Posts = ({ navigation }) => {
     }
 
     return (
-        <ScrollView>
+        <ScrollView
+            backgroundColor="#F9F9F9"
+        >
             <Text>All of your reviews</Text>
 
             {
