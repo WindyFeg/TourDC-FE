@@ -1041,11 +1041,38 @@ const styles = StyleSheet.create({
         margin: 10,
     },
 
+    tourismPage_checkInLocationTextError: {
+        color: 'red',
+        fontFamily: 'InterB',
+    },
+
+    tourismPage_checkInLocationTextSuccess: {
+        color: 'green',
+        fontFamily: 'InterB',
+    },
+
+    tourismPage_TransactionHashContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#D9D9D9',
+        borderRadius: 5,
+    },
+
     tourismPage_checkInBtnText: {
         color: 'white',
         fontFamily: 'InterB',
         fontSize: 12,
     },
+
+    tourismPage_clipboardIcon: {
+        width: 10,
+        height: 10,
+        opacity: 0.7,
+        margin: 10,
+    },
+
 
     tourismPage_checkInNotify: {
         margin: 20,

@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import {Alert, Modal, StyleSheet, Text, Pressable, View, Touchable, TouchableOpacity, ActivityIndicator} from 'react-native';
+import {Alert, 
+Modal, 
+StyleSheet, 
+Text,
+Pressable, 
+View, 
+Image,
+Touchable, 
+TouchableOpacity, 
+ActivityIndicator, } from 'react-native';
 import {
   useContractRead,
   useContractWrite,
@@ -11,7 +20,8 @@ import { getNetwork } from '@wagmi/core'
 import axios from 'axios';
 import GLOBAL from '../../../Custom/Globals';
 import styles from '../../../../styles';
-
+import * as Clipboard from 'expo-clipboard';
+import * as WebBrowser from 'expo-web-browser';
 interface CheckInProps {
   placeId: string;
   placeName: string;
@@ -27,6 +37,7 @@ export default function CheckIn(
 {
   const [modalVisible, setModalVisible] = useState(false);
   const { chain, chains } = getNetwork()
+  const [isGPSValid, setIsGPSValid] = useState(0);
 
   // Writing to the Contract
   const { config } = usePrepareContractWrite({
@@ -45,6 +56,20 @@ export default function CheckIn(
     isSuccess: isSuccesscheckIn, 
     write: checkIn } = useContractWrite(config)
 
+  const ViewTransaction = async () => {
+    if (checkInData == null) {
+      return;
+    }
+    const url = `https://blockchain.agridential.vn/vibi/tx/${checkInData.hash}`
+    await WebBrowser.openBrowserAsync(url);
+  }
+
+  const copyToClipboard = async () => {
+    if (checkInData == null) {
+      return;
+    }
+    await Clipboard.setStringAsync(checkInData?.hash);
+  };
     
     useEffect(() => {
       console.log("_______CheckIn.tsx_______")
@@ -84,22 +109,50 @@ export default function CheckIn(
     });
   }, [checkInData]);
 
-  const CheckInBtn = () => {
+  //* Call BE to Check GPS 
+  const CheckGPS = () => {
+    axios({
+      method: 'post',
+      url: `${GLOBAL.BASE_URL}/api/destination/checkGPS`,
+      data: {
+        "longitude": location.coords.longitude,
+        "latitude": location.coords.latitude,
+        "placeID": placeId
+      }
+    }).then((response) => {
+      console.log("GPS Status:", response.data)
+      let status = response.data.success;
+      if (status == true) {
+        if (checkIn) {
+          checkIn();
+          setIsGPSValid(1);
+        }
+      }
+      else {
+        setIsGPSValid(-1);
+        setModalVisible(true);
+      }
+    }).catch((error) => {
+      console.error('Error:', error);
+    });
+  }
+
+  const CheckInBtn = ({text, func}) => {
    return (
       <TouchableOpacity
         style={styles.tourismPage_checkInBtnContainer}
-        onPress={() => checkIn?.()}>
+        onPress={func}>
         <Text style={styles.tourismPage_checkInBtnText}>
-          Check-In
+          {text}
         </Text>
       </TouchableOpacity>
    )
   }
 
-  const CheckInStatusNotify = ({status}) => {
+  const CheckInStatusNotify = ({status, statusStyle}) => {
     return (
       <>
-        <Text style={styles.tourismPage_checkInLocationText}>
+        <Text style={statusStyle}>
           {status}
         </Text>
         <TouchableOpacity
@@ -130,20 +183,69 @@ export default function CheckIn(
               TourDC will check your current address to perform CheckIn in destination
               </Text>
 
+              {/* Transaction Hash */}
               <Text style={styles.tourismPage_checkInLocationText}>
-              Your Transaction Hash: {checkInData?.hash}
+                Your Transaction Hash (Touch to copy):  
               </Text>
+              <View style={styles.tourismPage_TransactionHashContainer}>
+                <TouchableOpacity onPress={copyToClipboard}>
+                  <Text style={styles.tourismPage_checkInLocationText}>
+                    {checkInData?.hash}
+                    {checkInData?.hash && (
+                      <Image
+                        source={require('../../../../assets/icons/clipboard.png')}
+                        style={styles.tourismPage_clipboardIcon}
+                      />
+                    )}
+                  </Text>
+                </TouchableOpacity>
+              </View>
 
+             {/* Checking GPS Status */}
+              {
+                isGPSValid == -1 ?
+                <Text style={
+                  [
+                    styles.tourismPage_checkInLocationText, 
+                    styles.tourismPage_checkInLocationTextError
+                  ]}>
+                  You are not in the destination
+                </Text> : null
+              }
+
+              {/* Check In Transaction Status */}
               { 
                 isLoadingcheckIn ?
                 <LoadingIcon /> :
                   (isSuccesscheckIn ?
                 <CheckInStatusNotify 
-                status={'CheckIn Success you can closed this'}/> 
+                status={'Check-In Success you can closed this'}
+                statusStyle = {[
+                  styles.tourismPage_checkInLocationText, 
+                  styles.tourismPage_checkInLocationTextSuccess
+                ]}
+                /> 
                 :
                 <CheckInStatusNotify
-                status={'CheckIn Failed you can closed this'}/>) 
+                status={'Check-In Failed you can closed this'}
+                statusStyle = {[
+                  styles.tourismPage_checkInLocationText, 
+                  styles.tourismPage_checkInLocationTextError
+                ]}
+                />) 
               }
+
+              {/* View Transaction Button */}
+              {
+                isSuccesscheckIn ?
+                <CheckInBtn 
+              text={'View Transaction'}
+              func={() => ViewTransaction()}
+              />
+              : null
+              }
+
+              
           </View>
         </View>
       </Modal>
@@ -162,8 +264,11 @@ export default function CheckIn(
     <CheckInNotify />
     {
       isLoadingcheckIn ?
-      <ActivityIndicator size="large" color="#39A7FF" /> :
-      <CheckInBtn />
+      <LoadingIcon />:
+      <CheckInBtn 
+      text={'Check-In'}
+      func={() => CheckGPS()}
+      />
     }
 
     </>
