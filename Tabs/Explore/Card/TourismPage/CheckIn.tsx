@@ -20,6 +20,7 @@ import { getNetwork } from '@wagmi/core'
 import axios from 'axios';
 import GLOBAL from '../../../Custom/Globals';
 import styles from '../../../../styles';
+import { useWaitForTransaction } from 'wagmi'
 import * as Clipboard from 'expo-clipboard';
 import * as WebBrowser from 'expo-web-browser';
 interface CheckInProps {
@@ -38,7 +39,7 @@ export default function CheckIn(
   const [modalVisible, setModalVisible] = useState(false);
   const { chain, chains } = getNetwork()
   const [isGPSValid, setIsGPSValid] = useState(0);
-
+  // const [result, setResult] = useState();
   // Writing to the Contract
   const { config } = usePrepareContractWrite({
     address: Tourism_address.Token as `0x${string}`,
@@ -83,6 +84,7 @@ export default function CheckIn(
       console.log("error:", checkInError)
       console.log("data:", checkInData)
       console.log("__________________________")
+
   }, [checkInData, checkInError, isErrorcheckIn, isLoadingcheckIn, isSuccesscheckIn]);
 
   useEffect(() => {
@@ -93,6 +95,10 @@ export default function CheckIn(
   , [isLoadingcheckIn]);
 
   //* Call BE to store checkIn data 
+  
+   const result = useWaitForTransaction({
+      hash: checkInData?.hash,
+    })
   useEffect(() => {
     axios({
         method: 'post',
@@ -107,7 +113,7 @@ export default function CheckIn(
     }).catch((error) => {
         console.error('Error:', error);
     });
-  }, [checkInData]);
+  }, [result]);
 
   //* Call BE to Check GPS 
   const CheckGPS = () => {
