@@ -778,8 +778,9 @@ const styles = StyleSheet.create({
 
     CreateReview_errorText: {
         color: 'red',
-        fontFamily: 'InterL',
-        fontSize: 12,
+        fontFamily: 'InterR',
+        fontSize: 14,
+        margin: 10,
     },
 
     CreateReview_uploadImageButtonText: {

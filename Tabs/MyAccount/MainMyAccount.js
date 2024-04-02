@@ -160,6 +160,7 @@ const MainMyAccount = ({ navigation }) => {
     //! Navigation
     const Logout = () => {
         // navigation.goBack();
+        close();
         open()
     }
 

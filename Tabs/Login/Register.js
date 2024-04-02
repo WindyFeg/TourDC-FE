@@ -4,6 +4,8 @@ import BackNavigationButton from '../Custom/BackNavigationButton';
 import styles from '../../styles.js';
 import { StatusBar } from 'expo-status-bar';
 import loginBackground from '../../assets/background/login_background.png';
+import * as ImagePicker from "expo-image-picker";
+import UploadImage from '../Custom/UploadImage.js';
 
 //! Components put outside for not being re-rendered
 const RegisterInputUI = ({ label,
@@ -40,9 +42,23 @@ const Register = ({ navigation }) => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [age, setAge] = useState('');
     const [avt, setAvt] = useState('');
+    const [avtSource, setAvtSource] = useState('');
 
     const [walletAddress, setWalletAddress] = useState('');
     const [privateKey, setPrivateKey] = useState('');
+    const [errorText, setErrorText] = useState(null);
+
+    const checkPasswords = () => {
+        if (password !== confirmPassword) {
+            setErrorText('Passwords do not match');
+        } else {
+            setErrorText(null);
+        }
+    };
+
+    useEffect(() => {
+        checkPasswords();
+    }, [password, confirmPassword]);
 
     return (
         <View styles={styles.registerContainer}>
@@ -98,6 +114,17 @@ const Register = ({ navigation }) => {
                         isPassword={false}
                         keyboardType={'numeric'}
                     />
+
+                    <UploadImage
+                        setFiles={setAvt}
+                        setSource={setAvtSource}
+                    />
+
+                    {
+                        errorText && <Text style={styles.CreateReview_errorText}>
+                            {errorText}
+                        </Text>
+                    }
 
                 </View>
             </ImageBackground>
