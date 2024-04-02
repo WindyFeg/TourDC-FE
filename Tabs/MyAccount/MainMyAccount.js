@@ -159,6 +159,7 @@ const MainMyAccount = ({ navigation }) => {
 
     //! Navigation
     const Logout = () => {
+        // navigation.goBack();
         open()
     }
 

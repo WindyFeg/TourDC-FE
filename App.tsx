@@ -80,11 +80,14 @@ export default function App() {
           <Stack.Screen
             name="TourDC_Register"
             component={Register}
+            options={{ headerShown: false }}
+          
           />
 
           <Stack.Screen
             name="TourDC_ForgotPassword"
             component={ForgotPassword}
+            options={{ headerShown: false }}  
           />
 
           <Stack.Screen

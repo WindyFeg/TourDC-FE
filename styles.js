@@ -1137,6 +1137,30 @@ const styles = StyleSheet.create({
         margin: 10,
     },
 
+    registerContainer: {
+        backgroundColor: '#fff',
+        padding: 10,
+        marginTop: 20,
+    },
+
+    registerBackground: {
+        justifyContent: "center",
+        alignItems: "center",
+        height: '100%',
+    },
+
+    registerBackgroundOverlay: {
+        alignItems: "center",
+        width: '95%',
+        height: '80%',
+        backgroundColor: 'white',
+        borderRadius: 20,
+        paddingTop: 20,
+    },
+    registerHeader: {
+        height: 30,
+        backgroundColor: '#fff',
+    },
 
 });
 

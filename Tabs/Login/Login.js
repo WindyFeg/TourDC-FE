@@ -12,6 +12,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 const GLOBAL = require('../Custom/Globals.js');
 
+//! Components put outside for not being re-rendered
 const LoginInputUI = ({ username, setUsername, password, setPassword }) => {
     return (
         <SafeAreaView>
