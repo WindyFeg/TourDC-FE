@@ -767,13 +767,16 @@ const styles = StyleSheet.create({
     },
 
     CreateReview_imageContainer: {
+        flexDirection: 'row',
+
     }
     ,
 
     CreateReview_image: {
-        width: 100,
-        height: 100,
+        width: 50,
+        height: 50,
         borderRadius: 10,
+        margin: 10,
     },
 
     CreateReview_errorText: {
@@ -784,6 +787,10 @@ const styles = StyleSheet.create({
     },
 
     CreateReview_uploadImageButtonText: {
+        color: 'white',
+        fontFamily: 'InterB',
+        fontSize: 12,
+
     },
 
     CreateReview_uploadImageButton: {
@@ -803,7 +810,9 @@ const styles = StyleSheet.create({
     },
 
     CreateReview_uploadImageContainer: {
-        margin: 20,
+        margin: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
     },
 
     ReviewPostShort_achievement: {
@@ -1153,7 +1162,7 @@ const styles = StyleSheet.create({
     registerBackgroundOverlay: {
         alignItems: "center",
         width: '95%',
-        height: '80%',
+        height: '85%',
         backgroundColor: 'white',
         borderRadius: 20,
         paddingTop: 20,

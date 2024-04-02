@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { View, TouchableOpacity, Text, Image } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import styles from '../../styles.js';
+import * as FileSystem from 'expo-file-system';
 
 const UploadImage = ({ setFiles, setSource }) => {
-    const [file, setFile] = useState(null);
+    const [uri, setUri] = useState(null);
 
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -15,11 +16,18 @@ const UploadImage = ({ setFiles, setSource }) => {
         });
 
         if (!result.cancelled) {
-            setFile(result.uri);
-            setFiles(result);
-            setSource(result.uri);
+            setUri(result.uri);
+            setSource(result);
+            getBase64();
         }
     };
+
+    const getBase64 = async () => {
+        const base64 = await FileSystem.readAsStringAsync(
+            uri, { encoding: FileSystem.EncodingType.Base64 });
+        setFiles(base64);
+    }
+
 
     return (
         <View style={styles.CreateReview_uploadImageContainer}>
@@ -30,9 +38,9 @@ const UploadImage = ({ setFiles, setSource }) => {
                 </Text>
             </TouchableOpacity>
 
-            {file ? (
+            {uri ? (
                 <View style={styles.CreateReview_imageContainer}>
-                    <Image source={{ uri: file }}
+                    <Image source={{ uri: uri }}
                         style={styles.CreateReview_image} />
                 </View>
             ) : (
