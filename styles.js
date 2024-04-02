@@ -600,7 +600,7 @@ const styles = StyleSheet.create({
             width: 0,
             height: 4,
         },
-        elevation: 3,
+        elevation: 2,
         shadowOpacity: 0.5,
         marginBottom: 20,
 
@@ -782,6 +782,13 @@ const styles = StyleSheet.create({
     CreateReview_errorText: {
         color: 'red',
         fontFamily: 'InterR',
+        fontSize: 14,
+        margin: 10,
+    },
+
+    CreateReview_successText: {
+        color: 'green',
+        fontFamily: 'InterB',
         fontSize: 14,
         margin: 10,
     },
