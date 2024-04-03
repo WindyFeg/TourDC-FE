@@ -21,6 +21,7 @@
     "@types/react": "~18.2.14",
     "@walletconnect/modal-react-native": "^1.0.0-rc.11",
     "@walletconnect/react-native-compat": "^2.11.3",
+    "@web3modal/wagmi": "^3.5.7",
     "@web3modal/wagmi-react-native": "^1.2.1",
     "axios": "^1.6.7",
     "expo": "~49.0.15",
@@ -28,6 +29,7 @@
     "expo-barcode-scanner": "~12.5.3",
     "expo-font": "~11.4.0",
     "expo-image-picker": "~14.3.2",
+    "expo-location": "~16.1.0",
     "expo-status-bar": "~1.6.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -44,8 +46,7 @@
     "typescript": "^5.4.3",
     "viem": "1.21.4",
     "wagmi": "1.4.13",
-    "web3": "^4.6.0",
-    "expo-location": "~16.1.0"
+    "web3": "^4.6.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

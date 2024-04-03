@@ -192,7 +192,7 @@ const Login = ({ navigation }) => {
                         label={
                             <View style={styles.metaMaskView} >
                                 <SvgComponent name="MetaMask" />
-                                <Text style={styles.btnText}>METAMASK</Text>
+                                <Text style={styles.btnText}>Connect Wallet</Text>
                             </View>
                         }
                         testID="button-connect"

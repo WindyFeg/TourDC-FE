@@ -14,7 +14,9 @@ import { WagmiConfig } from 'wagmi'
 import { mainnet, polygon, arbitrum, sepolia } from 'viem/chains'
 import { createWeb3Modal, defaultWagmiConfig, Web3Modal } from '@web3modal/wagmi-react-native'
 import {vibiChain} from './defineChain.tsx'
-import { useNetwork, useSwitchNetwork } from 'wagmi'
+import { useConnect } from 'wagmi'
+// import { injected } from 'wagmi/connectors'
+// import { useNetwork, useSwitchNetwork } from 'wagmi'
 // import { createPublicClient, http } from 'viem'
 // import { fantom } from 'viem/chains'
  
@@ -39,7 +41,7 @@ const metadata = {
 
 
 
-const chains = [vibiChain, sepolia, polygon, arbitrum, mainnet]
+const chains = [vibiChain]
 
 const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata })
 
