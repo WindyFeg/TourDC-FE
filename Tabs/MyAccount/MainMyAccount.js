@@ -16,6 +16,10 @@ import { ScrollView } from 'react-native-gesture-handler';
 import axios from 'axios';
 import GLOBAL from '../Custom/Globals.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+    useAccount,
+    useDisconnect
+} from "wagmi";
 
 /* 
 ! Tourism Page
@@ -24,6 +28,8 @@ $ Contains information of a destination, hotel, restaurant, or activity
 const MainMyAccount = ({ navigation }) => {
     const { open, close } = useWeb3Modal()
     const { token, setToken } = useState('')
+    const { address, isConnecting, isDisconnected } = useAccount()
+    const { disconnect } = useDisconnect()
 
     //! Fetch Data
     // Fetch token from AsyncStorage
@@ -156,12 +162,28 @@ const MainMyAccount = ({ navigation }) => {
         }></Text >)
     )
 
+    const deleteData = async () => {
+        try {
+            await Promise.all([
+                AsyncStorage.setItem('address', ''),
+                AsyncStorage.setItem('refreshToken', ''),
+                AsyncStorage.setItem('privateKey', '')
+            ]);
+            console.log("User Data removed");
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     //! Navigation
     const Logout = () => {
-        // navigation.goBack();
-        close();
-        open()
+        // navigation.navigate('Login', { screen: 'TourDC_Login' });
+        navigation.navigate('TourDC_Login');
+        deleteData();
+        if (isConnecting) {
+            close();
+            open()
+        }
     }
 
     const Profile = () => {

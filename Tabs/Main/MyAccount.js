@@ -21,36 +21,36 @@ const Stack = createStackNavigator();
 
 const MyAccount = ({ navigation }) => {
     return (
-        <NavigationContainer independent={true}>
-            <Stack.Navigator initialRouteName="MainMyAccount" >
+        // <NavigationContainer independent={false}>
+        <Stack.Navigator initialRouteName="MainMyAccount" >
 
-                <Stack.Screen name="MainMyAccount"
-                    component={MainMyAccount}
-                    options={{ headerShown: false }}
-                />
+            <Stack.Screen name="MainMyAccount"
+                component={MainMyAccount}
+                options={{ headerShown: false }}
+            />
 
-                <Stack.Screen name="ExchangeVoucher"
-                    component={ExchangeVoucher}
-                />
+            <Stack.Screen name="ExchangeVoucher"
+                component={ExchangeVoucher}
+            />
 
-                <Stack.Screen name="MyProfile"
-                    component={MyProfile}
-                />
+            <Stack.Screen name="MyProfile"
+                component={MyProfile}
+            />
 
-                <Stack.Screen name="Settings"
-                    component={Settings}
-                />
+            <Stack.Screen name="Settings"
+                component={Settings}
+            />
 
-                <Stack.Screen name="HelpCentre"
-                    component={HelpCentre}
-                />
+            <Stack.Screen name="HelpCentre"
+                component={HelpCentre}
+            />
 
-                <Stack.Screen name="Point"
-                    component={Point}
-                />
+            <Stack.Screen name="Point"
+                component={Point}
+            />
 
-            </Stack.Navigator>
-        </NavigationContainer>
+        </Stack.Navigator>
+        // </NavigationContainer>
     )
 }
 

@@ -55,6 +55,19 @@ const Login = ({ navigation }) => {
     const [Wrong, setWrong] = useState(false);
 
     useEffect(() => {
+        const loadData = async () => {
+            try {
+                setUserAddress(await AsyncStorage.getItem('address'));
+                console.log("Load address" + userAddress)
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        loadData();
+    }, []);
+
+    useEffect(() => {
         const storeData = async () => {
             let _userAddress = userAddress ? userAddress : address;
             let _refreshToken = refreshToken ? refreshToken : null;
@@ -64,14 +77,16 @@ const Login = ({ navigation }) => {
                     AsyncStorage.setItem('refreshToken', _refreshToken),
                     AsyncStorage.setItem('privateKey', privateKey)
                 ]);
-                console.log("Save address: " + userAddress);
+                console.log("Save address: " + _userAddress);
+                navigation.navigate('TourDC_Main');
             } catch (error) {
                 console.log(error);
             }
         };
 
-        storeData();
-        navigation.navigate('TourDC_Main');
+        if ((userAddress != '') || (address != undefined)) {
+            storeData();
+        }
     }, [address, userAddress]);
 
     useEffect(() => {
@@ -104,6 +119,7 @@ const Login = ({ navigation }) => {
     }
 
     const Authentication = () => {
+        console.log("Current Storage Data: " + address + "/" + userAddress)
         fetchLoginData();
     }
 

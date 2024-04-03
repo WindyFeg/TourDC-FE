@@ -151,15 +151,15 @@ const test = async () => {
   const address2 = "0x9E0E58F9052aDc53986eA9ca7cf8389b0EdE364f"
   const postID = "0x5a28a54a254168fde809b36b87260f51a07c299f232380cc09e5d6c271c2b77c"
 
-  console.log(await getBalanceOf(owner))
-  console.log("getTouristInfor function: ", await getTouristInfor(owner))
-  console.log("get all reviews of tourist: ", await getTouristReviews(owner))
-  console.log("get all review of destination: ", await getDestinationReviews("65d6ec325ecf27cb3d803d87"))
-  console.log("get review By Post ID: ", await getReviewByPostID(postID))
-  console.log("see postID list can get reward of account: ", await getRewardListsPostID(owner))
-  console.log("see reward of one postID of acc1: ", await getRewardPoinFromPostID(postID, owner))
-  console.log("see reward of one postID of acc2: ", await getRewardPoinFromPostID(postID, address1))
-  console.log("see reward of one postID of acc3: ", await getRewardPoinFromPostID(postID, address2))
+  // console.log(await getBalanceOf(owner))
+  // console.log("getTouristInfor function: ", await getTouristInfor(owner))
+  // console.log("get all reviews of tourist: ", await getTouristReviews(owner))
+  // console.log("get all review of destination: ", await getDestinationReviews("65d6ec325ecf27cb3d803d87"))
+  // console.log("get review By Post ID: ", await getReviewByPostID(postID))
+  // console.log("see postID list can get reward of account: ", await getRewardListsPostID(owner))
+  // console.log("see reward of one postID of acc1: ", await getRewardPoinFromPostID(postID, owner))
+  // console.log("see reward of one postID of acc2: ", await getRewardPoinFromPostID(postID, address1))
+  // console.log("see reward of one postID of acc3: ", await getRewardPoinFromPostID(postID, address2))
 
 
   // console.log("get all rates of destination: ", await getDestinationRates("1"))
