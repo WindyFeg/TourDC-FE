@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, View, Image, TextInput, TouchableOpacity, ImageBackground } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import ExploreTab from '../Explore/ExploreTab';
 import SvgComponent from '../../assets/SvgComponent';
@@ -11,20 +12,48 @@ import Posts from './Tabs/Posts.js';
 import Collections from './Tabs/Collections.js';
 import * as web3 from '../../service/web3.js';
 import { useAccount } from 'wagmi';
+import axios from 'axios';
+const GLOBAL = require('../Custom/Globals.js');
 
 const Tab = createMaterialTopTabNavigator();
 /* 
 */
 const MainMyTrip = () => {
-    const { address, isConnecting, isDisconnected } = useAccount()
+    // const { address, isConnecting, isDisconnected } = useAccount()
+    const [userAddress, setUserAddress] = useState('');
+    const [userData, setUserData] = useState({});
+    const [isLoading, setIsLoading] = useState(true);
+
+    //! Load user address
+    useEffect(() => {
+        const loadData = async () => {
+            try {
+                setUserAddress(
+                    await
+                        AsyncStorage.getItem('address'));
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        loadData();
+    }, []);
 
 
-    const fetchRewards = async () => {
-        console.log(await web3.getTouristInfor('address'))
-        console.log("Get Destination Reviews")
-        console.log(await web3.getDestinationReviews("1"))
-    };
-    fetchRewards();
+    //! Fetch user data from blockchain
+    // 0": "Phong", "1": "Tran", "2": "11111111111111", "3": 15n, "4": 100n, "REP": 15n, "VP": 100n, "__length__": 5, "firstName": "Phong", "lastName": "Tran", "phoneNumber": "11111111111111"}
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                setUserData(await web3.getTouristInfor(userAddress));
+            }
+            catch (error) {
+                console.log(error);
+            }
+        };
+
+        if (userAddress != '') fetchUser();
+    }, [userAddress]);
 
     const HeaderMyTrip = (props) => (
         <View>
@@ -38,7 +67,7 @@ const MainMyTrip = () => {
                     <View style={styles.MyTrip_backgroundUserAvatar}>
                         <Image
                             style={styles.MyTrip_userAvatar}
-                            source={require('../../assets/destinations/dc_dalat.jpg')} />
+                            source={{ uri: `${GLOBAL.BASE_URL}/api/user/getAvatar/${userAddress}` }} />
                     </View>
 
                     <View style={styles.MyTrip_headerText}>
@@ -115,10 +144,10 @@ const MainMyTrip = () => {
     )
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, padding: 10 }}>
             <HeaderMyTrip
-                username="David BeckHam"
-                REP="100"
+                username={userData.firstName + " " + userData.lastName}
+                REP={userData.REP}
                 Posts="10"
                 Trips="5"
                 Upvote="20"

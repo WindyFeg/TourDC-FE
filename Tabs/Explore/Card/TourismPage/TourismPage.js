@@ -22,6 +22,8 @@ const TourismPage = ({ route, navigation }) => {
     //! Variables
     /*
     Get the information from the TourismCard
+    location.coords.longitude
+    location.coords.latitude
     */
     const [locationDetails, setLocationDetails] = useState(null);
     const [location, setLocation] = useState(null);
@@ -51,14 +53,6 @@ const TourismPage = ({ route, navigation }) => {
             setLocationDetails(geocode[0]);
         })();
     }, []);
-
-    let text = 'Waiting..';
-    if (errorMsg) {
-        text = errorMsg;
-    } else if (location) {
-        text = JSON.stringify(location.coords.longitude) + ", " + JSON.stringify(location.coords.latitude);
-        // console.log("Location: ", location);
-    }
 
     //! Smart Contract
     useEffect(() => {

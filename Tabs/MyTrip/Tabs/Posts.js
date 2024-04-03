@@ -29,10 +29,15 @@ const Posts = ({ navigation }) => {
     //! Fetch user posts
     useEffect(() => {
         const fetchUserPosts = async () => {
-            const response = await web3.getTouristReviews(userAddress);
-            setResponse(response);
-            setNumberOfPosts(response.length);
-            setIsLoading(false);
+            try {
+                const response = await web3.getTouristReviews(userAddress);
+                setResponse(response);
+                setNumberOfPosts(response.length);
+                setIsLoading(false);
+            } catch (error) {
+                console.log(error);
+                setIsLoading(false);
+            }
         };
 
         if (userAddress != '') fetchUserPosts();
@@ -52,7 +57,9 @@ const Posts = ({ navigation }) => {
     }
 
     return (
-        <ScrollView>
+        <ScrollView
+            backgroundColor="#F9F9F9"
+        >
             <Text>All of your reviews</Text>
 
             {

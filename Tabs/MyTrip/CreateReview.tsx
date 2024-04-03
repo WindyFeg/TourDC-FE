@@ -17,6 +17,7 @@ import { getNetwork } from '@wagmi/core'
 import axios from 'axios';
 import Globals from '../Custom/Globals.js';
 import { hexToBytes } from 'viem';
+import UploadImage from '../Custom/UploadImage.js';
 
 type Props = {
     navigation: StackNavigationProp<any>;
@@ -24,6 +25,7 @@ type Props = {
 
 const CreateReview: React.FC<Props> = ({ navigation }) => {
     const [file, setFile] = useState<string | null>(null);
+    const [source, setSource] = useState<string | null>(null);
     const [errorText, setErrorText] = useState<string | null>(null);
     const [title, onChangeTitle] = useState<string>('This is an title');
     const [reviewText, onChangeReviewText] = useState<string>('This is an review');
@@ -109,28 +111,6 @@ const CreateReview: React.FC<Props> = ({ navigation }) => {
         }
     };
 
-    const UploadImage: React.FC = () => {
-        return (
-            <View style={styles.CreateReview_uploadImageContainer}>
-                <TouchableOpacity style={styles.CreateReview_uploadImageButton}
-                    onPress={pickImage}>
-                    <Text style={styles.CreateReview_uploadImageButtonText}>
-                        Choose Image
-                    </Text>
-                </TouchableOpacity>
-
-                {file ? (
-                    <View style={styles.CreateReview_imageContainer}>
-                        <Image source={{ uri: file }} 
-                        style={styles.CreateReview_image} />
-                    </View>
-                ) : (
-                    <Text style={styles.CreateReview_errorText}>error</Text>
-                )}
-            </View>
-        )
-    }
-
     return (
         <View>
             <ScrollView>
@@ -156,7 +136,10 @@ const CreateReview: React.FC<Props> = ({ navigation }) => {
                     />
 
                     <Text style={styles.CreateReview_Text}>Upload Images</Text>
-                    <UploadImage />
+                    <UploadImage 
+                        setFiles={setFile}
+                        setSource={setSource}
+                    />
 
                     <TouchableOpacity style={styles.loginBtn}
                         onPress={() => review?.()}>

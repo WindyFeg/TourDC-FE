@@ -12,6 +12,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 const GLOBAL = require('../Custom/Globals.js');
 
+//! Components put outside for not being re-rendered
 const LoginInputUI = ({ username, setUsername, password, setPassword }) => {
     return (
         <SafeAreaView>
@@ -48,18 +49,20 @@ const Login = ({ navigation }) => {
     const { address, isConnecting, isDisconnected } = useAccount()
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [tourdcAddress, setTourdcAddress] = useState('');
+    const [userAddress, setUserAddress] = useState('');
+    const [privateKey, setPrivateKey] = useState('');
     const [refreshToken, setRefreshToken] = useState('');
     const [Wrong, setWrong] = useState(false);
 
     useEffect(() => {
         const storeData = async () => {
-            let userAddress = address ? address : tourdcAddress;
-            let refreshToken = refreshToken ? refreshToken : null;
+            let _userAddress = userAddress ? userAddress : address;
+            let _refreshToken = refreshToken ? refreshToken : null;
             try {
                 await Promise.all([
-                    AsyncStorage.setItem('address', userAddress),
-                    AsyncStorage.setItem('refreshToken', refreshToken)
+                    AsyncStorage.setItem('address', _userAddress),
+                    AsyncStorage.setItem('refreshToken', _refreshToken),
+                    AsyncStorage.setItem('privateKey', privateKey)
                 ]);
                 console.log("Save address: " + userAddress);
             } catch (error) {
@@ -67,11 +70,9 @@ const Login = ({ navigation }) => {
             }
         };
 
-        if (address) {
-            navigation.navigate('TourDC_Main');
-            storeData();
-        }
-    }, [address, tourdcAddress]);
+        storeData();
+        navigation.navigate('TourDC_Main');
+    }, [address, userAddress]);
 
     useEffect(() => {
         if (isDisconnected) {
@@ -79,7 +80,6 @@ const Login = ({ navigation }) => {
         }
     }, [isDisconnected]);
 
-    // fetch login data http://localhost:5500/api/user/login
     const fetchLoginData = async () => {
         try {
             const response = await axios.post(`${GLOBAL.BASE_URL}/api/user/login`, {
@@ -90,11 +90,11 @@ const Login = ({ navigation }) => {
                 setWrong(true);
             }
             else {
-                console.log("User login data: \n" + response.data);
+                console.log("User login address: \n" + response.data.userData.wallet_address);
 
-                setTourdcAddress(response.data.address);
-                setRefreshToken(response.data.refreshToken);
-
+                setUserAddress(response.data.userData.wallet_address);
+                setPrivateKey(response.data.userData.private_key);
+                setRefreshToken(response.data.userData.refreshToken);
                 navigation.navigate('TourDC_Main');
             }
         } catch (error) {
