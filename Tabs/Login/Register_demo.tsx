@@ -15,6 +15,7 @@ import {
 } from "wagmi";
 import Tourism_abi from "../../contracts/Tourism.json"
 import Tourism_address from "../../contracts/Tourism-address.json" 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const FormData = require('form-data');
 const GLOBAL = require('../Custom/Globals.js');
@@ -26,23 +27,6 @@ const RegisterInputUI = ({ label,
     setText,
     isPassword,
     keyboardType }) => {
-
-    const { config } = usePrepareContractWrite({
-      address: Tourism_address.Token as `0x${string}`,
-      abi: Tourism_abi.abi,
-      functionName: 'register',
-      args: ['firstName', 'lastName', 'phoneNumber'], // [placeID]
-      account: '0x...addressFromWallet...', // current address
-      chainId: 306,
-    })
-
-    const { data: registerData,
-      error: registerError, 
-      isError: isErrorRegister, 
-      isLoading: isLoadingRegister , 
-      isSuccess: isSuccessRegister, 
-      write: register } = useContractWrite(config)
-
     
     return (
         <SafeAreaView>
@@ -63,6 +47,47 @@ const RegisterInputUI = ({ label,
     )
 }
 
+const NameInputUI = ({ label,
+    placeholder,
+    firstName,
+    setFirstName,
+    lastName,
+    setLastName,
+    isPassword,
+    keyboardType }) => {
+    return (
+        <SafeAreaView>
+            <Text style={styles.loginLabel}>{label}</Text>
+            <StatusBar style="auto" />
+            <View style={styles.loginInput}>
+            <View> 
+                <TextInput
+                    style={styles.nameTextInput}
+                    placeholder={'First'}
+                    placeholderTextColor="#003f5c"
+                    secureTextEntry={isPassword}
+                    onChangeText={setFirstName}
+                    value={firstName}
+                    keyboardType={keyboardType}
+                />
+            </View>
+            <View >
+          <TextInput
+                    style={styles.nameTextInput}
+                    placeholder={'Last'}
+                    placeholderTextColor="#003f5c"
+                    secureTextEntry={isPassword}
+                    onChangeText={setLastName}
+                    value={lastName}
+                    keyboardType={keyboardType}
+                />
+
+            </View>
+            </View>
+        </SafeAreaView>
+    )
+}
+
 const Register = ({ navigation }) => {
 
     //! State for Register from user
@@ -70,22 +95,78 @@ const Register = ({ navigation }) => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
-    const [name, setName] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
     const [age, setAge] = useState('');
     const [avt, setAvt] = useState('');
     const [avtSource, setAvtSource] = useState('');
 
     const [walletAddress, setWalletAddress] = useState('');
     const [privateKey, setPrivateKey] = useState('');
-    const [errorText, setErrorText] = useState(null);
-    const [successText, setSuccessText] = useState(null);
+    const [errorText, setErrorText] = useState('');
+    const [successText, setSuccessText] = useState('');
+    const [userAddress, setUserAddress] = useState('');
+
+    //! Load user address
+    //! Check if Register by Wallet or by Username
+    useEffect(() => {
+        const loadData = async () => {
+            try {
+                const address = await AsyncStorage.getItem('address');
+                setUserAddress(address !== null ? address : '');
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        const checkAddress = async () => {
+            const response = await axios.post(`${GLOBAL.BASE_URL}/api/user/checkAddress`, {
+                params: {
+                    address: userAddress,
+                }
+            });
+            //! If user address is already registered, navigate to Login, else stay in Register (with user address passed from WalletConnect)
+            if (response.data === 'true') {
+                navigation.navigate('TourDC_Login');
+            }
+            else {
+            }
+            console.log(response.data);
+        };
+
+        loadData();
+        if (userAddress !== '') {
+            checkAddress();
+        }
+
+    }, []);
+
+ 
+
+    //! Writing to the Contract
+    const { config } = usePrepareContractWrite({
+      address: Tourism_address.Token as `0x${string}`,
+      abi: Tourism_abi.abi,
+      functionName: 'register',
+      args: [firstName, lastName, phoneNumber], // [placeID]
+      account: `0x${userAddress}`,// current address
+      chainId: 306,
+    })
+
+    const { data: registerData,
+      error: registerError, 
+      isError: isErrorRegister, 
+      isLoading: isLoadingRegister , 
+      isSuccess: isSuccessRegister, 
+      write: register } = useContractWrite(config)
+
+    console.log("registerData: ", registerData)
 
     //! Check if passwords match
     const checkPasswords = () => {
         if (password !== confirmPassword) {
             setErrorText('Passwords do not match');
         } else {
-            setErrorText(null);
+            setErrorText('');
         }
     };
 
@@ -108,6 +189,12 @@ const Register = ({ navigation }) => {
         }
     }
 
+    const registerUser = () => {
+        if (register) {
+            console.log("here");
+            register();
+        }
+    }
 
     const fetchRegisterData = async () => {
         if (errorText) {
@@ -115,7 +202,8 @@ const Register = ({ navigation }) => {
         }
 
         console.log(avtSource);
-        const filename = avtSource.uri.split('/').pop();
+        const avtSourceObj = typeof avtSource === 'string' ? { uri: avtSource } : avtSource;
+        const filename = avtSourceObj.uri.split('/').pop();
         const imageType = getImageType(filename);
         console.log(filename);
         console.log(imageType);
@@ -125,10 +213,11 @@ const Register = ({ navigation }) => {
         registerForm.append('password', password);
         registerForm.append('phoneNumber', phoneNumber);
         registerForm.append('age', age);
-        registerForm.append('name', name);
+        registerForm.append('firstName', firstName);
+        registerForm.append('lastName', lastName);
         registerForm.append('role', "user");
         registerForm.append('file', {
-            uri: avtSource.uri,
+            uri: avtSourceObj,
             type: imageType,
             name: filename,
         });
@@ -149,13 +238,13 @@ const Register = ({ navigation }) => {
             );
             // console.log(response.data);
             setSuccessText('Register successfully');
-            setErrorText(null);
+            setErrorText('');
             navigation.navigate('TourDC_Login');
         }
         catch (error) {
             console.error(error);
             setErrorText('Username already exists');
-            setSuccessText(null);
+            setSuccessText('');
         }
     }
 
@@ -166,7 +255,7 @@ const Register = ({ navigation }) => {
     );
 
     return (
-        <View styles={styles.registerContainer}>
+        <View >
             <View style={styles.registerHeader}>
             </View>
             <BackNavigationButton
@@ -203,14 +292,18 @@ const Register = ({ navigation }) => {
                         isPassword={true}
                         keyboardType={'default'}
                     />
-                    <RegisterInputUI
-                        label={'Full Name'}
-                        placeholder={'Full Name'}
-                        text={name}
-                        setText={setName}
+                   
+                    <NameInputUI
+                        label={'Input Name'}
+                        placeholder={'First Name'}
                         isPassword={false}
+                        firstName={firstName}
+                        setFirstName={setFirstName}
+                        lastName={lastName}
+                        setLastName={setLastName}
                         keyboardType={'default'}
                     />
+
                     <RegisterInputUI
                         label={'Phone Number'}
                         placeholder={'84+'}
@@ -246,7 +339,7 @@ const Register = ({ navigation }) => {
                     }
                     <CustomButton
                         style={styles.loginBtn}
-                        onPress={fetchRegisterData}
+                        onPress={registerUser}
                         text={'REGISTER'}
                     />
 
