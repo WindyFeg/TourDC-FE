@@ -1,25 +1,4 @@
-
-import Web3 from "web3";
-import DCToken_abi from "../contracts/ERC20With4RMechanism.json"
-import DCToken_address from "../contracts/ERC20With4RMechanism-address.json"
-import Tourism_abi from "../contracts/Tourism.json"
-import Tourism_address from "../contracts/Tourism-address.json"
-
-// const { Web3 } = require('web3');
-// const DCToken_abi = require("../contracts/ERC20With4RMechanism.json")
-// const Tourism_abi = require("../contracts/Tourism.json")
-// const DCToken_address = require("../contracts/ERC20With4RMechanism-address.json")
-// const Tourism_address = require("../contracts/Tourism-address.json")
-
-
-const VBCProvider = "https://vibi.vbchain.vn/"
-// const InfuraProvider = 'https://sepolia.infura.io/v3/c6b95d3b003e40cda8dcf76f7ba58be8'
-
-// const localHost = "http://127.0.0.1:8545/"
-// var web3Provider = Web3.providers.HttpProvider(InfuraProvider);
-var web3 = new Web3(VBCProvider);
-contract_DCToken = new web3.eth.Contract(DCToken_abi.abi, DCToken_address.Token)
-contract_4R = new web3.eth.Contract(Tourism_abi.abi, Tourism_address.Token)
+import {contract_DCToken, contract_4R} from './web3config'
 
 const getBalanceOf = async (user_address) => {
   try {
@@ -169,7 +148,6 @@ const test = async () => {
   // console.log("Get reward number of an post by user: ", await touristRewardPointOnPostID(account1, '0x26eecb00ddef76d58362552f4fd2e782ae49d1e064ccd5b06bd70dcd8039ec35'))
 }
 
-test()
 
 module.exports = {
   getBalanceOf,
@@ -180,7 +158,7 @@ module.exports = {
   getVotesOfReview,
   calculationTotalReward,
   rewardListOfTourist,
-  touristRewardPointOnPostID
+  touristRewardPointOnPostID,
 }
 
 // export default getBalanceOf;
