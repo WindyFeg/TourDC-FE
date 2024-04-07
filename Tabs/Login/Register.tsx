@@ -18,6 +18,7 @@ import {
 import Tourism_abi from "../../contracts/Tourism.json"
 import Tourism_address from "../../contracts/Tourism-address.json" 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {createAccount} from '../../service/create_account.js';
 
 const FormData = require('form-data');
 const GLOBAL = require('../Custom/Globals.js');
@@ -143,7 +144,7 @@ const Register = ({ route, navigation }) => {
       isError: isErrorRegister, 
       isLoading: isLoadingRegister , 
       isSuccess: isSuccessRegister, 
-      write: register } = useContractWrite(config)
+      write: addInfoToAddress } = useContractWrite(config)
 
     console.log("---------")
     console.log("registerData: ", registerData)
@@ -168,11 +169,18 @@ const Register = ({ route, navigation }) => {
     }
 
     const registerUser = () => {
-        if (isWalletRegister){
-            register?.();
-        }
+        createSmartContractAccount()
+        addInfoToAddress?.();
         privateKeyEncrypt();
         fetchRegisterData();
+    }
+
+    const createSmartContractAccount = async () => {
+        let response = await createAccount();
+        if (response !== null) {
+            setPrivateKey(response.privateKey);
+            setWalletAddress(response.walletAddress);
+        }
     }
 
     const fetchRegisterData = async () => {
@@ -203,7 +211,7 @@ const Register = ({ route, navigation }) => {
 
         registerForm.append('share_key', 
         isWalletRegister? null : shares[0]);
-        registerForm.append('private_key_encrypted', isWalletRegister? null : privateKeyEncrypt);
+        registerForm.append('private_key_encrypted', isWalletRegister? null : encryptedPrivateKey);
 
         console.log(registerForm);
 
@@ -235,6 +243,8 @@ const Register = ({ route, navigation }) => {
         let shares = await shamir.shares_key_shamir();
         let randomKey = shamir.shamir_combine(shares[0], shares[1]);
         setShares(shares);
+
+        console.log(shares);
 
         // encrypt private key
         let encryptedPrivateKey = aes.encryptedPrivateKey(randomKey.key, privateKey);
