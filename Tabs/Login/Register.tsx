@@ -18,7 +18,7 @@ import {
 import Tourism_abi from "../../contracts/Tourism.json"
 import Tourism_address from "../../contracts/Tourism-address.json" 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {createAccount} from '../../service/create_account.js';
+import {createAccount, HelloWorld} from '../../service/create_account.js';
 
 const FormData = require('form-data');
 const GLOBAL = require('../Custom/Globals.js');
@@ -129,7 +129,17 @@ const Register = ({ route, navigation }) => {
         loadData();
     }, []);
 
-    //! Writing to the Contract
+    
+    //! Check if passwords match
+    useEffect(() => {
+        if (password !== confirmPassword) {
+            setErrorText('Passwords do not match');
+        } else {
+            setErrorText('');
+        }
+    }, [password, confirmPassword]);
+
+    //! Adding user info to smart contract
     const { config } = usePrepareContractWrite({
       address: Tourism_address.Token as `0x${string}`,
       abi: Tourism_abi.abi,
@@ -146,12 +156,13 @@ const Register = ({ route, navigation }) => {
       isSuccess: isSuccessRegister, 
       write: addInfoToAddress } = useContractWrite(config)
 
-    console.log("---------")
+    console.log("---------Is Wallet Register---------" , isWalletRegister)
     console.log("registerData: ", registerData)
     console.log("registerError: ", registerError)
     console.log("isErrorRegister: ", isErrorRegister)
     console.log("isLoadingRegister: ", isLoadingRegister)
     console.log("isSuccessRegister: ", isSuccessRegister)
+    console.log("current private Key", privateKey)
 
     //! Register
     function getImageType(filename) {
@@ -168,21 +179,21 @@ const Register = ({ route, navigation }) => {
         }
     }
 
-    const registerUser = () => {
-        createSmartContractAccount()
-        addInfoToAddress?.();
-        privateKeyEncrypt();
-        fetchRegisterData();
-    }
-
-    const createSmartContractAccount = async () => {
+    //! Create smart contract account to get private key
+ const createSmartContractAccount = async () => {
+    try {
         let response = await createAccount();
         if (response !== null) {
+            console.log(response);
             setPrivateKey(response.privateKey);
             setWalletAddress(response.walletAddress);
         }
+    } catch (error) {
+        console.error("Failed to create account:", error);
     }
+}
 
+    //! Register user to server
     const fetchRegisterData = async () => {
         if (errorText) {
             return;
@@ -242,12 +253,21 @@ const Register = ({ route, navigation }) => {
     const privateKeyEncrypt = async () => {
         let shares = await shamir.shares_key_shamir();
         let randomKey = shamir.shamir_combine(shares[0], shares[1]);
-        setShares(shares);
-
-        console.log(shares);
+        let hexShares = shares.map((share) => {
+            return share.toString('hex');
+        })
+        setShares(hexShares);
 
         // encrypt private key
-        let encryptedPrivateKey = aes.encryptedPrivateKey(randomKey.key, privateKey);
+        console.log("Before Encrypt Private Key");
+        console.log(randomKey.key);
+        console.log(privateKey);
+        let encryptedPrivateKey = aes.encryptedPrivateKey(randomKey.key, privateKey) as string;
+        console.log("Encrypted Private Key");
+        console.log(encryptedPrivateKey);
+        // TODO: setEncryptedPrivateKey
+        setEncryptedPrivateKey(encryptedPrivateKey);
+
         // call api to send to sever share0
         // call api to send to sever encryptedPrivateKey
         // call api to save share1
@@ -259,19 +279,37 @@ const Register = ({ route, navigation }) => {
 
     }
 
-
-    useEffect(() => {
-        checkPasswords();
-    }, [password, confirmPassword]);
-
-    //! Check if passwords match
-    const checkPasswords = () => {
-        if (password !== confirmPassword) {
-            setErrorText('Passwords do not match');
-        } else {
-            setErrorText('');
+    async function registerTourDCUser() {
+        try {
+            //$ Create smart contract account to get private key
+            await createSmartContractAccount();
+        } catch (error) {
+            console.error("Error during registration:", error);
         }
-    };
+    }   
+    
+    //$ Encrypt private key and send share to server
+    useEffect(() => {
+        if (privateKey !== '') {
+            privateKeyEncrypt();
+        }
+    }, [privateKey]);
+    
+    //$ Register user to server 
+    useEffect(() => {
+        if (encryptedPrivateKey !== '') {
+            fetchRegisterData();
+        }
+    }, [encryptedPrivateKey]);
+    
+    
+
+    const registerWalletUser = () => {
+        //$ Add user info to smart contract with wallet address 
+        addInfoToAddress?.();
+        //$ Register user to server 
+        fetchRegisterData();
+    }
 
     const CustomButton = ({ onPress, text, style }) => (
         <TouchableOpacity style={[style]} onPress={onPress}>
@@ -369,10 +407,10 @@ const Register = ({ route, navigation }) => {
                     }
                     <CustomButton
                         style={styles.loginBtn}
-                        onPress={registerUser}
+                        onPress={isWalletRegister ? registerWalletUser : registerTourDCUser}
                         text={'REGISTER'}
                     />
-
+          
                 </View>
             </ImageBackground>
         </View>

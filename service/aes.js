@@ -2,16 +2,20 @@ const aesjs = require('aes-js');
 // import aesjs from 'aes-js'
 
 function encryptedPrivateKey(randomKey, privateKey) {
-  const key = Buffer.from(randomKey)
-  console.log(key)
-  const privateKeyBytes = aesjs.utils.hex.toBytes(privateKey)
-  console.log(privateKeyBytes)
-  var aesCtr = new aesjs.ModeOfOperation.ctr(key, new aesjs.Counter(5));
-  var encryptedBytes = aesCtr.encrypt(privateKeyBytes);
-  console.log(encryptedBytes)
-  var bytestoHex = aesjs.utils.hex.fromBytes(encryptedBytes)
-  console.log(bytestoHex)
-  return bytestoHex
+  try {
+    const key = Buffer.from(randomKey)
+    console.log(key)
+    const privateKeyBytes = aesjs.utils.hex.toBytes(privateKey)
+    console.log(privateKeyBytes)
+    var aesCtr = new aesjs.ModeOfOperation.ctr(key, new aesjs.Counter(5));
+    var encryptedBytes = aesCtr.encrypt(privateKeyBytes);
+    console.log(encryptedBytes)
+    var bytestoHex = aesjs.utils.hex.fromBytes(encryptedBytes)
+    console.log(bytestoHex)
+    return bytestoHex
+  } catch (error) {
+    console.error("Failed to encrypt:", error);
+  }
 }
 
 function decryptedPrivateKey(randomKey, encryptKey) {
@@ -38,7 +42,10 @@ encryptedPrivateKey('2dc232208048ff7f', 'e11f5c9977c82fe752f84caeb9ba0c50feabd0c
 
 decryptedPrivateKey('2dc232208048ff7f', '29b05dee4c7d1818c44a99dd1e098f8bb01caceff6b53c29602288a3e9bd6191')
 
-module.exports = {
-  encryptedPrivateKey,
-  decryptedPrivateKey
-}
+encryptedPrivateKey('vAFK0aaqobdgd2Pw', '0x8d75c8c35504204d0a43a2e6fd4cd6301ccce7ac037629e0e34b0b0066c93724'),
+
+
+  module.exports = {
+    encryptedPrivateKey,
+    decryptedPrivateKey
+  }

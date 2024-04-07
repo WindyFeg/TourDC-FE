@@ -9,5 +9,11 @@ export async function createAccount() {
   }
 }
 
+export async function HelloWorld() {
+  console.log('Hello World')
+}
+
+export default createAccount
+
 // createAccount()
-module.exports = createAccount
+// module.exports = createAccount

@@ -10,6 +10,7 @@ import TourismLogo from '../../assets/logo/TourismLogo.png';
 import SvgComponent from '../../assets/SvgComponent';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Keychain from 'react-native-keychain';
 
 const GLOBAL = require('../Custom/Globals.js');
 
@@ -46,6 +47,7 @@ const LoginInputUI = ({ username, setUsername, password, setPassword }) => {
 }
 
 const Login = ({ navigation }) => {
+    const [session, setSession] = useState(undefined)
     //* Normal Login
     const { address, isConnecting, isDisconnected } = useAccount()
     const [userAddress, setUserAddress] = useState(undefined);
@@ -57,12 +59,26 @@ const Login = ({ navigation }) => {
     const [Wrong, setWrong] = useState(false);
     const [walletAddressStatus, setWalletAddressStatus] = useState([]);
 
+
     console.log("-----------------Login-----------------");
     console.log("User Address: " + userAddress);
     console.log("TourDC Address: " + tourDCAddress);
     console.log("Wallet Address: " + address);
     console.log("Check Address: \n" + JSON.stringify(walletAddressStatus));
     console.log("Check Address: \n" + walletAddressStatus);
+
+    //! Create session
+    useEffect(() => {
+        const createSession = async () => {
+            try {
+                const rawValue = JSON.stringify(session);
+                await Keychain.setGenericPassword('session', rawValue);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        createSession();
+    }, [session]);
 
     //! Get user address from storage
     useEffect(() => {
@@ -78,13 +94,19 @@ const Login = ({ navigation }) => {
         loadData();
     }, []);
 
+    //! Store user address to storage 
+    //! based on login method 
     useEffect(() => {
         const storeData = async (_userAddress) => {
             try {
                 await Promise.all([
                     AsyncStorage.setItem('address', _userAddress),
-                    AsyncStorage.setItem('privateKey', privateKey)
                 ]);
+
+                setSession({
+                    userAddress: _userAddress,
+                });
+
                 console.log("Save address: " + _userAddress);
             } catch (error) {
                 console.log(error);
@@ -100,16 +122,19 @@ const Login = ({ navigation }) => {
         if (tourDCAddress != undefined) {
             storeData(tourDCAddress);
             navigation.navigate('TourDC_Main');
+            return;
         }
     }, [address, tourDCAddress]);
 
+    //! Check wallet address
+    //! If address is already registered, navigate to Main page
+    //! If address is not registered, navigate to Register page
     const checkWalletAddress = async () => {
         try {
             const response = await axios.post(`${GLOBAL.BASE_URL}/api/user/checkAddress`, {
                 address: userAddress
             });
             // Wallet address already registered,
-            // navigate to Main page
             setWalletAddressStatus(response.data);
             console.log("Address found in Smart Contract");
             navigation.navigate('TourDC_Main');
@@ -118,7 +143,6 @@ const Login = ({ navigation }) => {
             if (error.response.data.success === false) {
                 console.log("Address not found in Smart Contract");
                 // Wallet address not registered,
-                // navigate to Register page
                 navigation.navigate('TourDC_Register',
                     {
                         isWalletRegister: true
@@ -128,6 +152,7 @@ const Login = ({ navigation }) => {
         }
     }
 
+    //! TourDC Login
     const fetchLoginData = async () => {
         try {
             const response = await axios.post(`${GLOBAL.BASE_URL}/api/user/login`, {
@@ -170,10 +195,6 @@ const Login = ({ navigation }) => {
 
     const ForgotPassword = () => {
         navigation.navigate('TourDC_ForgotPassword');
-    }
-
-    const MetaMask = () => {
-        navigation.navigate('TourDC_Main');
     }
 
     const CustomButton = ({ onPress, text, style }) => (

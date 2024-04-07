@@ -24,7 +24,6 @@ async function shares_key_shamir() {
   const randomKey = generateRandomBase64Secret(16)
   console.log("Random Key: " + randomKey)
   const shares = sss.split(randomKey, { shares: 3, threshold: 2 })
-  console.log(shares)
   return shares
 }
 
