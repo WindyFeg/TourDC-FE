@@ -1,5 +1,5 @@
-// const aesjs = require('aes-js');
-import aesjs from 'aes-js'
+const aesjs = require('aes-js');
+// import aesjs from 'aes-js'
 
 function encryptedPrivateKey(randomKey, privateKey) {
   const key = Buffer.from(randomKey)

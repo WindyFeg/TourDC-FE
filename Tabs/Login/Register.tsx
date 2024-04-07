@@ -171,6 +171,7 @@ const Register = ({ route, navigation }) => {
         if (isWalletRegister){
             register?.();
         }
+        privateKeyEncrypt();
         fetchRegisterData();
     }
 
@@ -195,14 +196,14 @@ const Register = ({ route, navigation }) => {
         registerForm.append('lastName', lastName);
         registerForm.append('role', isWalletRegister ? "walletUser" : "tourdcUser");
         registerForm.append('file', {
-            uri: avtSourceObj,
+            uri: avtSourceObj.uri,
             type: imageType,
             name: filename,
         });
 
         registerForm.append('share_key', 
-        isWalletRegister? null : privateKey);
-        registerForm.append('private_key_encrypted', isWalletRegister? null : privateKey);
+        isWalletRegister? null : shares[0]);
+        registerForm.append('private_key_encrypted', isWalletRegister? null : privateKeyEncrypt);
 
         console.log(registerForm);
 
@@ -218,7 +219,7 @@ const Register = ({ route, navigation }) => {
                     },
                 },
             );
-            // console.log(response.data);
+            console.log(response.data);
             setSuccessText('Register successfully');
             setErrorText('');
             navigation.navigate('TourDC_Login');
@@ -231,11 +232,21 @@ const Register = ({ route, navigation }) => {
     }
 
     const privateKeyEncrypt = async () => {
-        setShares(await shamir.shares_key_shamir());
-        // let _encryptedPrivateKey = aes.encryptedPrivateKey(
-        //     shamir.shamir_combine(shares[0], shares[1]),
-        //     privateKey);
-        // setEncryptedPrivateKey(_encryptedPrivateKey);
+        let shares = await shamir.shares_key_shamir();
+        let randomKey = shamir.shamir_combine(shares[0], shares[1]);
+        setShares(shares);
+
+        // encrypt private key
+        let encryptedPrivateKey = aes.encryptedPrivateKey(randomKey.key, privateKey);
+        // call api to send to sever share0
+        // call api to send to sever encryptedPrivateKey
+        // call api to save share1
+        // call api to save show share2
+        console.log(randomKey.key);
+
+        // set Share 0
+        // set Encrypted Private Key
+
     }
 
 
