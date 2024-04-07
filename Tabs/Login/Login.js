@@ -47,18 +47,27 @@ const LoginInputUI = ({ username, setUsername, password, setPassword }) => {
 const Login = ({ navigation }) => {
     //* Normal Login
     const { address, isConnecting, isDisconnected } = useAccount()
+    const [userAddress, setUserAddress] = useState(undefined);
+    const [tourDCAddress, setTourDCAddress] = useState(undefined);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [userAddress, setUserAddress] = useState('');
     const [privateKey, setPrivateKey] = useState('');
     const [refreshToken, setRefreshToken] = useState('');
     const [Wrong, setWrong] = useState(false);
+    const [walletAddressStatus, setWalletAddressStatus] = useState([]);
 
+    console.log("-----------------Login-----------------");
+    console.log("User Address: " + userAddress);
+    console.log("Address: " + address);
+    console.log("Check Address: \n" + JSON.stringify(walletAddressStatus));
+    console.log("Check Address: \n" + walletAddressStatus);
+
+    //! Get user address from storage
     useEffect(() => {
         const loadData = async () => {
             try {
                 setUserAddress(await AsyncStorage.getItem('address'));
-                console.log("Load address" + userAddress)
+                console.log("Storage address: " + userAddress)
             } catch (error) {
                 console.log(error);
             }
@@ -68,32 +77,53 @@ const Login = ({ navigation }) => {
     }, []);
 
     useEffect(() => {
-        const storeData = async () => {
-            let _userAddress = userAddress ? userAddress : address;
-            let _refreshToken = refreshToken ? refreshToken : null;
+        const storeData = async (_userAddress) => {
             try {
                 await Promise.all([
                     AsyncStorage.setItem('address', _userAddress),
-                    AsyncStorage.setItem('refreshToken', _refreshToken),
                     AsyncStorage.setItem('privateKey', privateKey)
                 ]);
                 console.log("Save address: " + _userAddress);
-                navigation.navigate('TourDC_Main');
             } catch (error) {
                 console.log(error);
             }
         };
-
-        if ((userAddress != '') || (address != undefined)) {
-            storeData();
+        // Login with Wallet account
+        if (address != undefined) {
+            storeData(address);
+            checkWalletAddress();
+            return;
         }
-    }, [address, userAddress]);
-
-    useEffect(() => {
-        if (isDisconnected) {
-            console.log("Disconnected");
+        // Login with username and password
+        if (tourDCAddress != undefined) {
+            storeData(tourDCAddress);
+            navigation.navigate('TourDC_Main');
         }
-    }, [isDisconnected]);
+    }, [address, tourDCAddress]);
+
+    const checkWalletAddress = async () => {
+        try {
+            const response = await axios.post(`${GLOBAL.BASE_URL}/api/user/checkAddress`, {
+                address: userAddress
+            });
+            // Wallet address already registered, 
+            // navigate to Main page
+            setWalletAddressStatus(response.data);
+            navigation.navigate('TourDC_Main');
+        } catch (error) {
+            console.log(error.response.data);
+            if (error.response.data.success === false) {
+                console.log("Address not found");
+                // Wallet address not registered,
+                // navigate to Register page
+                navigation.navigate('TourDC_Register',
+                    {
+                        isWalletRegister: true
+                    });
+            }
+            setWrong(true);
+        }
+    }
 
     const fetchLoginData = async () => {
         try {
@@ -107,10 +137,9 @@ const Login = ({ navigation }) => {
             else {
                 console.log("User login address: \n" + response.data.userData.wallet_address);
 
-                setUserAddress(response.data.userData.wallet_address);
+                tourDCAddress(response.data.userData.wallet_address);
                 setPrivateKey(response.data.userData.private_key);
                 setRefreshToken(response.data.userData.refreshToken);
-                navigation.navigate('TourDC_Main');
             }
         } catch (error) {
             console.error(error);
@@ -118,13 +147,22 @@ const Login = ({ navigation }) => {
         }
     }
 
-    const Authentication = () => {
-        console.log("Current Storage Data: " + address + "/" + userAddress)
-        fetchLoginData();
-    }
+    //! Disconnect
+    useEffect(() => {
+        if (isDisconnected) {
+            console.log("Disconnected");
+            setUserAddress(undefined);
+            setTourDCAddress(undefined);
+            setPrivateKey('');
+        }
+    }, [isDisconnected]);
 
+    //! Navigation
     const Register = () => {
-        navigation.navigate('TourDC_Register');
+        navigation.navigate('TourDC_Register',
+            {
+                isWalletRegister: false
+            });
     }
 
     const ForgotPassword = () => {
@@ -189,7 +227,7 @@ const Login = ({ navigation }) => {
 
                     <CustomButton
                         style={styles.loginBtn}
-                        onPress={Authentication}
+                        onPress={fetchLoginData}
                         text={'LOGIN'}
                     />
 

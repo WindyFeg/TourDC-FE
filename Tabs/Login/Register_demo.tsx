@@ -88,7 +88,9 @@ const NameInputUI = ({ label,
     )
 }
 
-const Register = ({ navigation }) => {
+const Register = ({ route, navigation }) => {
+
+    const {isWalletRegister} = route.params;
 
     //! State for Register from user
     const [username, setUsername] = useState('');
@@ -140,15 +142,13 @@ const Register = ({ navigation }) => {
 
     }, []);
 
- 
-
     //! Writing to the Contract
     const { config } = usePrepareContractWrite({
       address: Tourism_address.Token as `0x${string}`,
       abi: Tourism_abi.abi,
       functionName: 'register',
       args: [firstName, lastName, phoneNumber], // [placeID]
-      account: `0x${userAddress}`,// current address
+      account: `0x${userAddress.substring(2)}`,// current address
       chainId: 306,
     })
 
@@ -159,20 +159,12 @@ const Register = ({ navigation }) => {
       isSuccess: isSuccessRegister, 
       write: register } = useContractWrite(config)
 
+    console.log("---------")
     console.log("registerData: ", registerData)
-
-    //! Check if passwords match
-    const checkPasswords = () => {
-        if (password !== confirmPassword) {
-            setErrorText('Passwords do not match');
-        } else {
-            setErrorText('');
-        }
-    };
-
-    useEffect(() => {
-        checkPasswords();
-    }, [password, confirmPassword]);
+    console.log("registerError: ", registerError)
+    console.log("isErrorRegister: ", isErrorRegister)
+    console.log("isLoadingRegister: ", isLoadingRegister)
+    console.log("isSuccessRegister: ", isSuccessRegister)
 
     //! Register
     function getImageType(filename) {
@@ -190,10 +182,8 @@ const Register = ({ navigation }) => {
     }
 
     const registerUser = () => {
-        if (register) {
-            console.log("here");
-            register();
-        }
+        register?.();
+        fetchRegisterData();
     }
 
     const fetchRegisterData = async () => {
@@ -222,6 +212,9 @@ const Register = ({ navigation }) => {
             name: filename,
         });
 
+        registerForm.append('share_key', '');
+        registerForm.append('private_key_encrypted', '');
+
         console.log(registerForm);
 
         try {
@@ -248,6 +241,19 @@ const Register = ({ navigation }) => {
         }
     }
 
+    useEffect(() => {
+        checkPasswords();
+    }, [password, confirmPassword]);
+
+    //! Check if passwords match
+    const checkPasswords = () => {
+        if (password !== confirmPassword) {
+            setErrorText('Passwords do not match');
+        } else {
+            setErrorText('');
+        }
+    };
+
     const CustomButton = ({ onPress, text, style }) => (
         <TouchableOpacity style={[style]} onPress={onPress}>
             <Text style={styles.btnText}>{text}</Text>
@@ -265,8 +271,13 @@ const Register = ({ navigation }) => {
 
                 <View style={styles.registerBackgroundOverlay}>
                     <Text style={styles.loginBigText}>
-                        Register
+                        {isWalletRegister ? 'New Wallet Register' : 'TourDC Register'}
                     </Text>
+                    {
+                        isWalletRegister && <Text style={styles.loginText}>
+                            All of your wallet information will connect to TourDC
+                        </Text>
+                    }
 
                     <RegisterInputUI
                         label={'Username'}
