@@ -3,7 +3,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Login from './Tabs/Login/Login.js';
-import Register from './Tabs/Login/Register_demo.tsx';
+import Register from './Tabs/Login/Register.tsx';
 import Main from './Main.js';
 import ForgotPassword from './Tabs/Login/ForgotPassword.js';
 import { useFonts } from 'expo-font';

@@ -10,6 +10,7 @@ import TourismLogo from '../../assets/logo/TourismLogo.png';
 import SvgComponent from '../../assets/SvgComponent';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const GLOBAL = require('../Custom/Globals.js');
 
 //! Components put outside for not being re-rendered
@@ -58,7 +59,8 @@ const Login = ({ navigation }) => {
 
     console.log("-----------------Login-----------------");
     console.log("User Address: " + userAddress);
-    console.log("Address: " + address);
+    console.log("TourDC Address: " + tourDCAddress);
+    console.log("Wallet Address: " + address);
     console.log("Check Address: \n" + JSON.stringify(walletAddressStatus));
     console.log("Check Address: \n" + walletAddressStatus);
 
@@ -106,14 +108,15 @@ const Login = ({ navigation }) => {
             const response = await axios.post(`${GLOBAL.BASE_URL}/api/user/checkAddress`, {
                 address: userAddress
             });
-            // Wallet address already registered, 
+            // Wallet address already registered,
             // navigate to Main page
             setWalletAddressStatus(response.data);
+            console.log("Address found in Smart Contract");
             navigation.navigate('TourDC_Main');
         } catch (error) {
             console.log(error.response.data);
             if (error.response.data.success === false) {
-                console.log("Address not found");
+                console.log("Address not found in Smart Contract");
                 // Wallet address not registered,
                 // navigate to Register page
                 navigation.navigate('TourDC_Register',

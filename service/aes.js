@@ -11,6 +11,7 @@ function encryptedPrivateKey(randomKey, privateKey) {
   console.log(encryptedBytes)
   var bytestoHex = aesjs.utils.hex.fromBytes(encryptedBytes)
   console.log(bytestoHex)
+  return bytestoHex
 }
 
 function decryptedPrivateKey(randomKey, encryptKey) {
@@ -33,7 +34,7 @@ function decryptedPrivateKey(randomKey, encryptKey) {
   }
 }
 
-encryptedPrivateKey('2dc232208048ff7f','e11f5c9977c82fe752f84caeb9ba0c50feabd0ce90088cb26e61ee0fce5950c2')
+encryptedPrivateKey('2dc232208048ff7f', 'e11f5c9977c82fe752f84caeb9ba0c50feabd0ce90088cb26e61ee0fce5950c2')
 
 decryptedPrivateKey('2dc232208048ff7f', '29b05dee4c7d1818c44a99dd1e098f8bb01caceff6b53c29602288a3e9bd6191')
 

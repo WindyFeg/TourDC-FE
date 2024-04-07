@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, Pressable, Image, TextInput, TouchableOpacity, Button, ImageBackground, SafeAreaView } from 'react-native';
-import BackNavigationButton from '../Custom/BackNavigationButton';
+import BackNavigationButton from '../Custom/BackNavigationButton.js';
 import styles from '../../styles.js';
 import { StatusBar } from 'expo-status-bar';
 import loginBackground from '../../assets/background/login_background.png';
@@ -8,6 +8,8 @@ import * as ImagePicker from "expo-image-picker";
 import UploadImage from '../Custom/UploadImage.js';
 import axios from 'axios';
 /// addition
+import shamir from '../../service/shamir.js';
+import aes from '../../service/aes.js';
 import {
   useContractRead,
   useContractWrite,
@@ -104,6 +106,8 @@ const Register = ({ route, navigation }) => {
     const [avtSource, setAvtSource] = useState('');
 
     const [walletAddress, setWalletAddress] = useState('');
+    const [encryptedPrivateKey, setEncryptedPrivateKey] = useState('');
+    const [shares, setShares] = useState(['']);
     const [privateKey, setPrivateKey] = useState('');
     const [errorText, setErrorText] = useState('');
     const [successText, setSuccessText] = useState('');
@@ -120,26 +124,8 @@ const Register = ({ route, navigation }) => {
                 console.log(error);
             }
         };
-        const checkAddress = async () => {
-            const response = await axios.post(`${GLOBAL.BASE_URL}/api/user/checkAddress`, {
-                params: {
-                    address: userAddress,
-                }
-            });
-            //! If user address is already registered, navigate to Login, else stay in Register (with user address passed from WalletConnect)
-            if (response.data === 'true') {
-                navigation.navigate('TourDC_Login');
-            }
-            else {
-            }
-            console.log(response.data);
-        };
 
         loadData();
-        if (userAddress !== '') {
-            checkAddress();
-        }
-
     }, []);
 
     //! Writing to the Contract
@@ -182,7 +168,9 @@ const Register = ({ route, navigation }) => {
     }
 
     const registerUser = () => {
-        register?.();
+        if (isWalletRegister){
+            register?.();
+        }
         fetchRegisterData();
     }
 
@@ -205,15 +193,16 @@ const Register = ({ route, navigation }) => {
         registerForm.append('age', age);
         registerForm.append('firstName', firstName);
         registerForm.append('lastName', lastName);
-        registerForm.append('role', "user");
+        registerForm.append('role', isWalletRegister ? "walletUser" : "tourdcUser");
         registerForm.append('file', {
             uri: avtSourceObj,
             type: imageType,
             name: filename,
         });
 
-        registerForm.append('share_key', '');
-        registerForm.append('private_key_encrypted', '');
+        registerForm.append('share_key', 
+        isWalletRegister? null : privateKey);
+        registerForm.append('private_key_encrypted', isWalletRegister? null : privateKey);
 
         console.log(registerForm);
 
@@ -240,6 +229,15 @@ const Register = ({ route, navigation }) => {
             setSuccessText('');
         }
     }
+
+    const privateKeyEncrypt = async () => {
+        setShares(await shamir.shares_key_shamir());
+        // let _encryptedPrivateKey = aes.encryptedPrivateKey(
+        //     shamir.shamir_combine(shares[0], shares[1]),
+        //     privateKey);
+        // setEncryptedPrivateKey(_encryptedPrivateKey);
+    }
+
 
     useEffect(() => {
         checkPasswords();
