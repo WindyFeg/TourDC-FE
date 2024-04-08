@@ -53,14 +53,14 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         opacity: 0.7,
         color: '#878282',
-        width: '80%',  
+        width: '80%',
     },
 
-nameTextInput: {
+    nameTextInput: {
         marginLeft: 10,
         opacity: 0.7,
         color: '#878282',
-        width: 100,  
+        width: 100,
     },
 
     loginLabel: {
@@ -1066,6 +1066,13 @@ nameTextInput: {
         margin: 10,
     },
 
+    modalText: {
+        color: '#828282',
+        fontFamily: 'InterR',
+        fontSize: 12,
+        margin: 10,
+    },
+
     tourismPage_checkInLocationTextError: {
         color: 'red',
         fontFamily: 'InterB',
@@ -1076,7 +1083,7 @@ nameTextInput: {
         fontFamily: 'InterB',
     },
 
-    tourismPage_TransactionHashContainer: {
+    modalCopyTextContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -1120,6 +1127,7 @@ nameTextInput: {
         justifyContent: 'center',
         // alignItems: 'center',
         marginTop: 22,
+        backgroundColor: 'rgba(0, 0, 0, 0.3)'
     },
 
     MyAccount_BtnLogout: {
@@ -1188,10 +1196,10 @@ nameTextInput: {
     },
 
     NameInput: {
-      borderRadius: 5,
+        borderRadius: 5,
         borderColor: '#D9D9D9',
         borderWidth: 1,
-   flexDirection: 'row',
+        flexDirection: 'row',
         // alignItems: 'space-between',
         backgroundColor: '#FFF',
         paddingHorizontal: 10,

@@ -1,5 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, Pressable, Image, TextInput, TouchableOpacity, Button, ImageBackground, SafeAreaView } from 'react-native';
+import { 
+    Text, 
+    View, 
+    Pressable, 
+    Image, 
+    TextInput, 
+    TouchableOpacity, 
+    Button, 
+    ImageBackground, 
+    ActivityIndicator,
+    SafeAreaView,
+    Modal
+} from 'react-native';
+import * as Clipboard from 'expo-clipboard';
 import BackNavigationButton from '../Custom/BackNavigationButton.js';
 import styles from '../../styles.js';
 import { StatusBar } from 'expo-status-bar';
@@ -19,6 +32,7 @@ import Tourism_abi from "../../contracts/Tourism.json"
 import Tourism_address from "../../contracts/Tourism-address.json" 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createAccount, HelloWorld} from '../../service/create_account.js';
+import { err } from 'react-native-svg/lib/typescript/xml.js';
 
 const FormData = require('form-data');
 const GLOBAL = require('../Custom/Globals.js');
@@ -113,6 +127,7 @@ const Register = ({ route, navigation }) => {
     const [errorText, setErrorText] = useState('');
     const [successText, setSuccessText] = useState('');
     const [userAddress, setUserAddress] = useState('');
+    const [modalVisible, setModalVisible] = useState(false);
 
     //! Load user address
     //! Check if Register by Wallet or by Username
@@ -181,6 +196,14 @@ const Register = ({ route, navigation }) => {
             default: return 'application/octet-stream';
         }
     }
+
+    //! Copy Share 3 to clipboard
+    const copyToClipboard = async () => {
+        if (shares[2] == null) {
+            return;
+        }
+        await Clipboard.setStringAsync(shares[2]);
+    };
 
     //! Save Share 2 to device
     const saveShare2 = async () => {
@@ -254,7 +277,7 @@ const Register = ({ route, navigation }) => {
             console.log(response.data);
             setSuccessText('Register successfully');
             setErrorText('');
-            navigation.navigate('TourDC_Login');
+            
         }
         catch (error) {
             console.error(error);
@@ -281,12 +304,11 @@ const Register = ({ route, navigation }) => {
 
         //! Save share 2 (Device)
         saveShare2();   
-        
+
         //! Show share 3 (User)
-        // call api to save show share3
     }
 
-    async function registerTourDCUser() {
+    async function registerTourDCUser() {        
         try {
             //$ Create smart contract account to get private key
             await createSmartContractAccount();
@@ -318,6 +340,90 @@ const Register = ({ route, navigation }) => {
         fetchRegisterData();
     }
 
+    const registerLogic = () => {
+        if (isWalletRegister) {
+            registerWalletUser();
+        } else {
+            registerTourDCUser();
+        }
+    }
+
+    //! Components 
+    const RegisterNotify = () => {
+        return (
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    setModalVisible(!modalVisible);
+                }}
+            >
+                <View style={styles.centeredView}>
+                <View style={styles.tourismPage_checkInNotify}>
+            <Text style={styles.modalText}>
+              TourDC will verify your information to complete the registration
+              </Text>
+
+              
+
+              {/* Share 3 */}
+              {encryptedPrivateKey ?  
+              (
+                <View>
+                    <Text style={styles.tourismPage_checkInLocationText}>
+                    Your private share key, Please be backed-up this key (Touch to copy):  
+                    </Text>
+                    <View style={styles.modalCopyTextContainer}>
+                    <TouchableOpacity onPress={() => copyToClipboard()}>
+                        <Text style={styles.tourismPage_checkInLocationText}>
+                        {encryptedPrivateKey}
+                        <Image
+                            source={require('../../assets/icons/clipboard.png')}
+                            style={styles.tourismPage_clipboardIcon}
+                        />
+                        </Text>
+                    </TouchableOpacity>
+                    </View>
+                </View>
+                ):
+                <Text style={styles.tourismPage_checkInLocationText}>
+                    Encrypting private key...
+              </Text> 
+                }
+                    {/* Close button */}
+                    {
+                        successText ? 
+                        <Text style={styles.CreateReview_successText}>
+                            {successText}
+                        </Text> :
+                        <LoadingIcon />
+                    }
+
+                    <TouchableOpacity
+                        style={styles.tourismPage_checkInBtnContainer}
+                        onPress={() => {
+                            setModalVisible(false)
+                            navigation.navigate('TourDC_Login');
+                            }}>
+                        <Text style={styles.tourismPage_checkInBtnText}>
+                            Close
+                        </Text>
+                    </TouchableOpacity>
+
+                </View>
+            </View>
+            </Modal>
+        )
+    }
+
+    const LoadingIcon = () => {
+        return (
+                <ActivityIndicator size="large" color="#39A7FF" />
+        );
+    }
+
+
     const CustomButton = ({ onPress, text, style }) => (
         <TouchableOpacity style={[style]} onPress={onPress}>
             <Text style={styles.btnText}>{text}</Text>
@@ -325,6 +431,8 @@ const Register = ({ route, navigation }) => {
     );
 
     return (
+        <>
+        <RegisterNotify />
         <View >
             <View style={styles.registerHeader}>
             </View>
@@ -414,13 +522,18 @@ const Register = ({ route, navigation }) => {
                     }
                     <CustomButton
                         style={styles.loginBtn}
-                        onPress={isWalletRegister ? registerWalletUser : registerTourDCUser}
+                        onPress={() => {
+                        setModalVisible(true);
+                        registerLogic();
+                        }}
+                            
                         text={'REGISTER'}
                     />
           
                 </View>
             </ImageBackground>
         </View>
+        </>
     )
 }
 
