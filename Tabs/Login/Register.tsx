@@ -163,6 +163,9 @@ const Register = ({ route, navigation }) => {
     console.log("isLoadingRegister: ", isLoadingRegister)
     console.log("isSuccessRegister: ", isSuccessRegister)
     console.log("current private Key", privateKey)
+    console.log("Encrypted Private Key", encryptedPrivateKey);
+    console.log("Shares", shares);
+
 
     //! Register
     function getImageType(filename) {
@@ -179,19 +182,29 @@ const Register = ({ route, navigation }) => {
         }
     }
 
-    //! Create smart contract account to get private key
- const createSmartContractAccount = async () => {
-    try {
-        let response = await createAccount();
-        if (response !== null) {
-            console.log(response);
-            setPrivateKey(response.privateKey);
-            setWalletAddress(response.walletAddress);
+    //! Save Share 2 to device
+    const saveShare2 = async () => {
+        try {
+            const address = await AsyncStorage.setItem('share', shares[1]);
+        } catch (error) {
+            console.log(error);
         }
-    } catch (error) {
-        console.error("Failed to create account:", error);
+    };
+
+
+    //! Create smart contract account to get private key
+    const createSmartContractAccount = async () => {
+        try {
+            let response = await createAccount();
+            if (response !== null) {
+                console.log(response);
+                setPrivateKey(response.privateKey);
+                setWalletAddress(response.walletAddress);
+            }
+        } catch (error) {
+            console.error("Failed to create account:", error);
+        }
     }
-}
 
     //! Register user to server
     const fetchRegisterData = async () => {
@@ -251,32 +264,26 @@ const Register = ({ route, navigation }) => {
     }
 
     const privateKeyEncrypt = async () => {
+        //$ Get random key and shares it
         let shares = await shamir.shares_key_shamir();
         let randomKey = shamir.shamir_combine(shares[0], shares[1]);
+        //$ Convert shares to hex
         let hexShares = shares.map((share) => {
             return share.toString('hex');
         })
         setShares(hexShares);
 
-        // encrypt private key
-        console.log("Before Encrypt Private Key");
-        console.log(randomKey.key);
-        console.log(privateKey);
-        let encryptedPrivateKey = aes.encryptedPrivateKey(randomKey.key, privateKey) as string;
-        console.log("Encrypted Private Key");
-        console.log(encryptedPrivateKey);
-        // TODO: setEncryptedPrivateKey
-        setEncryptedPrivateKey(encryptedPrivateKey);
+        //$ encrypt private key
+        let encryptedPrivateKey = aes.encryptedPrivateKey(randomKey.key, privateKey);
+        
+        //! Save share 1 and encrypted private key (Server)
+        setEncryptedPrivateKey(encryptedPrivateKey.encryptedKey ?? '');
 
-        // call api to send to sever share0
-        // call api to send to sever encryptedPrivateKey
-        // call api to save share1
-        // call api to save show share2
-        console.log(randomKey.key);
-
-        // set Share 0
-        // set Encrypted Private Key
-
+        //! Save share 2 (Device)
+        saveShare2();   
+        
+        //! Show share 3 (User)
+        // call api to save show share3
     }
 
     async function registerTourDCUser() {
