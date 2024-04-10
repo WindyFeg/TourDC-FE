@@ -5,11 +5,13 @@ import GLOBAL from "../Globals"
 import contractABI from "../contracts/Tourism.json"
 import contractAddress from "../contracts/Tourism-address.json"
 import { LegacyTransaction } from '@ethereumjs/tx'
-import { axios } from "axios";
+import axios from "axios";
 import {Common, Hardfork} from '@ethereumjs/common'
 import { bytesToHex, hexToBytes } from '@ethereumjs/util' 
 import React, {useState} from 'react';
 import {Alert, Modal, StyleSheet, Text, Pressable, View} from 'react-native';
+import AES from './aes'
+import GLOBAL from '../Globals'
 // const { Web3 } = require('web3');
 // const axios = require('axios')
 // const contractAddress = require('../contracts/Tourism-address.json')
@@ -18,31 +20,19 @@ import {Alert, Modal, StyleSheet, Text, Pressable, View} from 'react-native';
 // const {Common, Hardfork} = require('@ethereumjs/common')
 // const {hexToBytes, bytesToHex} = require('@ethereumjs/util')
 
-// const Tx = Transaction;
-// const BASE_URL = GLOBAL.BASE_URL
 const VBCProvider = "https://vibi.vbchain.vn/"
 var web3 = new Web3(VBCProvider);
 const contract = new web3.eth.Contract(contractABI.abi, contractAddress.Token);
 
-// randomKey in Sesssion + private_key_encrypt => decrypted to get privateKey
-// const customCommon = Common.forCustomChain(
-//   'mainnet',
-//   {
-//       name: 'vibichain',
-//       networkId: 306,
-//       chainId: 306,
-//   },
-//   'istanbul'
-// );
-//
-
 const customCommon = Common.custom({ chainId: 306 , networkId: 306}, {hardfork: Hardfork.Berlin})
-async function autoCheckIn(randomKey, username, placeID) {
+export async function autoCheckIn(randomKey, placeID) {
   try {
+
     // call api to get private_key_encrypt
-    // console.log(await web3.eth.getTransactionReceipt('0xd7abc07daf4096b9ab81c9468edd298a011b216d4ae78448137b93560936fece'))
-    // let enc_private_key = await axios.post(`${BASE_URL}/api/user/getPrivateEnc`, {username: username})
-    let enc_private_key = '29b05dee4c7d1818c44a99dd1e098f8bb01caceff6b53c29602288a3e9bd6191'
+    console.log(await web3.eth.getTransactionReceipt('0xd7abc07daf4096b9ab81c9468edd298a011b216d4ae78448137b93560936fece'))
+    let enc_private_key = await axios.post(`${GLOBAL.BASE_URL}/api/user/getPrivateEnc`, {address: address})
+    // let enc_private_key = '29b05dee4c7d1818c44a99dd1e098f8bb01caceff6b53c29602288a3e9bd6191'
+    
     if(enc_private_key.success == false) {
       return enc_private_key
     }
@@ -52,46 +42,42 @@ async function autoCheckIn(randomKey, username, placeID) {
     console.log('privateKey: ', privateKey)
 
     // signmessage
-    const account = web3.eth.accounts.privateKeyToAccount('0x' + privateKey).address
-    console.log('account: ', account)
+    const account = web3.eth.accounts.privateKeyToAccount(privateKey).address
   
     let nonce = await web3.eth.getTransactionCount(account,'latest');
-    console.log('nonce: ', nonce)
     let data = contract.methods.checkIn(placeID).encodeABI();
-    console.log("data", data)
-    let estimateGas = await contract.methods.checkIn(placeID).estimateGas({
-      from: account,
-    });
-    console.log("estimateGas", estimateGas)
-    
+
     const txObject = {
       nonce: web3.utils.toHex(nonce),
       from: account,
-      gasLimit: web3.utils.toHex(estimateGas), // Raise the gas limit to a much higher amount
-      // gasPrice: web3.eth.getGasPrice(),
-      // gasPrice: '0x09184e72a000',
-      // gasLimit: '0x2710',
-      // gasPrice: 1000000000,
+      gasLimit: web3.utils.toHex(5000000), // Raise the gas limit to a much higher amount
       to: contractAddress.Token,
-      data: contract.methods.checkIn(placeID).encodeABI(),
-      gasPrice: 1000000000,
-      chainId: 0x132
+      data: await contract.methods.checkIn(placeID).encodeABI(),
+      gasPrice: 3000000,
     }
+    console.log('txObject:', txObject)
+    const tx = LegacyTransaction.fromTxData(txObject,{ common: customCommon })
     
-    const tx = new Tx(txObject,{ common: customCommon })
-    console.log("newtxObj", tx)
-    
-    const privateKeyBytes = Buffer.from(privateKey, 'hex')
-    console.log(privateKeyBytes)
-    tx.sign(privateKeyBytes)
+    const privateKeyBytes = Buffer.from(privateKey.slice(2), 'hex')
+    const signedTx = tx.sign(privateKeyBytes)
 
-    const serializedTx = tx.serialize()
-    const raw = '0x' + serializedTx.toString('hex')	
+    const serializedTx = signedTx.serialize()
+    const raw = '0x' + Buffer.from(serializedTx).toString('hex')
     const txHash = web3.utils.sha3(serializedTx);
 
-    console.log("txHash", txHash)
-    web3.eth.sendSignedTransaction( raw )
-    .on('receipt', console.log);
+    const sendtransaction = await web3.eth.sendSignedTransaction( raw )
+    if (sendtransaction.transactionHash) {
+      const postID = sendtransaction.logs[0].topics[1]
+      console.log('postID', postID)
+      // call api to save post in db
+      await axios.post(`${GLOBAL.BASE_URL}/api/post/add`, {
+            hash: txHash,
+            placeID: placeID,
+          })
+      console.log('success')
+      return txHash
+    }
+    else return false
   } catch (error) {
     console.error(error)
     return {
@@ -102,7 +88,7 @@ async function autoCheckIn(randomKey, username, placeID) {
 }
 
 
-export const faucet = async(address) => {
+const faucet = async(address) => {
   // get account address
   try {
     // send to account Vibi
@@ -178,6 +164,8 @@ export async function autoRegister(privateKey, firstName, lastName, phoneNumber)
 // faucet('0x8e9A096546C4dD39861fb7D9897b7Ce211BA4129')
 
 
+
+
 // auto create post --> create post(...) --> 
 // bấm dô bài post
 // destination Reviews 
@@ -186,3 +174,17 @@ export async function autoRegister(privateKey, firstName, lastName, phoneNumber)
 // --> Reward History
 // --> TourDC Token? 
 // --> Voucher ... Exchange 
+
+
+// 0x12341234123412 randomkey
+
+// share1: 80151bba053547fa7e66db299c4330525ca8e273956ec6e0903c6c8951f2b2c7f3bce7f44e7500b4ed44b0b33607f9920ddb5f4c532c02bdb564334c0112655846eef845819ce097a2a28f98ab8c0c064cab815838912c6cf2c870eecadd5ea3dc3e39939fa74018567c242aabe84ed4e6068e4a4c39f81040bc3c1e702cda298ab
+// share2: 802a26b5da6a8fe53d1da792f95660a4a89014e72acc5dc1206918d373e5658fe7681fe88d3a0169cb5961666c0fe2f40a777f597649d56abac86689d224caa15dcc315b0328112f45450ef096d9d9dc8896d2a1b0f24918358131cc547b7c97a98db7972bae85e179b99d24932159b9c95d08355c8234308439bc9d35787d12d1b
+// share3: 803f3d0fdf5fc81f437b7cbb651550f6f438f694bfa29b21b055745a2217d74814d4f81cc34f01dd261dd1d55a081b6607ac20152565d7d70fac55c5d336aff91b22c91e82b4f1b8e7e781683d55d5dac43d53f988636574c74941229ea6223475a38d24b719c6b92cf5ba2e3bd9142d2c6b855f13abcf60c7b583a34644a0bb580
+
+// enc_private_key: AB9E13C8D3B09F120DD13BA473B953D487F7028A518B696E0D4662082BD5373D018F8C316A2FB0CE04951BFB36899B386781562D95885A1CEC2684A7A00C2D683A282A62370B29B7DA5FF708BFF7002A
+
+// private key: e11f5c9977c82fe752f84caeb9ba0c50feabd0ce90088cb2  6e61ee0fce5950c2
+
+
+// checkIn('0x12341234123412', '65f2c7e1f60b126cb2487527')

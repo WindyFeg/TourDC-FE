@@ -25,10 +25,12 @@ import { useConnect } from 'wagmi'
 //   transport: http('https://vibi.vbchain.vn/​') 
 // }) 
 
-// import {faucet, autoRegister} from './service/signmessage.js'
+// import {autoCheckIn, autoRegister, } from './service/signmessage.js'
+// autoCheckIn('2dc232208048ff7f', '65f2c7e1f60b126cb2487527')
 // console.log('txhash:', faucet('0x22bAD70a7882c5094aacCCdD941df1430AD00f59'))
 // console.log('registerHash:', autoRegister('0xbc729936a880a977542856f7e3cda104062cb2627ece05937e05b8f8dc579f21','David','2','23123123'))
 // faucet('0x22bAD70a7882c5094aacCCdD941df1430AD00f59')
+
 
 const projectId = '8b6eb1cee75ca1dc62be65c01eef5cc7'
 
