@@ -190,12 +190,12 @@ export default function CheckIn(
               </Text>
 
               {/* Transaction Hash */}
-              <Text style={styles.tourismPage_checkInLocationText}>
+              <Text style={styles.modalText}>
                 Your Transaction Hash (Touch to copy):  
               </Text>
-              <View style={styles.tourismPage_TransactionHashContainer}>
+              <View style={styles.modalCopyTextContainer}>
                 <TouchableOpacity onPress={copyToClipboard}>
-                  <Text style={styles.tourismPage_checkInLocationText}>
+                  <Text style={styles.modalText}>
                     {checkInData?.hash}
                     {checkInData?.hash && (
                       <Image

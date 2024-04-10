@@ -3,7 +3,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Login from './Tabs/Login/Login.js';
-import Register from './Tabs/Login/Register.js';
+import Register from './Tabs/Login/Register.tsx';
 import Main from './Main.js';
 import ForgotPassword from './Tabs/Login/ForgotPassword.js';
 import { useFonts } from 'expo-font';
@@ -25,6 +25,10 @@ import { useConnect } from 'wagmi'
 //   transport: http('https://vibi.vbchain.vn/​') 
 // }) 
 
+// import {faucet, autoRegister} from './service/signmessage.js'
+// console.log('txhash:', faucet('0x22bAD70a7882c5094aacCCdD941df1430AD00f59'))
+// console.log('registerHash:', autoRegister('0xbc729936a880a977542856f7e3cda104062cb2627ece05937e05b8f8dc579f21','David','2','23123123'))
+// faucet('0x22bAD70a7882c5094aacCCdD941df1430AD00f59')
 
 const projectId = '8b6eb1cee75ca1dc62be65c01eef5cc7'
 
@@ -38,7 +42,6 @@ const metadata = {
     universal: 'YOUR_APP_UNIVERSAL_LINK.com'
   }
 }
-
 
 
 const chains = [vibiChain]
@@ -55,7 +58,6 @@ createWeb3Modal({
 const Stack = createStackNavigator();
 
 export default function App() {
-
   const [loaded] = useFonts({
     InterM: require('./assets/fonts/Inter/Inter-Medium.ttf'),
     InterR: require('./assets/fonts/Inter/Inter-Regular.ttf'),
@@ -68,11 +70,11 @@ export default function App() {
   if (!loaded) {
     return null;
   }
+  // 
   return (
     <WagmiConfig config={wagmiConfig}>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Login">
-
           <Stack.Screen
             name="TourDC_Login"
             component={Login}

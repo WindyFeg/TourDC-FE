@@ -9,11 +9,10 @@ import Home from './Tabs/Main/Home';
 import MyAccount from './Tabs/Main/MyAccount';
 import MyTrip from './Tabs/Main/MyTrip';
 
-import Home_Icon from './assets/icons/home.svg';
-import Explore_Icon from './assets/icons/explore.svg';
-import ReviewSection from './service/reviewSections'
+// import Home_Icon from './assets/icons/home.svg';
+// import Explore_Icon from './assets/icons/explore.svg';
+// import ReviewSection from './service/review/* S */ections'
 const Tab = createBottomTabNavigator();
-
 const Main = ({ navigation }) => {
     return (
         <SafeAreaView style={{ flex: 1, paddingTop: StatusBar.currentHeight }}>

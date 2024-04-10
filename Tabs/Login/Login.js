@@ -10,6 +10,8 @@ import TourismLogo from '../../assets/logo/TourismLogo.png';
 import SvgComponent from '../../assets/SvgComponent';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Keychain from 'react-native-keychain';
+
 const GLOBAL = require('../Custom/Globals.js');
 
 //! Components put outside for not being re-rendered
@@ -45,20 +47,45 @@ const LoginInputUI = ({ username, setUsername, password, setPassword }) => {
 }
 
 const Login = ({ navigation }) => {
+    const [session, setSession] = useState(undefined)
     //* Normal Login
     const { address, isConnecting, isDisconnected } = useAccount()
+    const [userAddress, setUserAddress] = useState(undefined);
+    const [tourDCAddress, setTourDCAddress] = useState(undefined);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [userAddress, setUserAddress] = useState('');
     const [privateKey, setPrivateKey] = useState('');
     const [refreshToken, setRefreshToken] = useState('');
     const [Wrong, setWrong] = useState(false);
+    const [walletAddressStatus, setWalletAddressStatus] = useState([]);
 
+
+    console.log("-----------------Login-----------------");
+    console.log("User Address: " + userAddress);
+    console.log("TourDC Address: " + tourDCAddress);
+    console.log("Wallet Address: " + address);
+    console.log("Check Address: \n" + JSON.stringify(walletAddressStatus));
+    console.log("Check Address: \n" + walletAddressStatus);
+
+    //! Create session
+    useEffect(() => {
+        const createSession = async () => {
+            try {
+                const rawValue = JSON.stringify(session);
+                await Keychain.setGenericPassword('session', rawValue);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        createSession();
+    }, [session]);
+
+    //! Get user address from storage
     useEffect(() => {
         const loadData = async () => {
             try {
                 setUserAddress(await AsyncStorage.getItem('address'));
-                console.log("Load address" + userAddress)
+                console.log("Storage address: " + userAddress)
             } catch (error) {
                 console.log(error);
             }
@@ -67,34 +94,65 @@ const Login = ({ navigation }) => {
         loadData();
     }, []);
 
+    //! Store user address to storage 
+    //! based on login method 
     useEffect(() => {
-        const storeData = async () => {
-            let _userAddress = userAddress ? userAddress : address;
-            let _refreshToken = refreshToken ? refreshToken : null;
+        const storeData = async (_userAddress) => {
             try {
                 await Promise.all([
                     AsyncStorage.setItem('address', _userAddress),
-                    AsyncStorage.setItem('refreshToken', _refreshToken),
-                    AsyncStorage.setItem('privateKey', privateKey)
                 ]);
+
+                setSession({
+                    userAddress: _userAddress,
+                });
+
                 console.log("Save address: " + _userAddress);
-                navigation.navigate('TourDC_Main');
             } catch (error) {
                 console.log(error);
             }
         };
-
-        if ((userAddress != '') || (address != undefined)) {
-            storeData();
+        // Login with Wallet account
+        if (address != undefined) {
+            storeData(address);
+            checkWalletAddress();
+            return;
         }
-    }, [address, userAddress]);
-
-    useEffect(() => {
-        if (isDisconnected) {
-            console.log("Disconnected");
+        // Login with username and password
+        if (tourDCAddress != undefined) {
+            storeData(tourDCAddress);
+            navigation.navigate('TourDC_Main');
+            return;
         }
-    }, [isDisconnected]);
+    }, [address, tourDCAddress]);
 
+    //! Check wallet address
+    //! If address is already registered, navigate to Main page
+    //! If address is not registered, navigate to Register page
+    const checkWalletAddress = async () => {
+        try {
+            const response = await axios.post(`${GLOBAL.BASE_URL}/api/user/checkAddress`, {
+                address: userAddress
+            });
+            // Wallet address already registered,
+            setWalletAddressStatus(response.data);
+            console.log("Address found in Smart Contract");
+            navigation.navigate('TourDC_Main');
+        } catch (error) {
+            console.log(error.response.data);
+            if (error.response.data.success === false) {
+                console.log("Address not found in Smart Contract");
+                // Wallet address not registered,
+                navigation.navigate('TourDC_Register',
+                    {
+                        isWalletRegister: true
+                    });
+            }
+            setWrong(true);
+        }
+    }
+
+    //! TourDC Login
     const fetchLoginData = async () => {
         try {
             const response = await axios.post(`${GLOBAL.BASE_URL}/api/user/login`, {
@@ -107,10 +165,9 @@ const Login = ({ navigation }) => {
             else {
                 console.log("User login address: \n" + response.data.userData.wallet_address);
 
-                setUserAddress(response.data.userData.wallet_address);
+                tourDCAddress(response.data.userData.wallet_address);
                 setPrivateKey(response.data.userData.private_key);
                 setRefreshToken(response.data.userData.refreshToken);
-                navigation.navigate('TourDC_Main');
             }
         } catch (error) {
             console.error(error);
@@ -118,21 +175,26 @@ const Login = ({ navigation }) => {
         }
     }
 
-    const Authentication = () => {
-        console.log("Current Storage Data: " + address + "/" + userAddress)
-        fetchLoginData();
-    }
+    //! Disconnect
+    useEffect(() => {
+        if (isDisconnected) {
+            console.log("Disconnected");
+            setUserAddress(undefined);
+            setTourDCAddress(undefined);
+            setPrivateKey('');
+        }
+    }, [isDisconnected]);
 
+    //! Navigation
     const Register = () => {
-        navigation.navigate('TourDC_Register');
+        navigation.navigate('TourDC_Register',
+            {
+                isWalletRegister: false
+            });
     }
 
     const ForgotPassword = () => {
         navigation.navigate('TourDC_ForgotPassword');
-    }
-
-    const MetaMask = () => {
-        navigation.navigate('TourDC_Main');
     }
 
     const CustomButton = ({ onPress, text, style }) => (
@@ -189,7 +251,7 @@ const Login = ({ navigation }) => {
 
                     <CustomButton
                         style={styles.loginBtn}
-                        onPress={Authentication}
+                        onPress={fetchLoginData}
                         text={'LOGIN'}
                     />
 
