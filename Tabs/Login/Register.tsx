@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { 
-    Text, 
-    View, 
-    Pressable, 
-    Image, 
-    TextInput, 
-    TouchableOpacity, 
-    Button, 
-    ImageBackground, 
+import {
+    Text,
+    View,
+    Pressable,
+    Image,
+    TextInput,
+    TouchableOpacity,
+    Button,
+    ImageBackground,
     ActivityIndicator,
     SafeAreaView,
     Modal
@@ -24,16 +24,18 @@ import axios from 'axios';
 import shamir from '../../service/shamir.js';
 import aes from '../../service/aes.js';
 import {
-  useContractRead,
-  useContractWrite,
-  usePrepareContractWrite,
+    useContractRead,
+    useContractWrite,
+    usePrepareContractWrite,
 } from "wagmi";
 import Tourism_abi from "../../contracts/Tourism.json"
-import Tourism_address from "../../contracts/Tourism-address.json" 
+import Tourism_address from "../../contracts/Tourism-address.json"
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {createAccount, HelloWorld} from '../../service/create_account.js';
+import { createAccount, HelloWorld } from '../../service/create_account.js';
 import { err } from 'react-native-svg/lib/typescript/xml.js';
 import { autoRegister } from '../../service/signmessage.js'
+import * as WebBrowser from 'expo-web-browser';
+import { render } from 'react-native-web';
 
 const FormData = require('form-data');
 const GLOBAL = require('../Custom/Globals.js');
@@ -45,7 +47,7 @@ const RegisterInputUI = ({ label,
     setText,
     isPassword,
     keyboardType }) => {
-    
+
     return (
         <SafeAreaView>
             <Text style={styles.loginLabel}>{label}</Text>
@@ -78,29 +80,29 @@ const NameInputUI = ({ label,
             <Text style={styles.loginLabel}>{label}</Text>
             <StatusBar style="auto" />
             <View style={styles.loginInput}>
-            <View> 
-                <TextInput
-                    style={styles.nameTextInput}
-                    placeholder={'First'}
-                    placeholderTextColor="#003f5c"
-                    secureTextEntry={isPassword}
-                    onChangeText={setFirstName}
-                    value={firstName}
-                    keyboardType={keyboardType}
-                />
-            </View>
-            <View >
-          <TextInput
-                    style={styles.nameTextInput}
-                    placeholder={'Last'}
-                    placeholderTextColor="#003f5c"
-                    secureTextEntry={isPassword}
-                    onChangeText={setLastName}
-                    value={lastName}
-                    keyboardType={keyboardType}
-                />
+                <View>
+                    <TextInput
+                        style={styles.nameTextInput}
+                        placeholder={'First'}
+                        placeholderTextColor="#003f5c"
+                        secureTextEntry={isPassword}
+                        onChangeText={setFirstName}
+                        value={firstName}
+                        keyboardType={keyboardType}
+                    />
+                </View>
+                <View >
+                    <TextInput
+                        style={styles.nameTextInput}
+                        placeholder={'Last'}
+                        placeholderTextColor="#003f5c"
+                        secureTextEntry={isPassword}
+                        onChangeText={setLastName}
+                        value={lastName}
+                        keyboardType={keyboardType}
+                    />
 
-            </View>
+                </View>
             </View>
         </SafeAreaView>
     )
@@ -108,7 +110,7 @@ const NameInputUI = ({ label,
 
 const Register = ({ route, navigation }) => {
 
-    const {isWalletRegister} = route.params;
+    const { isWalletRegister } = route.params;
 
     //! State for Register from user
     const [username, setUsername] = useState('');
@@ -129,6 +131,7 @@ const Register = ({ route, navigation }) => {
     const [successText, setSuccessText] = useState('');
     const [userAddress, setUserAddress] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
+    const [isSend, setIsSend] = useState(false);
     // some hash
     const [registerHash, setRegisterHash] = useState<String | null>(null);
 
@@ -148,7 +151,7 @@ const Register = ({ route, navigation }) => {
         loadData();
     }, []);
 
-    
+
     //! Check if passwords match
     useEffect(() => {
         if (password !== confirmPassword) {
@@ -160,22 +163,22 @@ const Register = ({ route, navigation }) => {
 
     //! Adding user info to smart contract
     const { config } = usePrepareContractWrite({
-      address: Tourism_address.Token as `0x${string}`,
-      abi: Tourism_abi.abi,
-      functionName: 'register',
-      args: [firstName, lastName, phoneNumber], // [placeID]
-      account: `0x${userAddress.substring(2)}`,// current address
-      chainId: 306,
+        address: Tourism_address.Token as `0x${string}`,
+        abi: Tourism_abi.abi,
+        functionName: 'register',
+        args: [firstName, lastName, phoneNumber], // [placeID]
+        account: `0x${userAddress.substring(2)}`,// current address
+        chainId: 306,
     })
 
     const { data: registerData,
-      error: registerError, 
-      isError: isErrorRegister, 
-      isLoading: isLoadingRegister , 
-      isSuccess: isSuccessRegister, 
-      write: addInfoToAddress } = useContractWrite(config)
+        error: registerError,
+        isError: isErrorRegister,
+        isLoading: isLoadingRegister,
+        isSuccess: isSuccessRegister,
+        write: addInfoToAddress } = useContractWrite(config)
 
-    console.log("---------Is Wallet Register---------" , isWalletRegister)
+    console.log("---------Is Wallet Register---------", isWalletRegister)
     console.log("registerData: ", registerData)
     console.log("registerError: ", registerError)
     console.log("isErrorRegister: ", isErrorRegister)
@@ -200,6 +203,11 @@ const Register = ({ route, navigation }) => {
 
             default: return 'application/octet-stream';
         }
+    }
+
+    const ViewTransaction = async () => {
+        const url = `https://blockchain.agridential.vn/vibi/tx/${registerHash}`
+        await WebBrowser.openBrowserAsync(url);
     }
 
     //! Copy Share 3 to clipboard
@@ -261,10 +269,10 @@ const Register = ({ route, navigation }) => {
             type: imageType,
             name: filename,
         });
-        
-        registerForm.append('share_key', 
-        isWalletRegister? null : shares[0]);
-        registerForm.append('private_key_encrypted', isWalletRegister? null : encryptedPrivateKey);
+
+        registerForm.append('share_key',
+            isWalletRegister ? null : shares[0]);
+        registerForm.append('private_key_encrypted', isWalletRegister ? null : encryptedPrivateKey);
 
         console.log("registerForm: ", registerForm);
 
@@ -284,7 +292,7 @@ const Register = ({ route, navigation }) => {
             setSuccessText('Register successfully');
             setErrorText('');
             // register on blockchain 
-            
+
         }
         catch (error) {
             console.error(error);
@@ -305,51 +313,51 @@ const Register = ({ route, navigation }) => {
 
         //$ encrypt private key
         let encryptedPrivateKey = aes.encryptedPrivateKey(randomKey.key, privateKey);
-        
+
         //! Save share 1 and encrypted private key (Server)
         setEncryptedPrivateKey(encryptedPrivateKey.encryptedKey ?? '');
 
         //! Save share 2 (Device)
-        saveShare2();   
+        saveShare2();
 
         //! Show share 3 (User)
     }
 
-    async function registerTourDCUser() {        
+    // resgister user to blockchain
+    async function registerOnBlockchain() {
+        console.log(firstName, lastName, phoneNumber, privateKey)
+        setRegisterHash(await autoRegister(privateKey, firstName, lastName, phoneNumber) as String)
+    }
+
+
+    async function registerTourDCUser() {
         try {
             //$ Create smart contract account to get private key
             await createSmartContractAccount();
         } catch (error) {
             console.error("Error during registration:", error);
         }
-    }   
-    
+    }
+
     //$ Encrypt private key and send share to server
     useEffect(() => {
         if (privateKey !== '') {
             privateKeyEncrypt();
         }
     }, [privateKey]);
-    
+
     //$ Register user to server 
+    //$ Call Blockchain to register user
     useEffect(() => {
-        if (encryptedPrivateKey !== '') {
-            fetchRegisterData();
-        }
-    }, []);
-    
-    // resgister user to blockchain
-    async function registerOnBlockchain(firstName, lastName, phoneNumber, privateKey) {
-        console.log(firstName, lastName, phoneNumber, privateKey)
-        setRegisterHash(await autoRegister(privateKey, firstName, lastName, phoneNumber) as String)
-    }
-    useEffect(() => {
-        if (firstName && lastName && phoneNumber && privateKey) {
-            console.log("autoRegister with privatekey: ", privateKey)
-            registerOnBlockchain(firstName, lastName, phoneNumber, privateKey)
-        }
-    }, [firstName, lastName, phoneNumber, privateKey])
-    
+        const registerAndFetch = async () => {
+            if (encryptedPrivateKey !== '') {
+                await registerOnBlockchain();
+                fetchRegisterData();
+            }
+        };
+
+        registerAndFetch();
+    }, [encryptedPrivateKey]);
 
     const registerWalletUser = () => {
         //$ Add user info to smart contract with wallet address 
@@ -358,6 +366,8 @@ const Register = ({ route, navigation }) => {
         fetchRegisterData();
     }
 
+
+    //! Register Logic
     const registerLogic = () => {
         if (isWalletRegister) {
             registerWalletUser();
@@ -366,8 +376,18 @@ const Register = ({ route, navigation }) => {
         }
     }
 
+
     //! Components 
     const RegisterNotify = () => {
+
+        useEffect(() => {
+            if (isSend) {
+                console.log("Registering...");
+                setTimeout(registerLogic, 1000);
+                setIsSend(false);
+            }
+        }, [isSend]);
+
         return (
             <Modal
                 animationType="slide"
@@ -378,64 +398,111 @@ const Register = ({ route, navigation }) => {
                 }}
             >
                 <View style={styles.centeredView}>
-                <View style={styles.tourismPage_checkInNotify}>
-            <Text style={styles.modalText}>
-              TourDC will verify your information to complete the registration
-              </Text>
-              {/* Share 3 */}
-              {encryptedPrivateKey && registerHash ?  
-              (
-                <View>
-                    <Text style={styles.tourismPage_checkInLocationText}>
-                    Your private share key, Please be backed-up this key (Touch to copy):  
-                    </Text>
-                    <View style={styles.modalCopyTextContainer}>
-                    <TouchableOpacity onPress={() => copyToClipboard()}>
-                        <Text style={styles.tourismPage_checkInLocationText}>
-                        {encryptedPrivateKey}
-                        Register Hash: {registerHash}
-                        <Image
-                            source={require('../../assets/icons/clipboard.png')}
-                            style={styles.tourismPage_clipboardIcon}
-                        />
+                    <View style={styles.tourismPage_checkInNotify}>
+                        <Text style={styles.modalText}>
+                            TourDC will verify your information to complete the registration
                         </Text>
-                    </TouchableOpacity>
+                        {/* Share 3 */}
+                        {
+                            encryptedPrivateKey ?
+                                (
+                                    <View>
+                                        <Text style={styles.tourismPage_checkInLocationText}>
+                                            Your private share key, Please be backed-up this key (Touch to copy):
+                                        </Text>
+                                        <View style={styles.modalCopyTextContainer}>
+                                            <TouchableOpacity onPress={() => copyToClipboard()}>
+                                                <Text style={styles.tourismPage_checkInLocationText}>
+                                                    {encryptedPrivateKey}
+                                                    <Image
+                                                        source={require('../../assets/icons/clipboard.png')}
+                                                        style={styles.tourismPage_clipboardIcon}
+                                                    />
+                                                </Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                ) :
+                                <Text style={styles.tourismPage_checkInLocationText}>
+                                    Encrypting private key...
+                                </Text>
+                        }
+                        {
+                            registerHash ?
+                                (
+                                    <View>
+                                        <Text style={styles.tourismPage_checkInLocationText}>
+                                            Your Register Hash, (Touch to copy):
+                                        </Text>
+                                        <View style={styles.modalCopyTextContainer}>
+                                            <TouchableOpacity onPress={() => copyToClipboard()}>
+                                                <Text style={styles.tourismPage_checkInLocationText}>
+                                                    {registerHash}
+                                                    <Image
+                                                        source={require('../../assets/icons/clipboard.png')}
+                                                        style={styles.tourismPage_clipboardIcon}
+                                                    />
+                                                </Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                ) :
+                                <Text style={styles.tourismPage_checkInLocationText}>
+                                    Getting Register Hash...
+                                </Text>
+                        }
+
+                        {/* Close button */}
+                        {
+                            errorText && <Text style={styles.CreateReview_errorText}>
+                                {errorText}
+                            </Text>
+                        }
+
+                        {
+                            successText && <Text style={styles.CreateReview_successText}>
+                                {successText}
+                            </Text>
+                        }
+
+                        {
+                            errorText || successText ? null :
+                                <LoadingIcon />
+                        }
+
+
+                        <TouchableOpacity
+                            style={styles.tourismPage_checkInBtnContainer}
+                            onPress={ViewTransaction}>
+                            <Text style={styles.tourismPage_checkInBtnText}>
+                                Open transaction Hash
+                            </Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            style={styles.tourismPage_checkInBtnContainer}
+                            onPress={() => {
+                                setModalVisible(false)
+                                navigation.navigate('TourDC_Login');
+                            }}>
+                            <Text style={styles.tourismPage_checkInBtnText}>
+                                Close
+                            </Text>
+                        </TouchableOpacity>
+
                     </View>
                 </View>
-                ):
-                <Text style={styles.tourismPage_checkInLocationText}>
-                    Encrypting private key...
-              </Text> 
-                }
-                    {/* Close button */}
-                    {
-                        successText ? 
-                        <Text style={styles.CreateReview_successText}>
-                            {successText}
-                        </Text> :
-                        <LoadingIcon />
-                    }
-
-                    <TouchableOpacity
-                        style={styles.tourismPage_checkInBtnContainer}
-                        onPress={() => {
-                            setModalVisible(false)
-                            navigation.navigate('TourDC_Login');
-                            }}>
-                        <Text style={styles.tourismPage_checkInBtnText}>
-                            Close
-                        </Text>
-                    </TouchableOpacity>
-
-                </View>
-            </View>
             </Modal>
         )
     }
 
     const LoadingIcon = () => {
         return (
-                <ActivityIndicator size="large" color="#39A7FF" />
+            <ActivityIndicator size="large" color="#39A7FF"
+                style={{
+                    margin: 10
+                }}
+            />
         );
     }
 
@@ -448,108 +515,108 @@ const Register = ({ route, navigation }) => {
 
     return (
         <>
-        <RegisterNotify />
-        <View >
-            <View style={styles.registerHeader}>
-            </View>
-            <BackNavigationButton
-                navigation={navigation}
-            />
-            <ImageBackground source={loginBackground} resizeMode="cover" style={styles.registerBackground}>
-
-                <View style={styles.registerBackgroundOverlay}>
-                    <Text style={styles.loginBigText}>
-                        {isWalletRegister ? 'New Wallet Register' : 'TourDC Register'}
-                    </Text>
-                    {
-                        isWalletRegister && <Text style={styles.loginText}>
-                            All of your wallet information will connect to TourDC
-                        </Text>
-                        
-                    }
-
-                    <RegisterInputUI
-                        label={'Username'}
-                        placeholder={'Enter your username'}
-                        text={username}
-                        setText={setUsername}
-                        isPassword={false}
-                        keyboardType={'default'}
-                    />
-                    <RegisterInputUI
-                        label={'Password'}
-                        placeholder={'* * *'}
-                        text={password}
-                        setText={setPassword}
-                        isPassword={true}
-                        keyboardType={'default'}
-                    />
-                    <RegisterInputUI
-                        label={'Confirm Password'}
-                        placeholder={'* * *'}
-                        text={confirmPassword}
-                        setText={setConfirmPassword}
-                        isPassword={true}
-                        keyboardType={'default'}
-                    />
-                   
-                    <NameInputUI
-                        label={'Input Name'}
-                        placeholder={'First Name'}
-                        isPassword={false}
-                        firstName={firstName}
-                        setFirstName={setFirstName}
-                        lastName={lastName}
-                        setLastName={setLastName}
-                        keyboardType={'default'}
-                    />
-
-                    <RegisterInputUI
-                        label={'Phone Number'}
-                        placeholder={'84+'}
-                        text={phoneNumber}
-                        setText={setPhoneNumber}
-                        isPassword={false}
-                        keyboardType={'numeric'}
-                    />
-                    <RegisterInputUI
-                        label={'Age'}
-                        placeholder={'Age'}
-                        text={age}
-                        setText={setAge}
-                        isPassword={false}
-                        keyboardType={'numeric'}
-                    />
-
-                    <UploadImage
-                        setFiles={setAvt}
-                        setSource={setAvtSource}
-                    />
-
-                    {
-                        errorText && <Text style={styles.CreateReview_errorText}>
-                            {errorText}
-                        </Text>
-                    }
-
-                    {
-                        successText && <Text style={styles.CreateReview_successText}>
-                            {successText}
-                        </Text>
-                    }
-                    <CustomButton
-                        style={styles.loginBtn}
-                        onPress={() => {
-                        setModalVisible(true);
-                        registerLogic();
-                        }}
-                            
-                        text={'REGISTER'}
-                    />
-          
+            <RegisterNotify />
+            <View >
+                <View style={styles.registerHeader}>
                 </View>
-            </ImageBackground>
-        </View>
+                <BackNavigationButton
+                    navigation={navigation}
+                />
+                <ImageBackground source={loginBackground} resizeMode="cover" style={styles.registerBackground}>
+
+                    <View style={styles.registerBackgroundOverlay}>
+                        <Text style={styles.loginBigText}>
+                            {isWalletRegister ? 'New Wallet Register' : 'TourDC Register'}
+                        </Text>
+                        {
+                            isWalletRegister && <Text style={styles.loginText}>
+                                All of your wallet information will connect to TourDC
+                            </Text>
+
+                        }
+
+                        <RegisterInputUI
+                            label={'Username'}
+                            placeholder={'Enter your username'}
+                            text={username}
+                            setText={setUsername}
+                            isPassword={false}
+                            keyboardType={'default'}
+                        />
+                        <RegisterInputUI
+                            label={'Password'}
+                            placeholder={'* * *'}
+                            text={password}
+                            setText={setPassword}
+                            isPassword={true}
+                            keyboardType={'default'}
+                        />
+                        <RegisterInputUI
+                            label={'Confirm Password'}
+                            placeholder={'* * *'}
+                            text={confirmPassword}
+                            setText={setConfirmPassword}
+                            isPassword={true}
+                            keyboardType={'default'}
+                        />
+
+                        <NameInputUI
+                            label={'Input Name'}
+                            placeholder={'First Name'}
+                            isPassword={false}
+                            firstName={firstName}
+                            setFirstName={setFirstName}
+                            lastName={lastName}
+                            setLastName={setLastName}
+                            keyboardType={'default'}
+                        />
+
+                        <RegisterInputUI
+                            label={'Phone Number'}
+                            placeholder={'84+'}
+                            text={phoneNumber}
+                            setText={setPhoneNumber}
+                            isPassword={false}
+                            keyboardType={'numeric'}
+                        />
+                        <RegisterInputUI
+                            label={'Age'}
+                            placeholder={'Age'}
+                            text={age}
+                            setText={setAge}
+                            isPassword={false}
+                            keyboardType={'numeric'}
+                        />
+
+                        <UploadImage
+                            setFiles={setAvt}
+                            setSource={setAvtSource}
+                        />
+
+                        {
+                            errorText && <Text style={styles.CreateReview_errorText}>
+                                {errorText}
+                            </Text>
+                        }
+
+                        {
+                            successText && <Text style={styles.CreateReview_successText}>
+                                {successText}
+                            </Text>
+                        }
+                        <CustomButton
+                            style={styles.loginBtn}
+                            onPress={() => {
+                                setModalVisible(true);
+                                setIsSend(true);
+                            }}
+
+                            text={'REGISTER'}
+                        />
+
+                    </View>
+                </ImageBackground>
+            </View>
         </>
     )
 }
