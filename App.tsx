@@ -15,16 +15,12 @@ import { mainnet, polygon, arbitrum, sepolia } from 'viem/chains'
 import { createWeb3Modal, defaultWagmiConfig, Web3Modal } from '@web3modal/wagmi-react-native'
 import {vibiChain} from './defineChain.tsx'
 import { useConnect } from 'wagmi'
-// import { injected } from 'wagmi/connectors'
-// import { useNetwork, useSwitchNetwork } from 'wagmi'
-// import { createPublicClient, http } from 'viem'
-// import { fantom } from 'viem/chains'
- 
-// const vibiChain = createPublicClient({ 
-//   chain: fantom, 
-//   transport: http('https://vibi.vbchain.vn/​') 
-// }) 
 
+
+import {autoCheckIn, autoRegister, autoCreatePost, autoUpvote } from './service/signmessage.js'
+// autoCheckIn('2dc232208048ff7f', '65f2c7e1f60b126cb2487527')
+// autoCreatePost('2dc232208048ff7f', '0x0', '65f2c7e1f60b126cb2487527', '0xca5cec26fd1a51ab59e8d679d1b8193394870b3843dd4fd4b02513af8b4b99fa', 'test', '50', 'test')
+// autoUpvote('2dc232208048ff7f', '0x0', '0xca5cec26fd1a51ab59e8d679d1b8193394870b3843dd4fd4b02513af8b4b99fa')
 
 const projectId = '8b6eb1cee75ca1dc62be65c01eef5cc7'
 
@@ -38,7 +34,6 @@ const metadata = {
     universal: 'YOUR_APP_UNIVERSAL_LINK.com'
   }
 }
-
 
 
 const chains = [vibiChain]
@@ -55,7 +50,6 @@ createWeb3Modal({
 const Stack = createStackNavigator();
 
 export default function App() {
-
   const [loaded] = useFonts({
     InterM: require('./assets/fonts/Inter/Inter-Medium.ttf'),
     InterR: require('./assets/fonts/Inter/Inter-Regular.ttf'),
@@ -68,11 +62,11 @@ export default function App() {
   if (!loaded) {
     return null;
   }
+  // 
   return (
     <WagmiConfig config={wagmiConfig}>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Login">
-
           <Stack.Screen
             name="TourDC_Login"
             component={Login}

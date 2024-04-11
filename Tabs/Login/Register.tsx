@@ -33,6 +33,7 @@ import Tourism_address from "../../contracts/Tourism-address.json"
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createAccount, HelloWorld} from '../../service/create_account.js';
 import { err } from 'react-native-svg/lib/typescript/xml.js';
+import { autoRegister } from '../../service/signmessage.js'
 
 const FormData = require('form-data');
 const GLOBAL = require('../Custom/Globals.js');
@@ -128,6 +129,9 @@ const Register = ({ route, navigation }) => {
     const [successText, setSuccessText] = useState('');
     const [userAddress, setUserAddress] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
+    // some hash
+    const [registerHash, setRegisterHash] = useState<String | null>(null);
+
 
     //! Load user address
     //! Check if Register by Wallet or by Username
@@ -177,6 +181,7 @@ const Register = ({ route, navigation }) => {
     console.log("isErrorRegister: ", isErrorRegister)
     console.log("isLoadingRegister: ", isLoadingRegister)
     console.log("isSuccessRegister: ", isSuccessRegister)
+    console.log("current address", walletAddress)
     console.log("current private Key", privateKey)
     console.log("Encrypted Private Key", encryptedPrivateKey);
     console.log("Shares", shares);
@@ -256,12 +261,12 @@ const Register = ({ route, navigation }) => {
             type: imageType,
             name: filename,
         });
-
+        
         registerForm.append('share_key', 
         isWalletRegister? null : shares[0]);
         registerForm.append('private_key_encrypted', isWalletRegister? null : encryptedPrivateKey);
 
-        console.log(registerForm);
+        console.log("registerForm: ", registerForm);
 
         try {
             const response = await axios.post(`${GLOBAL.BASE_URL}/api/user/register`,
@@ -278,6 +283,7 @@ const Register = ({ route, navigation }) => {
             console.log(response.data);
             setSuccessText('Register successfully');
             setErrorText('');
+            // register on blockchain 
             
         }
         catch (error) {
@@ -330,8 +336,19 @@ const Register = ({ route, navigation }) => {
         if (encryptedPrivateKey !== '') {
             fetchRegisterData();
         }
-    }, [encryptedPrivateKey]);
+    }, []);
     
+    // resgister user to blockchain
+    async function registerOnBlockchain(firstName, lastName, phoneNumber, privateKey) {
+        console.log(firstName, lastName, phoneNumber, privateKey)
+        setRegisterHash(await autoRegister(privateKey, firstName, lastName, phoneNumber) as String)
+    }
+    useEffect(() => {
+        if (firstName && lastName && phoneNumber && privateKey) {
+            console.log("autoRegister with privatekey: ", privateKey)
+            registerOnBlockchain(firstName, lastName, phoneNumber, privateKey)
+        }
+    }, [firstName, lastName, phoneNumber, privateKey])
     
 
     const registerWalletUser = () => {
@@ -365,11 +382,8 @@ const Register = ({ route, navigation }) => {
             <Text style={styles.modalText}>
               TourDC will verify your information to complete the registration
               </Text>
-
-              
-
               {/* Share 3 */}
-              {encryptedPrivateKey ?  
+              {encryptedPrivateKey && registerHash ?  
               (
                 <View>
                     <Text style={styles.tourismPage_checkInLocationText}>
@@ -379,6 +393,7 @@ const Register = ({ route, navigation }) => {
                     <TouchableOpacity onPress={() => copyToClipboard()}>
                         <Text style={styles.tourismPage_checkInLocationText}>
                         {encryptedPrivateKey}
+                        Register Hash: {registerHash}
                         <Image
                             source={require('../../assets/icons/clipboard.png')}
                             style={styles.tourismPage_clipboardIcon}
@@ -450,6 +465,7 @@ const Register = ({ route, navigation }) => {
                         isWalletRegister && <Text style={styles.loginText}>
                             All of your wallet information will connect to TourDC
                         </Text>
+                        
                     }
 
                     <RegisterInputUI

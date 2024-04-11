@@ -13,7 +13,6 @@ import MyTrip from './Tabs/Main/MyTrip';
 // import Explore_Icon from './assets/icons/explore.svg';
 // import ReviewSection from './service/review/* S */ections'
 const Tab = createBottomTabNavigator();
-
 const Main = ({ navigation }) => {
     return (
         <SafeAreaView style={{ flex: 1, paddingTop: StatusBar.currentHeight }}>
