@@ -15,18 +15,11 @@ import { mainnet, polygon, arbitrum, sepolia } from 'viem/chains'
 import { createWeb3Modal, defaultWagmiConfig, Web3Modal } from '@web3modal/wagmi-react-native'
 import {vibiChain} from './defineChain.tsx'
 import { useConnect } from 'wagmi'
-// import { injected } from 'wagmi/connectors'
-// import { useNetwork, useSwitchNetwork } from 'wagmi'
-// import { createPublicClient, http } from 'viem'
-// import { fantom } from 'viem/chains'
- 
-// const vibiChain = createPublicClient({ 
-//   chain: fantom, 
-//   transport: http('https://vibi.vbchain.vn/​') 
-// }) 
 
-// import {autoCheckIn, autoRegister, } from './service/signmessage.js'
+
+// import {autoCheckIn, autoRegister,autoCreatePost } from './service/signmessage.js'
 // autoCheckIn('2dc232208048ff7f', '65f2c7e1f60b126cb2487527')
+// autoCreatePost('2dc232208048ff7f', '0x0', '65f2c7e1f60b126cb2487527', '0xca5cec26fd1a51ab59e8d679d1b8193394870b3843dd4fd4b02513af8b4b99fa', 'test', '50', 'test')
 // console.log('txhash:', faucet('0x22bAD70a7882c5094aacCCdD941df1430AD00f59'))
 // console.log('registerHash:', autoRegister('0xbc729936a880a977542856f7e3cda104062cb2627ece05937e05b8f8dc579f21','David','2','23123123'))
 // faucet('0x22bAD70a7882c5094aacCCdD941df1430AD00f59')
