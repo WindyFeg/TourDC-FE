@@ -147,6 +147,8 @@ const Login = ({ navigation }) => {
                     {
                         isWalletRegister: true
                     });
+
+
             }
             setWrong(true);
         }
@@ -165,7 +167,7 @@ const Login = ({ navigation }) => {
             else {
                 console.log("User login address: \n" + response.data.userData.wallet_address);
 
-                tourDCAddress(response.data.userData.wallet_address);
+                setTourDCAddress(response.data.userData.wallet_address);
                 setPrivateKey(response.data.userData.private_key);
                 setRefreshToken(response.data.userData.refreshToken);
             }

@@ -249,6 +249,7 @@ const Register = ({ route, navigation }) => {
         registerForm.append('age', age);
         registerForm.append('firstName', firstName);
         registerForm.append('lastName', lastName);
+        registerForm.append('wallet_address', walletAddress)
         registerForm.append('role', isWalletRegister ? "walletUser" : "tourdcUser");
         registerForm.append('file', {
             uri: avtSourceObj.uri,
