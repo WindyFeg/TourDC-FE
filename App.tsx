@@ -17,13 +17,10 @@ import {vibiChain} from './defineChain.tsx'
 import { useConnect } from 'wagmi'
 
 
-// import {autoCheckIn, autoRegister,autoCreatePost } from './service/signmessage.js'
+import {autoCheckIn, autoRegister, autoCreatePost, autoUpvote } from './service/signmessage.js'
 // autoCheckIn('2dc232208048ff7f', '65f2c7e1f60b126cb2487527')
 // autoCreatePost('2dc232208048ff7f', '0x0', '65f2c7e1f60b126cb2487527', '0xca5cec26fd1a51ab59e8d679d1b8193394870b3843dd4fd4b02513af8b4b99fa', 'test', '50', 'test')
-// console.log('txhash:', faucet('0x22bAD70a7882c5094aacCCdD941df1430AD00f59'))
-// console.log('registerHash:', autoRegister('0xbc729936a880a977542856f7e3cda104062cb2627ece05937e05b8f8dc579f21','David','2','23123123'))
-// faucet('0x22bAD70a7882c5094aacCCdD941df1430AD00f59')
-
+// autoUpvote('2dc232208048ff7f', '0x0', '0xca5cec26fd1a51ab59e8d679d1b8193394870b3843dd4fd4b02513af8b4b99fa')
 
 const projectId = '8b6eb1cee75ca1dc62be65c01eef5cc7'
 

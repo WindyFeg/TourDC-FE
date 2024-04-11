@@ -18,7 +18,7 @@ const customCommon = Common.custom({ chainId: 306 , networkId: 306}, {hardfork: 
 export async function autoCheckIn(randomKey,address, placeID) {
   try {
     // call api to get private_key_encrypt
-    console.log(await web3.eth.getTransactionReceipt('0xd7abc07daf4096b9ab81c9468edd298a011b216d4ae78448137b93560936fece'))
+    // console.log(await web3.eth.getTransactionReceipt('0xd7abc07daf4096b9ab81c9468edd298a011b216d4ae78448137b93560936fece'))
     let enc_private_key = await axios.post(`${GLOBAL.BASE_URL}/api/user/getPrivateEnc`, {address: address})
     
     if(enc_private_key.success == false) {
@@ -146,8 +146,8 @@ export async function autoRegister(privateKey, firstName, lastName, phoneNumber)
 
 export async function autoCreatePost(randomKey,address, placeID, postID, title, rate, review) {
   try {
-    // let enc_private_key = await axios.post(`${GLOBAL.BASE_URL}/api/user/getPrivateEnc`, {address: address})
-    let enc_private_key = '29b05dee4c7d1818c44a99dd1e098f8bb01caceff6b53c29602288a3e9bd6191'
+    let enc_private_key = await axios.post(`${GLOBAL.BASE_URL}/api/user/getPrivateEnc`, {address: address})
+    // let enc_private_key = '29b05dee4c7d1818c44a99dd1e098f8bb01caceff6b53c29602288a3e9bd6191'
     if(enc_private_key.success == false) {
       return enc_private_key
     }
@@ -184,6 +184,46 @@ export async function autoCreatePost(randomKey,address, placeID, postID, title, 
     console.error("ERR: ", error)
   }
 }
+
+export async function autoUpvote(randomKey, address, postID) {
+  try {
+    // let enc_private_key = await axios.post(`${GLOBAL.BASE_URL}/api/user/getPrivateEnc`, {address: address})
+    let enc_private_key = '29b05dee4c7d1818c44a99dd1e098f8bb01caceff6b53c29602288a3e9bd6191'
+    if(enc_private_key.success == false) {
+      return enc_private_key
+    }
+
+    // decrypted private_key
+    let privateKey = AES.decryptedPrivateKey(randomKey, enc_private_key).privateKey
+    const account = web3.eth.accounts.privateKeyToAccount(privateKey).address
+  
+    let nonce = await web3.eth.getTransactionCount(account,'latest');
+    const txObject = {
+      nonce: web3.utils.toHex(nonce),
+      from: account,
+      gasLimit: web3.utils.toHex(5000000), // Raise the gas limit to a much higher amount
+      to: contractAddress.Token,
+      data: await contract.methods.upvote(postID).encodeABI(),
+      gasPrice: 3000000,
+    }
+    console.log('txObject:', txObject)
+    const tx = LegacyTransaction.fromTxData(txObject,{ common: customCommon })
+    
+    const privateKeyBytes = Buffer.from(privateKey.slice(2), 'hex')
+    const signedTx = tx.sign(privateKeyBytes)
+
+    const serializedTx = signedTx.serialize()
+    const raw = '0x' + Buffer.from(serializedTx).toString('hex')
+    const txHash = web3.utils.sha3(serializedTx);
+    console.log('txHash: ', txHash)
+    const sendTransction = await web3.eth.sendSignedTransaction( raw )
+    return txHash
+
+  } catch (error) {
+    console.error("ERR: ", error.message)
+  }
+}
+
 
 // async function main() {
 //   await autoRegister('043f55c66a491d0c74bf1484d01876d28ea7ef02ca105af557944c3e3bfb7aa3', 'David', 'John', '0918812313')
