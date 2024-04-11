@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import {Alert, 
-Modal, 
-StyleSheet, 
-Text,
-Pressable, 
-View, 
-Image,
-Touchable, 
-TouchableOpacity, 
-ActivityIndicator, } from 'react-native';
+import {
+  Alert,
+  Modal,
+  StyleSheet,
+  Text,
+  Pressable,
+  View,
+  Image,
+  Touchable,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import {
   useContractRead,
   useContractWrite,
@@ -31,11 +33,10 @@ interface CheckInProps {
 }
 
 export default function CheckIn(
-  { placeId, 
-    placeName, 
-    location, 
-    userAddress }) 
-{
+  { placeId,
+    placeName,
+    location,
+    userAddress }) {
   const [modalVisible, setModalVisible] = useState(false);
   const { chain, chains } = getNetwork()
   const [isGPSValid, setIsGPSValid] = useState(0);
@@ -51,10 +52,10 @@ export default function CheckIn(
 
   })
   const { data: checkInData,
-    error: checkInError, 
-    isError: isErrorcheckIn, 
-    isLoading: isLoadingcheckIn , 
-    isSuccess: isSuccesscheckIn, 
+    error: checkInError,
+    isError: isErrorcheckIn,
+    isLoading: isLoadingcheckIn,
+    isSuccess: isSuccesscheckIn,
     write: checkIn } = useContractWrite(config)
 
   const ViewTransaction = async () => {
@@ -69,21 +70,21 @@ export default function CheckIn(
     if (checkInData == null) {
       return;
     }
-    await Clipboard.setStringAsync(checkInData?.hash);
+  await Clipboard.setStringAsync(checkInData?.hash);
   };
-    
-    useEffect(() => {
-      console.log("_______CheckIn.tsx_______")
-      // debug current time
-      console.log("Current time:", new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }));
-      console.log("placeId:", placeId)
-      console.log("userAddress:", userAddress)
-      console.log("isSuccess:", isSuccesscheckIn)
-      console.log("isLoading:", isLoadingcheckIn)
-      console.log("isError:", isErrorcheckIn)
-      console.log("error:", checkInError)
-      console.log("data:", checkInData)
-      console.log("__________________________")
+
+  useEffect(() => {
+    console.log("_______CheckIn.tsx_______")
+    // debug current time
+    console.log("Current time:", new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }));
+    console.log("placeId:", placeId)
+    console.log("userAddress:", userAddress)
+    console.log("isSuccess:", isSuccesscheckIn)
+    console.log("isLoading:", isLoadingcheckIn)
+    console.log("isError:", isErrorcheckIn)
+    console.log("error:", checkInError)
+    console.log("data:", checkInData)
+    console.log("__________________________")
 
   }, [checkInData, checkInError, isErrorcheckIn, isLoadingcheckIn, isSuccesscheckIn]);
 
@@ -92,26 +93,26 @@ export default function CheckIn(
       setModalVisible(true);
     }
   }
-  , [isLoadingcheckIn]);
+    , [isLoadingcheckIn]);
 
   //* Call BE to store checkIn data 
-  
-   const result = useWaitForTransaction({
-      hash: checkInData?.hash,
-    })
+
+  const result = useWaitForTransaction({
+    hash: checkInData?.hash,
+  })
   useEffect(() => {
     axios({
-        method: 'post',
-        url: `${GLOBAL.BASE_URL}/api/post/add`,
-        data: {
-          "placeId": placeId,
-          "hash": checkInData?.hash,
-        }
+      method: 'post',
+      url: `${GLOBAL.BASE_URL}/api/post/add`,
+      data: {
+        "placeId": placeId,
+        "hash": checkInData?.hash,
+      }
     }).then((response) => {
-        console.log("response from BE:", response.data)
-        
+      console.log("response from BE:", response.data)
+
     }).catch((error) => {
-        console.error('Error:', error);
+      console.error('Error:', error);
     });
   }, [result]);
 
@@ -143,8 +144,8 @@ export default function CheckIn(
     });
   }
 
-  const CheckInBtn = ({text, func}) => {
-   return (
+  const CheckInBtn = ({ text, func }) => {
+    return (
       <TouchableOpacity
         style={styles.tourismPage_checkInBtnContainer}
         onPress={func}>
@@ -152,10 +153,10 @@ export default function CheckIn(
           {text}
         </Text>
       </TouchableOpacity>
-   )
+    )
   }
 
-  const CheckInStatusNotify = ({status, statusStyle}) => {
+  const CheckInStatusNotify = ({ status, statusStyle }) => {
     return (
       <>
         <Text style={statusStyle}>
@@ -168,13 +169,13 @@ export default function CheckIn(
             Close
           </Text>
         </TouchableOpacity>
-    </>
+      </>
     )
   }
 
   const CheckInNotify = () => {
     return (
-    <Modal
+      <Modal
         animationType="slide"
         transparent={true}
         visible={modalVisible}
@@ -182,76 +183,76 @@ export default function CheckIn(
           Alert.alert('Modal has been closed.');
           setModalVisible(!modalVisible);
         }}>
-          
+
         <View style={styles.centeredView}>
           <View style={styles.tourismPage_checkInNotify}>
             <Text style={styles.tourismPage_checkInLocationText}>
               TourDC will check your current address to perform CheckIn in destination
-              </Text>
+            </Text>
 
-              {/* Transaction Hash */}
-              <Text style={styles.modalText}>
-                Your Transaction Hash (Touch to copy):  
-              </Text>
-              <View style={styles.modalCopyTextContainer}>
-                <TouchableOpacity onPress={copyToClipboard}>
-                  <Text style={styles.modalText}>
-                    {checkInData?.hash}
-                    {checkInData?.hash && (
-                      <Image
-                        source={require('../../../../assets/icons/clipboard.png')}
-                        style={styles.tourismPage_clipboardIcon}
-                      />
-                    )}
-                  </Text>
-                </TouchableOpacity>
-              </View>
+            {/* Transaction Hash */}
+            <Text style={styles.modalText}>
+              Your Transaction Hash (Touch to copy):
+            </Text>
+            <View style={styles.modalCopyTextContainer}>
+              <TouchableOpacity onPress={copyToClipboard}>
+                <Text style={styles.modalText}>
+                  {checkInData?.hash}
+                  {checkInData?.hash && (
+                    <Image
+                      source={require('../../../../assets/icons/clipboard.png')}
+                      style={styles.tourismPage_clipboardIcon}
+                    />
+                  )}
+                </Text>
+              </TouchableOpacity>
+            </View>
 
-             {/* Checking GPS Status */}
-              {
-                isGPSValid == -1 ?
+            {/* Checking GPS Status */}
+            {
+              isGPSValid == -1 ?
                 <Text style={
                   [
-                    styles.tourismPage_checkInLocationText, 
+                    styles.tourismPage_checkInLocationText,
                     styles.tourismPage_checkInLocationTextError
                   ]}>
                   You are not in the destination
                 </Text> : null
-              }
+            }
 
-              {/* Check In Transaction Status */}
-              { 
-                isLoadingcheckIn ?
+            {/* Check In Transaction Status */}
+            {
+              isLoadingcheckIn ?
                 <LoadingIcon /> :
-                  (isSuccesscheckIn ?
-                <CheckInStatusNotify 
-                status={'Check-In Success you can closed this'}
-                statusStyle = {[
-                  styles.tourismPage_checkInLocationText, 
-                  styles.tourismPage_checkInLocationTextSuccess
-                ]}
-                /> 
-                :
-                <CheckInStatusNotify
-                status={'Check-In Failed you can closed this'}
-                statusStyle = {[
-                  styles.tourismPage_checkInLocationText, 
-                  styles.tourismPage_checkInLocationTextError
-                ]}
-                />) 
-              }
+                (isSuccesscheckIn ?
+                  <CheckInStatusNotify
+                    status={'Check-In Success you can closed this'}
+                    statusStyle={[
+                      styles.tourismPage_checkInLocationText,
+                      styles.tourismPage_checkInLocationTextSuccess
+                    ]}
+                  />
+                  :
+                  <CheckInStatusNotify
+                    status={'Check-In Failed you can closed this'}
+                    statusStyle={[
+                      styles.tourismPage_checkInLocationText,
+                      styles.tourismPage_checkInLocationTextError
+                    ]}
+                  />)
+            }
 
-              {/* View Transaction Button */}
-              {
-                isSuccesscheckIn ?
-                <CheckInBtn 
-              text={'View Transaction'}
-              func={() => ViewTransaction()}
-              />
-              : null
-              }
+            {/* View Transaction Button */}
+            {
+              isSuccesscheckIn ?
+                <CheckInBtn
+                  text={'View Transaction'}
+                  func={() => ViewTransaction()}
+                />
+                : null
+            }
 
-              
+
           </View>
         </View>
       </Modal>
@@ -265,17 +266,17 @@ export default function CheckIn(
   }
 
   return (
-<>
-    {/* Popup Notify */}
-    <CheckInNotify />
-    {
-      isLoadingcheckIn ?
-      <LoadingIcon />:
-      <CheckInBtn 
-      text={'Check-In'}
-      func={() => CheckGPS()}
-      />
-    }
+    <>
+      {/* Popup Notify */}
+      <CheckInNotify />
+      {
+        isLoadingcheckIn ?
+          <LoadingIcon /> :
+          <CheckInBtn
+            text={'Check-In'}
+            func={() => CheckGPS()}
+          />
+      }
 
     </>
   );

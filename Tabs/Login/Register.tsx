@@ -151,7 +151,6 @@ const Register = ({ route, navigation }) => {
         loadData();
     }, []);
 
-
     //! Check if passwords match
     useEffect(() => {
         if (password !== confirmPassword) {
@@ -398,7 +397,7 @@ const Register = ({ route, navigation }) => {
                 }}
             >
                 <View style={styles.centeredView}>
-                    <View style={styles.tourismPage_checkInNotify}>
+                    <View style={styles.modalView}>
                         <Text style={styles.modalText}>
                             TourDC will verify your information to complete the registration
                         </Text>

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { useSignMessage, useAccount } from 'wagmi'
 import styles from '../../styles.js';
-import { Text, View, Pressable, Image, TextInput, TouchableOpacity, Button, ImageBackground, SafeAreaView } from 'react-native';
+import { Text, View, ScrollView, Pressable, Image, TextInput, TouchableOpacity, Button, ImageBackground, SafeAreaView, Modal } from 'react-native';
 import loginBackground from '../../assets/background/login_background.png';
 import TourDCLogo from '../../assets/logo/TourDCLogo.png';
 import TourismLogo from '../../assets/logo/TourismLogo.png';
@@ -46,6 +46,33 @@ const LoginInputUI = ({ username, setUsername, password, setPassword }) => {
     )
 }
 
+const LoginNotify = ({ modalVisible, setBackupShareKey, backupShareKey }) => {
+    return (
+        <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+                console.log("Modal has been closed.");
+            }}
+        >
+            <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                    <Text style={styles.modalText}>
+                        This is the first time you login on this device, please enter the share key to continue
+                    </Text>
+                    <TextInput
+                        style={styles.loginTextInput}
+                        placeholder="Enter share key"
+                        onChangeText={setBackupShareKey}
+                        value={backupShareKey}
+                    />
+                </View>
+            </View>
+        </Modal>
+    );
+}
+
 const Login = ({ navigation }) => {
     const [session, setSession] = useState(undefined)
     //* Normal Login
@@ -54,11 +81,13 @@ const Login = ({ navigation }) => {
     const [tourDCAddress, setTourDCAddress] = useState(undefined);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [privateKey, setPrivateKey] = useState('');
+    const [encryptPrivateKey, setEncryptPrivateKey] = useState('');
+    const [shareKey, setShareKey] = useState('');
+    const [backupShareKey, setBackupShareKey] = useState('');
     const [refreshToken, setRefreshToken] = useState('');
     const [Wrong, setWrong] = useState(false);
     const [walletAddressStatus, setWalletAddressStatus] = useState([]);
-
+    const [modalVisible, setModalVisible] = useState(true);
 
     console.log("-----------------Login-----------------");
     console.log("User Address: " + userAddress);
@@ -72,7 +101,8 @@ const Login = ({ navigation }) => {
         const createSession = async () => {
             try {
                 const rawValue = JSON.stringify(session);
-                await Keychain.setGenericPassword('session', rawValue);
+                var session = await AsyncStorage.getItem('session');
+
             } catch (error) {
                 console.log(error);
             }
@@ -98,6 +128,7 @@ const Login = ({ navigation }) => {
     //! based on login method 
     useEffect(() => {
         const storeData = async (_userAddress) => {
+            //* 
             try {
                 await Promise.all([
                     AsyncStorage.setItem('address', _userAddress),
@@ -168,12 +199,15 @@ const Login = ({ navigation }) => {
                 console.log("User login address: \n" + response.data.userData.wallet_address);
 
                 setTourDCAddress(response.data.userData.wallet_address);
-                setPrivateKey(response.data.userData.private_key);
+                setEncryptPrivateKey(response.data.userData.private_key_encrypted);
                 setRefreshToken(response.data.userData.refreshToken);
+                setShareKey(response.data.userData.share_key);
+                return true;
             }
         } catch (error) {
             console.error(error);
             setWrong(true);
+            return false;
         }
     }
 
@@ -183,7 +217,7 @@ const Login = ({ navigation }) => {
             console.log("Disconnected");
             setUserAddress(undefined);
             setTourDCAddress(undefined);
-            setPrivateKey('');
+            setEncryptPrivateKey('');
         }
     }, [isDisconnected]);
 
@@ -199,6 +233,29 @@ const Login = ({ navigation }) => {
         navigation.navigate('TourDC_ForgotPassword');
     }
 
+    //! Login Logic
+    const loginLogic = async () => {
+        //! get share 1
+        let status = await fetchLoginData();
+        if (status) {
+            getOtherShareKey();
+        }
+    }
+
+    //! Get other share key
+    const getOtherShareKey = async () => {
+        try {
+            //! try to get share 2 
+            const share2 = await AsyncStorage.getItem('share');
+
+            //! if share 2 is null, Ask user to input share 3
+            if (share2 == null) {
+                setModalVisible(true);
+            }
+        } catch (error) {
+        }
+    }
+
     const CustomButton = ({ onPress, text, style }) => (
         <TouchableOpacity style={[style]} onPress={onPress}>
             {
@@ -211,78 +268,81 @@ const Login = ({ navigation }) => {
     );
 
     return (
+        <>
+            <LoginNotify
+                modalVisible={modalVisible}
+                setBackupShareKey={setBackupShareKey}
+                backupShareKey={backupShareKey}
+            />
+            <View style={styles.container}>
+                <ImageBackground source={loginBackground} resizeMode="cover" style={styles.loginBackground}>
 
-        <View style={styles.container}>
-            <ImageBackground source={loginBackground} resizeMode="cover" style={styles.loginBackground}>
+                    {/* Logo Section */}
+                    <View style={styles.pinkOverlay} />
+                    <View style={styles.loginLogoContainer}>
+                        <Image
+                            style={styles.tourismLogo}
+                            source={TourismLogo}
+                        />
+                        <Image
+                            style={styles.tourDCLogo}
+                            source={TourDCLogo}
+                        />
+                    </View>
 
-                {/* Logo Section */}
-                <View style={styles.pinkOverlay} />
-                <View style={styles.loginLogoContainer}>
-                    <Image
-                        style={styles.tourismLogo}
-                        source={TourismLogo}
-                    />
-                    <Image
-                        style={styles.tourDCLogo}
-                        source={TourDCLogo}
-                    />
-                </View>
-
-                {/* Login Section */}
-                <View style={styles.loginBackgroundOverlay}>
-                    <Text style={styles.loginBigText}>
-                        Login/Register
-                    </Text>
-
-                    {Wrong && <Text style={{ color: "red" }}>
-                        Wrong username or password
-                    </Text>}
-
-                    <LoginInputUI
-                        username={username}
-                        setUsername={setUsername}
-                        password={password}
-                        setPassword={setPassword}
-                    />
-
-                    <TouchableOpacity onPress={ForgotPassword}>
-                        <Text style={styles.loginText}>
-                            Forgot Password?
+                    {/* Login Section */}
+                    <View style={styles.loginBackgroundOverlay}>
+                        <Text style={styles.loginBigText}>
+                            Login/Register
                         </Text>
-                    </TouchableOpacity>
 
-                    <CustomButton
-                        style={styles.loginBtn}
-                        onPress={fetchLoginData}
-                        text={'LOGIN'}
-                    />
+                        {Wrong && <Text style={{ color: "red" }}>
+                            Wrong username or password
+                        </Text>}
 
-                    <CustomButton
-                        style={styles.loginBtn}
-                        onPress={Register}
-                        text={'REGISTER'}
-                    />
+                        <LoginInputUI
+                            username={username}
+                            setUsername={setUsername}
+                            password={password}
+                            setPassword={setPassword}
+                        />
 
-                    {/* Other method section */}
-                    <Text style={styles.loginText}>  By registering, you agree to our Terms & Conditions and that you have read our Privacy Policy.</Text>
-                    <Text style={styles.loginText}>_________Other method_________</Text>
+                        <TouchableOpacity onPress={ForgotPassword}>
+                            <Text style={styles.loginText}>
+                                Forgot Password?
+                            </Text>
+                        </TouchableOpacity>
 
-                    <W3mConnectButton
-                        style={styles.metaMaskBtn}
-                        label={
-                            <View style={styles.metaMaskView} >
-                                <SvgComponent name="MetaMask" />
-                                <Text style={styles.btnText}>Connect Wallet</Text>
-                            </View>
-                        }
-                        testID="button-connect"
-                    />
-                </View>
+                        <CustomButton
+                            style={styles.loginBtn}
+                            onPress={loginLogic}
+                            text={'LOGIN'}
+                        />
 
-            </ImageBackground >
-        </View >
+                        <CustomButton
+                            style={styles.loginBtn}
+                            onPress={Register}
+                            text={'REGISTER'}
+                        />
 
+                        {/* Other method section */}
+                        <Text style={styles.loginText}>  By registering, you agree to our Terms & Conditions and that you have read our Privacy Policy.</Text>
+                        <Text style={styles.loginText}>_________Other method_________</Text>
 
+                        <W3mConnectButton
+                            style={styles.metaMaskBtn}
+                            label={
+                                <View style={styles.metaMaskView} >
+                                    <SvgComponent name="MetaMask" />
+                                    <Text style={styles.btnText}>Connect Wallet</Text>
+                                </View>
+                            }
+                            testID="button-connect"
+                        />
+                    </View>
+                </ImageBackground >
+            </View >
+        </>
     )
 }
 
