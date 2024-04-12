@@ -11,6 +11,8 @@ import SvgComponent from '../../assets/SvgComponent';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Keychain from 'react-native-keychain';
+import shamir from '../../service/shamir.js';
+import aes from '../../service/aes.js';
 
 const GLOBAL = require('../Custom/Globals.js');
 
@@ -46,10 +48,10 @@ const LoginInputUI = ({ username, setUsername, password, setPassword }) => {
     )
 }
 
-const LoginNotify = ({ modalVisible, setBackupShareKey, backupShareKey }) => {
+const LoginNotify = ({ modalVisible, setModalVisible, setBackupShareKey, backupShareKey }) => {
     return (
         <Modal
-            animationType="slide"
+            animationType="none"
             transparent={true}
             visible={modalVisible}
             onRequestClose={() => {
@@ -61,17 +63,45 @@ const LoginNotify = ({ modalVisible, setBackupShareKey, backupShareKey }) => {
                     <Text style={styles.modalText}>
                         This is the first time you login on this device, please enter the share key to continue
                     </Text>
-                    <TextInput
-                        style={styles.loginTextInput}
-                        placeholder="Enter share key"
-                        onChangeText={setBackupShareKey}
-                        value={backupShareKey}
+
+                    <View style={styles.loginInput}>
+                        <TextInput
+                            style={styles.loginTextInput}
+                            placeholder="Enter share key"
+                            onChangeText={setBackupShareKey}
+                            value={backupShareKey}
+                        />
+                    </View>
+
+                    <ModalButton
+                        onPress={() => {
+                            setModalVisible(false);
+                        }}
+                        text={'Submit'}
+                    />
+
+
+                    <ModalButton
+                        onPress={() => {
+                            setModalVisible(false);
+                        }}
+                        text={'Close'}
                     />
                 </View>
             </View>
+
         </Modal>
     );
 }
+
+const ModalButton = ({ onPress, text }) => (
+    <TouchableOpacity
+        style={styles.tourismPage_checkInBtnContainer}
+        onPress={onPress}
+    >
+        <Text style={styles.tourismPage_checkInBtnText}>{text}</Text>
+    </TouchableOpacity>
+);
 
 const Login = ({ navigation }) => {
     const [session, setSession] = useState(undefined)
@@ -84,10 +114,12 @@ const Login = ({ navigation }) => {
     const [encryptPrivateKey, setEncryptPrivateKey] = useState('');
     const [shareKey, setShareKey] = useState('');
     const [backupShareKey, setBackupShareKey] = useState('');
+    const [localShareKey, setLocalShareKey] = useState('');
     const [refreshToken, setRefreshToken] = useState('');
     const [Wrong, setWrong] = useState(false);
     const [walletAddressStatus, setWalletAddressStatus] = useState([]);
-    const [modalVisible, setModalVisible] = useState(true);
+    const [randomKey, setRandomKey] = useState('');
+    const [modalVisible, setModalVisible] = useState(false);
 
     console.log("-----------------Login-----------------");
     console.log("User Address: " + userAddress);
@@ -202,6 +234,7 @@ const Login = ({ navigation }) => {
                 setEncryptPrivateKey(response.data.userData.private_key_encrypted);
                 setRefreshToken(response.data.userData.refreshToken);
                 setShareKey(response.data.userData.share_key);
+                setWrong(false);
                 return true;
             }
         } catch (error) {
@@ -233,6 +266,46 @@ const Login = ({ navigation }) => {
         navigation.navigate('TourDC_ForgotPassword');
     }
 
+    //! Login Using Backup Share Key 
+    const loginUsingShareKey = async (_otherShare) => {
+        //* Convert share key to buffer
+        serverShareBuffer = Buffer.from(shareKey, 'hex');
+        userShareBuffer = Buffer.from(_otherShare, 'hex');
+        if (serverShare && userShare) {
+            //* Combine share key
+            let response = shamir.shamir_combine(
+                serverShareBuffer,
+                userShareBuffer);
+
+            if (response.success) {
+                setRandomKey(response.key);
+            }
+            else {
+                console.log(response.error);
+                setModalVisible(false);
+                setWrong(true);
+            }
+            //* Store random key to storage to username
+            await AsyncStorage.setItem(username, _otherShare);
+        }
+    }
+
+    useEffect(() => {
+        if (localShareKey != '') {
+            loginUsingShareKey(localShareKey);
+        }
+        else if (backupShareKey != '') {
+            loginUsingShareKey(backupShareKey);
+        }
+
+    }, [localShareKey, backupShareKey]);
+
+    useEffect(() => {
+        if (randomKey != '') {
+            navigation.navigate('TourDC_Main');
+        }
+    }, [randomKey]);
+
     //! Login Logic
     const loginLogic = async () => {
         //! get share 1
@@ -246,11 +319,14 @@ const Login = ({ navigation }) => {
     const getOtherShareKey = async () => {
         try {
             //! try to get share 2 
-            const share2 = await AsyncStorage.getItem('share');
+            const share2 = await AsyncStorage.getItem(username);
 
             //! if share 2 is null, Ask user to input share 3
             if (share2 == null) {
                 setModalVisible(true);
+            }
+            else {
+                setLocalShareKey(share2);
             }
         } catch (error) {
         }
@@ -273,6 +349,7 @@ const Login = ({ navigation }) => {
                 modalVisible={modalVisible}
                 setBackupShareKey={setBackupShareKey}
                 backupShareKey={backupShareKey}
+                setModalVisible={setModalVisible}
             />
             <View style={styles.container}>
                 <ImageBackground source={loginBackground} resizeMode="cover" style={styles.loginBackground}>

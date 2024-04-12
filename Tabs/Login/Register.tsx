@@ -220,7 +220,7 @@ const Register = ({ route, navigation }) => {
     //! Save Share 2 to device
     const saveShare2 = async () => {
         try {
-            const address = await AsyncStorage.setItem('share', shares[1]);
+            const address = await AsyncStorage.setItem(username, shares[1]);
         } catch (error) {
             console.log(error);
         }
@@ -389,7 +389,7 @@ const Register = ({ route, navigation }) => {
 
         return (
             <Modal
-                animationType="slide"
+                animationType="none"
                 transparent={true}
                 visible={modalVisible}
                 onRequestClose={() => {

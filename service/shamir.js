@@ -34,10 +34,9 @@ function shamir_combine(key_share_1, key_share_2) {
       key_share_2
     ])
     if (comb) {
-      console.log(Buffer.from(comb, 'hex').toString('utf8'))
       return {
         success: true,
-        key: Buffer.from(comb, 'hex').toString('utf8')
+        key: comb
       }
     }
 

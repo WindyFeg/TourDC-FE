@@ -70,7 +70,7 @@ export default function CheckIn(
     if (checkInData == null) {
       return;
     }
-  await Clipboard.setStringAsync(checkInData?.hash);
+    await Clipboard.setStringAsync(checkInData?.hash);
   };
 
   useEffect(() => {
@@ -176,7 +176,7 @@ export default function CheckIn(
   const CheckInNotify = () => {
     return (
       <Modal
-        animationType="slide"
+        animationType="none"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {

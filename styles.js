@@ -47,6 +47,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFF',
         height: 44,
         paddingHorizontal: 10,
+        marginVertical: 5,
+        padding: 0,
     },
 
     loginTextInput: {
@@ -1056,7 +1058,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         height: 30,
-
+        marginVertical: 5,
     },
 
     tourismPage_checkInLocationText: {
