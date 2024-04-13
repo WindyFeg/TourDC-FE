@@ -167,7 +167,7 @@ const MainMyAccount = ({ navigation }) => {
             await Promise.all([
                 AsyncStorage.setItem('address', ''),
                 AsyncStorage.setItem('refreshToken', ''),
-                AsyncStorage.setItem('privateKey', '')
+                AsyncStorage.setItem('SessionRK', ''),
             ]);
             console.log("User Data removed");
         } catch (error) {

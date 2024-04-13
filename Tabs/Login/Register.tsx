@@ -296,7 +296,7 @@ const Register = ({ route, navigation }) => {
         }
         catch (error) {
             console.error(error);
-            setErrorText(error);
+            setErrorText("Register failed");
             setSuccessText('');
         }
     }
@@ -475,7 +475,6 @@ const Register = ({ route, navigation }) => {
                             style={styles.tourismPage_checkInBtnContainer}
                             onPress={ViewTransaction}>
                             <Text style={styles.tourismPage_checkInBtnText}
-                                disabled={registerHash ? false : true}
                             >
                                 Open transaction Hash
                             </Text>
@@ -487,7 +486,6 @@ const Register = ({ route, navigation }) => {
                                 setModalVisible(false)
                                 navigation.navigate('TourDC_Login');
                             }}
-                            disabled={errorText || successText ? false : true}
                         >
                             <Text style={styles.tourismPage_checkInBtnText}>
                                 Close

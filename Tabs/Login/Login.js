@@ -117,7 +117,7 @@ const Login = ({ navigation }) => {
     const [backupShareKey, setBackupShareKey] = useState('');
     const [localShareKey, setLocalShareKey] = useState('');
     const [refreshToken, setRefreshToken] = useState('');
-    const [Wrong, setWrong] = useState(false);
+    const [Wrong, setWrong] = useState('');
     const [walletAddressStatus, setWalletAddressStatus] = useState([]);
     const [randomKey, setRandomKey] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
@@ -219,7 +219,7 @@ const Login = ({ navigation }) => {
 
 
             }
-            setWrong(true);
+            setWrong('Wrong username or password!');
         }
     }
 
@@ -231,7 +231,7 @@ const Login = ({ navigation }) => {
                 password: password
             });
             if (response.data === "Invalid credentials") {
-                setWrong(true);
+                setWrong('Wrong username or password!');
             }
             else {
                 console.log("User login address: \n" + response.data.userData.wallet_address);
@@ -245,7 +245,7 @@ const Login = ({ navigation }) => {
             }
         } catch (error) {
             console.error(error);
-            setWrong(true);
+            setWrong("Login Failed!");
             return false;
         }
     }
@@ -286,23 +286,30 @@ const Login = ({ navigation }) => {
             serverShareBuffer,
             userShareBuffer);
 
-        console.log("Response: " + response);
-        if (response.success) {
+        let regex = /^[a-zA-Z0-9]+$/;
+
+        if (response.success && regex.test(response.key)) {
             setRandomKey(response.key);
         }
         else {
             console.log(response.error);
             setModalVisible(false);
-            setWrong(true);
+            setWrong('Wrong share key!');
         }
         //* Store random key to storage to username
         await AsyncStorage.setItem(username, _otherShare);
     }
 
     useEffect(() => {
-        if (randomKey != '') {
-            navigation.navigate('TourDC_Main');
-        }
+        const storeData = async () => {
+            if (randomKey != '') {
+                //* Store random key as Session
+                await AsyncStorage.setItem('SessionRK', randomKey);
+                navigation.navigate('TourDC_Main');
+            }
+        };
+
+        storeData();
     }, [randomKey]);
 
     //! Login Logic
