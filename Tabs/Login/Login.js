@@ -48,7 +48,7 @@ const LoginInputUI = ({ username, setUsername, password, setPassword }) => {
     )
 }
 
-const LoginNotify = ({ modalVisible, setModalVisible, setBackupShareKey, backupShareKey }) => {
+const LoginNotify = ({ modalVisible, setModalVisible, setBackupShareKey, backupShareKey, loginUsingShareKey }) => {
     return (
         <Modal
             animationType="none"
@@ -75,6 +75,7 @@ const LoginNotify = ({ modalVisible, setModalVisible, setBackupShareKey, backupS
 
                     <ModalButton
                         onPress={() => {
+                            loginUsingShareKey(backupShareKey);
                             setModalVisible(false);
                         }}
                         text={'Submit'}
@@ -127,6 +128,11 @@ const Login = ({ navigation }) => {
     console.log("Wallet Address: " + address);
     console.log("Check Address: \n" + JSON.stringify(walletAddressStatus));
     console.log("Check Address: \n" + walletAddressStatus);
+    console.log("Refresh Token: " + refreshToken);
+    console.log("Encrypt Private Key: " + encryptPrivateKey);
+    console.log("Share Key: " + shareKey);
+    console.log("Local Share Key: " + localShareKey);
+    console.log("Random Key: " + randomKey);
 
     //! Create session
     useEffect(() => {
@@ -184,7 +190,7 @@ const Login = ({ navigation }) => {
         // Login with username and password
         if (tourDCAddress != undefined) {
             storeData(tourDCAddress);
-            navigation.navigate('TourDC_Main');
+            // navigation.navigate('TourDC_Main');
             return;
         }
     }, [address, tourDCAddress]);
@@ -269,36 +275,29 @@ const Login = ({ navigation }) => {
     //! Login Using Backup Share Key 
     const loginUsingShareKey = async (_otherShare) => {
         //* Convert share key to buffer
+        console.log("hello");
         serverShareBuffer = Buffer.from(shareKey, 'hex');
         userShareBuffer = Buffer.from(_otherShare, 'hex');
-        if (serverShare && userShare) {
-            //* Combine share key
-            let response = shamir.shamir_combine(
-                serverShareBuffer,
-                userShareBuffer);
+        console.log("Server Share Buffer: " + serverShareBuffer);
+        console.log("User Share Buffer: " + userShareBuffer);
+        console.log("try to combine");
+        //* Combine share key
+        let response = shamir.shamir_combine(
+            serverShareBuffer,
+            userShareBuffer);
 
-            if (response.success) {
-                setRandomKey(response.key);
-            }
-            else {
-                console.log(response.error);
-                setModalVisible(false);
-                setWrong(true);
-            }
-            //* Store random key to storage to username
-            await AsyncStorage.setItem(username, _otherShare);
+        console.log("Response: " + response);
+        if (response.success) {
+            setRandomKey(response.key);
         }
+        else {
+            console.log(response.error);
+            setModalVisible(false);
+            setWrong(true);
+        }
+        //* Store random key to storage to username
+        await AsyncStorage.setItem(username, _otherShare);
     }
-
-    useEffect(() => {
-        if (localShareKey != '') {
-            loginUsingShareKey(localShareKey);
-        }
-        else if (backupShareKey != '') {
-            loginUsingShareKey(backupShareKey);
-        }
-
-    }, [localShareKey, backupShareKey]);
 
     useEffect(() => {
         if (randomKey != '') {
@@ -320,13 +319,15 @@ const Login = ({ navigation }) => {
         try {
             //! try to get share 2 
             const share2 = await AsyncStorage.getItem(username);
-
+            console.log("Share 2: " + share2);
             //! if share 2 is null, Ask user to input share 3
             if (share2 == null) {
+                console.log("Share 2 is null");
                 setModalVisible(true);
             }
             else {
                 setLocalShareKey(share2);
+                loginUsingShareKey(share2);
             }
         } catch (error) {
         }
@@ -350,6 +351,7 @@ const Login = ({ navigation }) => {
                 setBackupShareKey={setBackupShareKey}
                 backupShareKey={backupShareKey}
                 setModalVisible={setModalVisible}
+                loginUsingShareKey={loginUsingShareKey}
             />
             <View style={styles.container}>
                 <ImageBackground source={loginBackground} resizeMode="cover" style={styles.loginBackground}>

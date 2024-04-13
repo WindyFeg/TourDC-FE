@@ -474,7 +474,9 @@ const Register = ({ route, navigation }) => {
                         <TouchableOpacity
                             style={styles.tourismPage_checkInBtnContainer}
                             onPress={ViewTransaction}>
-                            <Text style={styles.tourismPage_checkInBtnText}>
+                            <Text style={styles.tourismPage_checkInBtnText}
+                                disabled={registerHash ? false : true}
+                            >
                                 Open transaction Hash
                             </Text>
                         </TouchableOpacity>
@@ -484,7 +486,9 @@ const Register = ({ route, navigation }) => {
                             onPress={() => {
                                 setModalVisible(false)
                                 navigation.navigate('TourDC_Login');
-                            }}>
+                            }}
+                            disabled={errorText || successText ? false : true}
+                        >
                             <Text style={styles.tourismPage_checkInBtnText}>
                                 Close
                             </Text>
