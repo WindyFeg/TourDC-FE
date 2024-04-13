@@ -169,7 +169,7 @@ const Login = ({ navigation }) => {
             //* 
             try {
                 await Promise.all([
-                    AsyncStorage.setItem('address', _userAddress),
+                    AsyncStorage.setItem('SessionAD', _userAddress),
                 ]);
 
                 setSession({
@@ -290,14 +290,14 @@ const Login = ({ navigation }) => {
 
         if (response.success && regex.test(response.key)) {
             setRandomKey(response.key);
+            //* Store random key to storage to username
+            await AsyncStorage.setItem(username, _otherShare);
         }
         else {
             console.log(response.error);
             setModalVisible(false);
             setWrong('Wrong share key!');
         }
-        //* Store random key to storage to username
-        await AsyncStorage.setItem(username, _otherShare);
     }
 
     useEffect(() => {

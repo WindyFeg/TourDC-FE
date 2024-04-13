@@ -25,21 +25,29 @@ import styles from '../../../../styles';
 import { useWaitForTransaction } from 'wagmi'
 import * as Clipboard from 'expo-clipboard';
 import * as WebBrowser from 'expo-web-browser';
+import {
+  autoCheckIn,
+}
+  from '../../../../service/signmessage.js';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 interface CheckInProps {
   placeId: string;
   placeName: string;
   location: string;
   userAddress: string;
+  isWalletRegister: boolean;
 }
 
 export default function CheckIn(
   { placeId,
     placeName,
     location,
-    userAddress }) {
+    userAddress,
+    isWalletRegister }) {
   const [modalVisible, setModalVisible] = useState(false);
   const { chain, chains } = getNetwork()
   const [isGPSValid, setIsGPSValid] = useState(0);
+  const [checkInHash, setCheckInHash] = useState('');
   // const [result, setResult] = useState();
   // Writing to the Contract
   const { config } = usePrepareContractWrite({
@@ -129,19 +137,50 @@ export default function CheckIn(
     }).then((response) => {
       console.log("GPS Status:", response.data)
       let status = response.data.success;
-      if (status == true) {
-        if (checkIn) {
-          checkIn();
-          setIsGPSValid(1);
-        }
+
+      //* if GPS is valid, check-in user to blockchain
+      if (isWalletRegister) {
+        checkInUsingWallet(status)
       }
       else {
-        setIsGPSValid(-1);
-        setModalVisible(true);
+        checkInUsingTourDC(status)
       }
+
     }).catch((error) => {
       console.error('Error:', error);
     });
+  }
+
+  //! check-in user to blockchain using TourDC
+  function checkInUsingTourDC(status) {
+    if (status == true) {
+      checkInOnBlockchain();
+      setIsGPSValid(1);
+    }
+    else {
+      setIsGPSValid(-1);
+      setModalVisible(true);
+    }
+  }
+
+  //! check-in user to blockchain using Wallet
+  function checkInUsingWallet(status) {
+    if (status == true) {
+      if (checkIn) {
+        checkIn();
+        setIsGPSValid(1);
+      }
+    }
+    else {
+      setIsGPSValid(-1);
+      setModalVisible(true);
+    }
+  }
+
+  //! check-in user to blockchain using TourDC
+  async function checkInOnBlockchain() {
+    let randomKey = await AsyncStorage.getItem('SessionRK');
+    setCheckInHash(await autoCheckIn(randomKey, userAddress, placeId) as string);
   }
 
   const CheckInBtn = ({ text, func }) => {

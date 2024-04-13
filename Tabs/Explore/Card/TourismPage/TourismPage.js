@@ -36,6 +36,16 @@ const TourismPage = ({ route, navigation }) => {
         placeList_imgs } = route.params;
     const [reviews, setReviews] = useState([]);
     const { address, isConnecting, isDisconnected } = useAccount()
+    const [SessionRK, setSessionRK] = useState('');
+    const [SessionAD, setSessionAD] = useState('');
+
+    useEffect(() => {
+        const loadData = async () => {
+            setSessionAD(await AsyncStorage.getItem('SessionRK'));
+            setSessionRK(await AsyncStorage.getItem('SessionAD'));
+        }
+        loadData();
+    }, []);
 
     //! Location
     useEffect(() => {
@@ -270,6 +280,7 @@ const TourismPage = ({ route, navigation }) => {
                     placeName={placeName}
                     location={location}
                     userAddress={address}
+                    isWalletRegister={SessionRK == null ? true : false}
                 />
             </View>
         )
