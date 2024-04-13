@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     loginBtn: {
         borderRadius: 10,
         backgroundColor: '#39A7FF',
-        width: '80%',
+        width: '100%',
         height: 44,
         justifyContent: 'center',
         alignItems: 'center',
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
 
     metaMaskBtn: {
         backgroundColor: 'black',
-        width: '80%',
+        width: '100%',
         height: 50,
         flexDirection: 'row',
         justifyContent: 'center',
@@ -187,6 +187,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderRadius: 20,
         paddingTop: 20,
+        paddingHorizontal: 20,
     },
 
     pinkOverlay: {

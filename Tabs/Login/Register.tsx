@@ -10,7 +10,8 @@ import {
     ImageBackground,
     ActivityIndicator,
     SafeAreaView,
-    Modal
+    Modal,
+    ScrollView
 } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 import BackNavigationButton from '../Custom/BackNavigationButton.js';
@@ -295,7 +296,7 @@ const Register = ({ route, navigation }) => {
         }
         catch (error) {
             console.error(error);
-            setErrorText('Username already exists');
+            setErrorText(error);
             setSuccessText('');
         }
     }
@@ -516,6 +517,7 @@ const Register = ({ route, navigation }) => {
         <>
             <RegisterNotify />
             <View >
+
                 <View style={styles.registerHeader}>
                 </View>
                 <BackNavigationButton
@@ -524,98 +526,98 @@ const Register = ({ route, navigation }) => {
                 <ImageBackground source={loginBackground} resizeMode="cover" style={styles.registerBackground}>
 
                     <View style={styles.registerBackgroundOverlay}>
-                        <Text style={styles.loginBigText}>
-                            {isWalletRegister ? 'New Wallet Register' : 'TourDC Register'}
-                        </Text>
-                        {
-                            isWalletRegister && <Text style={styles.loginText}>
-                                All of your wallet information will connect to TourDC
+                        <ScrollView >
+                            <Text style={styles.loginBigText}>
+                                {isWalletRegister ? 'New Wallet Register' : 'TourDC Register'}
                             </Text>
+                            {
+                                isWalletRegister && <Text style={styles.loginText}>
+                                    All of your wallet information will connect to TourDC
+                                </Text>
 
-                        }
+                            }
 
-                        <RegisterInputUI
-                            label={'Username'}
-                            placeholder={'Enter your username'}
-                            text={username}
-                            setText={setUsername}
-                            isPassword={false}
-                            keyboardType={'default'}
-                        />
-                        <RegisterInputUI
-                            label={'Password'}
-                            placeholder={'* * *'}
-                            text={password}
-                            setText={setPassword}
-                            isPassword={true}
-                            keyboardType={'default'}
-                        />
-                        <RegisterInputUI
-                            label={'Confirm Password'}
-                            placeholder={'* * *'}
-                            text={confirmPassword}
-                            setText={setConfirmPassword}
-                            isPassword={true}
-                            keyboardType={'default'}
-                        />
+                            <RegisterInputUI
+                                label={'Username'}
+                                placeholder={'Enter your username'}
+                                text={username}
+                                setText={setUsername}
+                                isPassword={false}
+                                keyboardType={'default'}
+                            />
+                            <RegisterInputUI
+                                label={'Password'}
+                                placeholder={'* * *'}
+                                text={password}
+                                setText={setPassword}
+                                isPassword={true}
+                                keyboardType={'default'}
+                            />
+                            <RegisterInputUI
+                                label={'Confirm Password'}
+                                placeholder={'* * *'}
+                                text={confirmPassword}
+                                setText={setConfirmPassword}
+                                isPassword={true}
+                                keyboardType={'default'}
+                            />
 
-                        <NameInputUI
-                            label={'Input Name'}
-                            placeholder={'First Name'}
-                            isPassword={false}
-                            firstName={firstName}
-                            setFirstName={setFirstName}
-                            lastName={lastName}
-                            setLastName={setLastName}
-                            keyboardType={'default'}
-                        />
+                            <NameInputUI
+                                label={'Input Name'}
+                                placeholder={'First Name'}
+                                isPassword={false}
+                                firstName={firstName}
+                                setFirstName={setFirstName}
+                                lastName={lastName}
+                                setLastName={setLastName}
+                                keyboardType={'default'}
+                            />
 
-                        <RegisterInputUI
-                            label={'Phone Number'}
-                            placeholder={'84+'}
-                            text={phoneNumber}
-                            setText={setPhoneNumber}
-                            isPassword={false}
-                            keyboardType={'numeric'}
-                        />
-                        <RegisterInputUI
-                            label={'Age'}
-                            placeholder={'Age'}
-                            text={age}
-                            setText={setAge}
-                            isPassword={false}
-                            keyboardType={'numeric'}
-                        />
+                            <RegisterInputUI
+                                label={'Phone Number'}
+                                placeholder={'84+'}
+                                text={phoneNumber}
+                                setText={setPhoneNumber}
+                                isPassword={false}
+                                keyboardType={'numeric'}
+                            />
+                            <RegisterInputUI
+                                label={'Age'}
+                                placeholder={'Age'}
+                                text={age}
+                                setText={setAge}
+                                isPassword={false}
+                                keyboardType={'numeric'}
+                            />
 
-                        <UploadImage
-                            setFiles={setAvt}
-                            setSource={setAvtSource}
-                        />
+                            <UploadImage
+                                setFiles={setAvt}
+                                setSource={setAvtSource}
+                            />
 
-                        {
-                            errorText && <Text style={styles.CreateReview_errorText}>
-                                {errorText}
-                            </Text>
-                        }
+                            {
+                                errorText && <Text style={styles.CreateReview_errorText}>
+                                    {errorText}
+                                </Text>
+                            }
 
-                        {
-                            successText && <Text style={styles.CreateReview_successText}>
-                                {successText}
-                            </Text>
-                        }
-                        <CustomButton
-                            style={styles.loginBtn}
-                            onPress={() => {
-                                setModalVisible(true);
-                                setIsSend(true);
-                            }}
-
-                            text={'REGISTER'}
-                        />
-
+                            {
+                                successText && <Text style={styles.CreateReview_successText}>
+                                    {successText}
+                                </Text>
+                            }
+                            <CustomButton
+                                style={styles.loginBtn}
+                                onPress={() => {
+                                    setModalVisible(true);
+                                    setIsSend(true);
+                                }}
+                                text={'REGISTER'}
+                            />
+                        </ScrollView>
                     </View>
                 </ImageBackground>
-            </View>
+            </View >
         </>
     )
 }
