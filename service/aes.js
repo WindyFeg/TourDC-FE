@@ -1,5 +1,5 @@
-const aesjs = require('aes-js');
-// import aesjs from 'aes-js'
+// const aesjs = require('aes-js');
+import aesjs from 'aes-js'
 
 //! randomKey: 16 bytes, privateKey: 32 bytes (remove 0x in function)
 function encryptedPrivateKey(randomKey, privateKey) {
@@ -53,7 +53,7 @@ console.log('decrypted key: ', decryptedPrivateKey('2dc232208048ff7f', '29b05dee
 // encryptedPrivateKey('EwkogWKcmHsLM0NC', '0x90e70167513506a0277548eaaa729b1ee283412996ae6be456b55637c5c6ac2e'),
 
 
-  module.exports = {
-    encryptedPrivateKey,
-    decryptedPrivateKey
-  }
+module.exports = {
+  encryptedPrivateKey,
+  decryptedPrivateKey
+}

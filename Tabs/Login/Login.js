@@ -48,7 +48,12 @@ const LoginInputUI = ({ username, setUsername, password, setPassword }) => {
     )
 }
 
-const LoginNotify = ({ modalVisible, setModalVisible, setBackupShareKey, backupShareKey, loginUsingShareKey }) => {
+const LoginNotify = ({ modalVisible,
+    setModalVisible,
+    setBackupShareKey,
+    backupShareKey,
+    loginUsingShareKey,
+    serverShare }) => {
     return (
         <Modal
             animationType="none"
@@ -75,7 +80,7 @@ const LoginNotify = ({ modalVisible, setModalVisible, setBackupShareKey, backupS
 
                     <ModalButton
                         onPress={() => {
-                            loginUsingShareKey(backupShareKey);
+                            loginUsingShareKey(backupShareKey, serverShare);
                             setModalVisible(false);
                         }}
                         text={'Submit'}
@@ -242,12 +247,12 @@ const Login = ({ navigation }) => {
                 setRefreshToken(response.data.userData.refreshToken);
                 setShareKey(response.data.userData.share_key);
                 setWrong(false);
-                return true;
+                return response.data.userData.share_key;
             }
         } catch (error) {
             console.error(error);
             setWrong("Login Failed!");
-            return false;
+            return undefined;
         }
     }
 
@@ -274,10 +279,10 @@ const Login = ({ navigation }) => {
     }
 
     //! Login Using Backup Share Key 
-    const loginUsingShareKey = async (_otherShare) => {
+    const loginUsingShareKey = async (_otherShare, _serverShare) => {
         //* Convert share key to buffer
         console.log("hello");
-        serverShareBuffer = Buffer.from(shareKey, 'hex');
+        serverShareBuffer = Buffer.from(_serverShare, 'hex');
         userShareBuffer = Buffer.from(_otherShare, 'hex');
         console.log("Server Share Buffer: " + serverShareBuffer);
         console.log("User Share Buffer: " + userShareBuffer);
@@ -304,14 +309,14 @@ const Login = ({ navigation }) => {
     //! Login Logic
     const loginLogic = async () => {
         //! get share 1
-        let status = await fetchLoginData();
-        if (status) {
-            getOtherShareKey();
+        let _serverShare = await fetchLoginData();
+        if (_serverShare != undefined) {
+            getOtherShareKey(_serverShare);
         }
     }
 
     //! Get other share key
-    const getOtherShareKey = async () => {
+    const getOtherShareKey = async (_serverShare) => {
         try {
             //! try to get share 2 
             const share2 = await AsyncStorage.getItem(username);
@@ -323,7 +328,7 @@ const Login = ({ navigation }) => {
             }
             else {
                 setLocalShareKey(share2);
-                loginUsingShareKey(share2);
+                loginUsingShareKey(share2, _serverShare);
             }
         } catch (error) {
         }
@@ -348,6 +353,7 @@ const Login = ({ navigation }) => {
                 backupShareKey={backupShareKey}
                 setModalVisible={setModalVisible}
                 loginUsingShareKey={loginUsingShareKey}
+                serverShare={shareKey}
             />
             <View style={styles.container}>
                 <ImageBackground source={loginBackground} resizeMode="cover" style={styles.loginBackground}>
