@@ -35,6 +35,7 @@ interface CheckInProps {
   placeName: string;
   location: string;
   userAddress: string;
+  randomKey: string;
   isWalletRegister: boolean;
 }
 
@@ -43,6 +44,7 @@ export default function CheckIn(
     placeName,
     location,
     userAddress,
+    randomKey,
     isWalletRegister }) {
   const [modalVisible, setModalVisible] = useState(false);
   const { chain, chains } = getNetwork()
@@ -119,19 +121,21 @@ export default function CheckIn(
     hash: checkInData?.hash,
   })
   useEffect(() => {
-    axios({
-      method: 'post',
-      url: `${GLOBAL.BASE_URL}/api/post/add`,
-      data: {
-        "placeId": placeId,
-        "hash": checkInData?.hash,
-      }
-    }).then((response) => {
-      console.log("response from BE:", response.data)
+    if (result?.data != undefined) {
+      axios({
+        method: 'post',
+        url: `${GLOBAL.BASE_URL}/api/post/add`,
+        data: {
+          "placeId": placeId,
+          "hash": checkInData?.hash,
+        }
+      }).then((response) => {
+        console.log("response from BE:", response.data)
 
-    }).catch((error) => {
-      console.error('Error:', error);
-    });
+      }).catch((error) => {
+        console.error('Error:', error);
+      });
+    }
   }, [result]);
 
   //* Call BE to Check GPS 
@@ -188,12 +192,23 @@ export default function CheckIn(
 
   //! check-in user to blockchain using TourDC
   async function checkInOnBlockchain() {
-    let randomKey = await AsyncStorage.getItem('SessionRK');
-    setCheckInHash(await autoCheckIn(randomKey, userAddress, placeId) as string);
-    console.log("CheckInHash:", checkInHash)
+    console.log("CheckIn using TourDC")
+    console.log("randomKey:", randomKey)
+    console.log("userAddress:", userAddress)
+    console.log("placeId:", placeId)
 
-    setIsLoading(false);
-    setIsSuccess(true);
+    let response = await autoCheckIn(randomKey, userAddress, placeId);
+
+    if (response.success == false) {
+      setCheckInHash(response.error);
+      setIsLoading(false);
+      setIsSuccess(false);
+    }
+    else {
+      setCheckInHash(response.txHash);
+      setIsLoading(false);
+      setIsSuccess(true);
+    }
   }
 
   const CheckInBtn = ({ text, func }) => {
@@ -249,15 +264,16 @@ export default function CheckIn(
             <View style={styles.modalCopyTextContainer}>
               <TouchableOpacity onPress={copyToClipboard}>
                 <Text style={styles.modalText}>
-                  {/* {isWalletRegister ?
+                  {isWalletRegister ?
                     checkInData?.hash :
                     checkInHash
-                  } */}
-                  {checkInHash}
-                  <Image
-                    source={require('../../../../assets/icons/clipboard.png')}
-                    style={styles.tourismPage_clipboardIcon}
-                  />
+                  }
+                  {
+                    <Image
+                      source={require('../../../../assets/icons/clipboard.png')}
+                      style={styles.tourismPage_clipboardIcon}
+                    />
+                  }
                 </Text>
               </TouchableOpacity>
             </View>

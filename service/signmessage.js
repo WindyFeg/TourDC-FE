@@ -6,22 +6,22 @@ import contractABI from "../contracts/Tourism.json"
 import contractAddress from "../contracts/Tourism-address.json"
 import { LegacyTransaction } from '@ethereumjs/tx'
 import axios from "axios";
-import {Common, Hardfork} from '@ethereumjs/common'
-import { bytesToHex, hexToBytes } from '@ethereumjs/util' 
+import { Common, Hardfork } from '@ethereumjs/common'
+import { bytesToHex, hexToBytes } from '@ethereumjs/util'
 import AES from './aes'
 
 const VBCProvider = "https://vibi.vbchain.vn/"
 var web3 = new Web3(VBCProvider);
 const contract = new web3.eth.Contract(contractABI.abi, contractAddress.Token);
 
-const customCommon = Common.custom({ chainId: 306 , networkId: 306}, {hardfork: Hardfork.Berlin})
-export async function autoCheckIn(randomKey,address, placeID) {
+const customCommon = Common.custom({ chainId: 306, networkId: 306 }, { hardfork: Hardfork.Berlin })
+export async function autoCheckIn(randomKey, address, placeID) {
   try {
     // call api to get private_key_encrypt
     // console.log(await web3.eth.getTransactionReceipt('0xd7abc07daf4096b9ab81c9468edd298a011b216d4ae78448137b93560936fece'))
-    let enc_private_key = await axios.post(`${GLOBAL.BASE_URL}/api/user/getPrivateEnc`, {address: address})
-    
-    if(enc_private_key.success == false) {
+    let enc_private_key = await axios.post(`${GLOBAL.BASE_URL}/api/user/getPrivateEnc`, { address: address })
+
+    if (enc_private_key.success == false) {
       return enc_private_key
     }
 
@@ -31,8 +31,8 @@ export async function autoCheckIn(randomKey,address, placeID) {
 
     // signmessage
     const account = web3.eth.accounts.privateKeyToAccount(privateKey).address
-  
-    let nonce = await web3.eth.getTransactionCount(account,'latest');
+
+    let nonce = await web3.eth.getTransactionCount(account, 'latest');
     let data = contract.methods.checkIn(placeID).encodeABI();
 
     const txObject = {
@@ -44,8 +44,8 @@ export async function autoCheckIn(randomKey,address, placeID) {
       gasPrice: 3000000,
     }
     console.log('txObject:', txObject)
-    const tx = LegacyTransaction.fromTxData(txObject,{ common: customCommon })
-    
+    const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
+
     const privateKeyBytes = Buffer.from(privateKey.slice(2), 'hex')
     const signedTx = tx.sign(privateKeyBytes)
 
@@ -53,17 +53,20 @@ export async function autoCheckIn(randomKey,address, placeID) {
     const raw = '0x' + Buffer.from(serializedTx).toString('hex')
     const txHash = web3.utils.sha3(serializedTx);
 
-    const sendtransaction = await web3.eth.sendSignedTransaction( raw )
+    const sendtransaction = await web3.eth.sendSignedTransaction(raw)
     if (sendtransaction.transactionHash) {
       const postID = sendtransaction.logs[0].topics[1]
       console.log('postID', postID)
       // call api to save post in db
       await axios.post(`${GLOBAL.BASE_URL}/api/post/add`, {
-            hash: txHash,
-            placeID: placeID,
-          })
+        hash: txHash,
+        placeID: placeID,
+      })
       console.log('success')
-      return txHash
+      return {
+        success: true,
+        txHash: txHash,
+      }
     }
     else return false
   } catch (error) {
@@ -76,14 +79,14 @@ export async function autoCheckIn(randomKey,address, placeID) {
 }
 
 
-const faucet = async(address) => {
+const faucet = async (address) => {
   // get account address
   try {
     // send to account Vibi
     // account using for sending VBC to new people
     const sponsorPrivateKey = hexToBytes('0x' + 'e11f5c9977c82fe752f84caeb9ba0c50feabd0ce90088cb26e61ee0fce5950c2')
     const sponserAccount = web3.eth.accounts.privateKeyToAccount('0x' + 'e11f5c9977c82fe752f84caeb9ba0c50feabd0ce90088cb26e61ee0fce5950c2').address
-    const sponserNonce = await web3.eth.getTransactionCount(sponserAccount,'latest')
+    const sponserNonce = await web3.eth.getTransactionCount(sponserAccount, 'latest')
     const txObject = {
       nonce: web3.utils.toHex(sponserNonce),
       gasPrice: web3.utils.toHex(3000000),
@@ -92,7 +95,7 @@ const faucet = async(address) => {
       value: '0xDE0B6B3A7640000',
       data: '0x0',
     }
-    const tx =  LegacyTransaction.fromTxData(txObject,{ common: customCommon })
+    const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
     const signedTx = tx.sign(sponsorPrivateKey)
     const serializedTx = signedTx.serialize()
     const raw = '0x' + Buffer.from(serializedTx).toString('hex')
@@ -119,7 +122,7 @@ export async function autoRegister(privateKey, firstName, lastName, phoneNumber)
     const privateKeyBytes = Buffer.from(privateKey.slice(2), 'hex')
     const account = web3.eth.accounts.privateKeyToAccount(privateKey).address
     await faucet(account)
-    let nonce = await web3.eth.getTransactionCount(account,'latest');
+    let nonce = await web3.eth.getTransactionCount(account, 'latest');
     console.log('nonce', nonce)
     const txObject = {
       nonce: web3.utils.toHex(nonce),
@@ -129,14 +132,14 @@ export async function autoRegister(privateKey, firstName, lastName, phoneNumber)
       data: contract.methods.register(firstName, lastName, phoneNumber).encodeABI(),
       gasPrice: 3000000,
     }
-    const tx = LegacyTransaction.fromTxData(txObject,{ common: customCommon })
+    const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
     const signedTx = tx.sign(privateKeyBytes)
 
     const serializedTx = signedTx.serialize()
     const raw = '0x' + Buffer.from(serializedTx).toString('hex')
     const txHash = web3.utils.sha3(serializedTx);
     console.log("txHashRegister: ", txHash)
-    const sendTransction = await web3.eth.sendSignedTransaction( raw )
+    const sendTransction = await web3.eth.sendSignedTransaction(raw)
     return txHash
   } catch (error) {
     console.error("ERR: ", error)
@@ -144,19 +147,19 @@ export async function autoRegister(privateKey, firstName, lastName, phoneNumber)
 }
 
 
-export async function autoCreatePost(randomKey,address, placeID, postID, title, rate, review) {
+export async function autoCreatePost(randomKey, address, placeID, postID, title, rate, review) {
   try {
-    let enc_private_key = await axios.post(`${GLOBAL.BASE_URL}/api/user/getPrivateEnc`, {address: address})
+    let enc_private_key = await axios.post(`${GLOBAL.BASE_URL}/api/user/getPrivateEnc`, { address: address })
     // let enc_private_key = '29b05dee4c7d1818c44a99dd1e098f8bb01caceff6b53c29602288a3e9bd6191'
-    if(enc_private_key.success == false) {
+    if (enc_private_key.success == false) {
       return enc_private_key
     }
 
     // decrypted private_key
     let privateKey = AES.decryptedPrivateKey(randomKey, enc_private_key).privateKey
     const account = web3.eth.accounts.privateKeyToAccount(privateKey).address
-  
-    let nonce = await web3.eth.getTransactionCount(account,'latest');
+
+    let nonce = await web3.eth.getTransactionCount(account, 'latest');
     let data = contract.methods.checkIn(placeID).encodeABI();
 
     const txObject = {
@@ -168,8 +171,8 @@ export async function autoCreatePost(randomKey,address, placeID, postID, title, 
       gasPrice: 3000000,
     }
     console.log('txObject:', txObject)
-    const tx = LegacyTransaction.fromTxData(txObject,{ common: customCommon })
-    
+    const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
+
     const privateKeyBytes = Buffer.from(privateKey.slice(2), 'hex')
     const signedTx = tx.sign(privateKeyBytes)
 
@@ -177,7 +180,7 @@ export async function autoCreatePost(randomKey,address, placeID, postID, title, 
     const raw = '0x' + Buffer.from(serializedTx).toString('hex')
     const txHash = web3.utils.sha3(serializedTx);
     console.log('txHash: ', txHash)
-    const sendTransction = await web3.eth.sendSignedTransaction( raw )
+    const sendTransction = await web3.eth.sendSignedTransaction(raw)
     return txHash
 
   } catch (error) {
@@ -189,15 +192,15 @@ export async function autoUpvote(randomKey, address, postID) {
   try {
     // let enc_private_key = await axios.post(`${GLOBAL.BASE_URL}/api/user/getPrivateEnc`, {address: address})
     let enc_private_key = '29b05dee4c7d1818c44a99dd1e098f8bb01caceff6b53c29602288a3e9bd6191'
-    if(enc_private_key.success == false) {
+    if (enc_private_key.success == false) {
       return enc_private_key
     }
 
     // decrypted private_key
     let privateKey = AES.decryptedPrivateKey(randomKey, enc_private_key).privateKey
     const account = web3.eth.accounts.privateKeyToAccount(privateKey).address
-  
-    let nonce = await web3.eth.getTransactionCount(account,'latest');
+
+    let nonce = await web3.eth.getTransactionCount(account, 'latest');
     const txObject = {
       nonce: web3.utils.toHex(nonce),
       from: account,
@@ -207,8 +210,8 @@ export async function autoUpvote(randomKey, address, postID) {
       gasPrice: 3000000,
     }
     console.log('txObject:', txObject)
-    const tx = LegacyTransaction.fromTxData(txObject,{ common: customCommon })
-    
+    const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
+
     const privateKeyBytes = Buffer.from(privateKey.slice(2), 'hex')
     const signedTx = tx.sign(privateKeyBytes)
 
@@ -216,7 +219,7 @@ export async function autoUpvote(randomKey, address, postID) {
     const raw = '0x' + Buffer.from(serializedTx).toString('hex')
     const txHash = web3.utils.sha3(serializedTx);
     console.log('txHash: ', txHash)
-    const sendTransction = await web3.eth.sendSignedTransaction( raw )
+    const sendTransction = await web3.eth.sendSignedTransaction(raw)
     return txHash
 
   } catch (error) {

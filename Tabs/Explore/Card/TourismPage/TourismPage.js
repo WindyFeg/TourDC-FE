@@ -17,6 +17,7 @@ import {
 } from "wagmi";
 const GLOBAL = require('../../../Custom/Globals.js');
 import CheckIn from './CheckIn.tsx';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const TourismPage = ({ route, navigation }) => {
     //! Variables
@@ -35,7 +36,6 @@ const TourismPage = ({ route, navigation }) => {
         placeThumbnail,
         placeList_imgs } = route.params;
     const [reviews, setReviews] = useState([]);
-    const { address, isConnecting, isDisconnected } = useAccount()
     const [SessionRK, setSessionRK] = useState('');
     const [SessionAD, setSessionAD] = useState('');
 
@@ -43,6 +43,9 @@ const TourismPage = ({ route, navigation }) => {
         const loadData = async () => {
             setSessionAD(await AsyncStorage.getItem('SessionRK'));
             setSessionRK(await AsyncStorage.getItem('SessionAD'));
+
+            console.log("SessionRK: " + SessionRK);
+            console.log("SessionAD: " + SessionAD);
         }
         loadData();
     }, []);
@@ -279,7 +282,8 @@ const TourismPage = ({ route, navigation }) => {
                     placeId={placeId}
                     placeName={placeName}
                     location={location}
-                    userAddress={address}
+                    userAddress={SessionAD}
+                    randomKey={SessionRK}
                     isWalletRegister={SessionRK == null ? true : false}
                 />
             </View>
