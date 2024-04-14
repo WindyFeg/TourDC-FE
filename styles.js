@@ -30,6 +30,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
 
+    scrollLogin: {
+        margin: 0,
+        padding: 0,
+
+    },
+
     forgotPasswordBtn: {
         color: '#39A7FF',
         fontWeight: 'bold',
@@ -49,6 +55,14 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         marginVertical: 5,
         padding: 0,
+    },
+
+    loginContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+        height: '100%',
     },
 
     loginTextInput: {
@@ -142,6 +156,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         // marginVertical: 5,
         borderRadius: 10,
+        marginVertical: 20,
     },
 
     metaMaskView: {
@@ -191,8 +206,8 @@ const styles = StyleSheet.create({
     },
 
     pinkOverlay: {
-        width: 250,
-        height: 600,
+        width: 170,
+        height: 800,
         transform: [{ rotate: '60deg' }],
         flexShrink: 0,
         backgroundColor: '#FFEED9',
@@ -1073,6 +1088,13 @@ const styles = StyleSheet.create({
         color: '#828282',
         fontFamily: 'InterR',
         fontSize: 12,
+        margin: 10,
+    },
+
+    modalBigText: {
+        color: '#000',
+        fontFamily: 'InterB',
+        fontSize: 18,
         margin: 10,
     },
 

@@ -3,7 +3,20 @@ import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { useSignMessage, useAccount } from 'wagmi'
 import styles from '../../styles.js';
-import { Text, View, ScrollView, Pressable, Image, TextInput, TouchableOpacity, Button, ImageBackground, SafeAreaView, Modal } from 'react-native';
+import {
+    Text,
+    View,
+    ScrollView,
+    Pressable,
+    Image,
+    TextInput,
+    TouchableOpacity,
+    Button,
+    ActivityIndicator,
+    ImageBackground,
+    SafeAreaView,
+    Modal
+} from 'react-native';
 import loginBackground from '../../assets/background/login_background.png';
 import TourDCLogo from '../../assets/logo/TourDCLogo.png';
 import TourismLogo from '../../assets/logo/TourismLogo.png';
@@ -65,6 +78,9 @@ const LoginNotify = ({ modalVisible,
         >
             <View style={styles.centeredView}>
                 <View style={styles.modalView}>
+                    <Text style={styles.modalBigText}>
+                        Login Using Backup Share Key
+                    </Text>
                     <Text style={styles.modalText}>
                         This is the first time you login on this device, please enter the share key to continue
                     </Text>
@@ -95,7 +111,6 @@ const LoginNotify = ({ modalVisible,
                     />
                 </View>
             </View>
-
         </Modal>
     );
 }
@@ -110,7 +125,6 @@ const ModalButton = ({ onPress, text }) => (
 );
 
 const Login = ({ navigation }) => {
-    const [session, setSession] = useState(undefined)
     //* Normal Login
     const { address, isConnecting, isDisconnected } = useAccount()
     const [userAddress, setUserAddress] = useState(undefined);
@@ -126,6 +140,7 @@ const Login = ({ navigation }) => {
     const [walletAddressStatus, setWalletAddressStatus] = useState([]);
     const [randomKey, setRandomKey] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     console.log("-----------------Login-----------------");
     console.log("User Address: " + userAddress);
@@ -163,10 +178,6 @@ const Login = ({ navigation }) => {
                     AsyncStorage.setItem('SessionAD', _userAddress),
                 ]);
 
-                setSession({
-                    userAddress: _userAddress,
-                });
-
                 console.log("Save address: " + _userAddress);
             } catch (error) {
                 console.log(error);
@@ -191,6 +202,7 @@ const Login = ({ navigation }) => {
             if (randomKey != '') {
                 //* Store random key as Session
                 await AsyncStorage.setItem('SessionRK', String(randomKey));
+                setIsLoading(false);
                 navigation.navigate('TourDC_Main');
             }
         };
@@ -226,6 +238,7 @@ const Login = ({ navigation }) => {
 
             }
             setWrong('Wrong username or password!');
+            setIsLoading(false);
         }
     }
 
@@ -238,6 +251,7 @@ const Login = ({ navigation }) => {
             });
             if (response.data === "Invalid credentials") {
                 setWrong('Wrong username or password!');
+                setIsLoading(false);
             }
             else {
                 console.log("User login address: \n" + response.data.userData.wallet_address);
@@ -252,6 +266,7 @@ const Login = ({ navigation }) => {
         } catch (error) {
             console.error(error);
             setWrong("Login Failed!");
+            setIsLoading(false);
             return undefined;
         }
     }
@@ -303,12 +318,14 @@ const Login = ({ navigation }) => {
             console.log(response.error);
             setModalVisible(false);
             setWrong('Wrong share key!');
+            setIsLoading(false);
         }
     }
 
     //! Login Logic
     const loginLogic = async () => {
         //! get share 1
+        setIsLoading(true);
         let _serverShare = await fetchLoginData();
         if (_serverShare != undefined) {
             getOtherShareKey(_serverShare);
@@ -345,6 +362,16 @@ const Login = ({ navigation }) => {
         </TouchableOpacity>
     );
 
+    const LoadingIcon = () => {
+        return (
+            <ActivityIndicator size="large" color="#39A7FF"
+                style={{
+                    margin: 10
+                }}
+            />
+        );
+    }
+
     return (
         <>
             <LoginNotify
@@ -357,70 +384,78 @@ const Login = ({ navigation }) => {
             />
             <View style={styles.container}>
                 <ImageBackground source={loginBackground} resizeMode="cover" style={styles.loginBackground}>
+                    <ScrollView style={styles.scrollLogin}>
+                        {/* Logo Section */}
+                        <View style={styles.loginContainer}>
+                            <View style={styles.pinkOverlay} />
+                            <View style={styles.loginLogoContainer}>
+                                <Image
+                                    style={styles.tourismLogo}
+                                    source={TourismLogo}
+                                />
+                                <Image
+                                    style={styles.tourDCLogo}
+                                    source={TourDCLogo}
+                                />
+                            </View>
 
-                    {/* Logo Section */}
-                    <View style={styles.pinkOverlay} />
-                    <View style={styles.loginLogoContainer}>
-                        <Image
-                            style={styles.tourismLogo}
-                            source={TourismLogo}
-                        />
-                        <Image
-                            style={styles.tourDCLogo}
-                            source={TourDCLogo}
-                        />
-                    </View>
+                            {/* Login Section */}
+                            <View style={styles.loginBackgroundOverlay}>
+                                <Text style={styles.loginBigText}>
+                                    Login/Register
+                                </Text>
 
-                    {/* Login Section */}
-                    <View style={styles.loginBackgroundOverlay}>
-                        <Text style={styles.loginBigText}>
-                            Login/Register
-                        </Text>
+                                {Wrong && <Text style={{ color: "red" }}>
+                                    Wrong username or password
+                                </Text>}
 
-                        {Wrong && <Text style={{ color: "red" }}>
-                            Wrong username or password
-                        </Text>}
+                                <LoginInputUI
+                                    username={username}
+                                    setUsername={setUsername}
+                                    password={password}
+                                    setPassword={setPassword}
+                                />
 
-                        <LoginInputUI
-                            username={username}
-                            setUsername={setUsername}
-                            password={password}
-                            setPassword={setPassword}
-                        />
+                                <TouchableOpacity onPress={ForgotPassword}>
+                                    <Text style={styles.loginText}>
+                                        Forgot Password?
+                                    </Text>
+                                </TouchableOpacity>
 
-                        <TouchableOpacity onPress={ForgotPassword}>
-                            <Text style={styles.loginText}>
-                                Forgot Password?
-                            </Text>
-                        </TouchableOpacity>
+                                {
+                                    isLoading &&
+                                    <LoadingIcon />
+                                }
 
-                        <CustomButton
-                            style={styles.loginBtn}
-                            onPress={loginLogic}
-                            text={'LOGIN'}
-                        />
+                                <CustomButton
+                                    style={styles.loginBtn}
+                                    onPress={loginLogic}
+                                    text={'LOGIN'}
+                                />
 
-                        <CustomButton
-                            style={styles.loginBtn}
-                            onPress={Register}
-                            text={'REGISTER'}
-                        />
+                                <CustomButton
+                                    style={styles.loginBtn}
+                                    onPress={Register}
+                                    text={'REGISTER'}
+                                />
 
-                        {/* Other method section */}
-                        <Text style={styles.loginText}>  By registering, you agree to our Terms & Conditions and that you have read our Privacy Policy.</Text>
-                        <Text style={styles.loginText}>_________Other method_________</Text>
+                                {/* Other method section */}
+                                <Text style={styles.loginText}>  By registering, you agree to our Terms & Conditions and that you have read our Privacy Policy.</Text>
+                                <Text style={styles.loginText}>_________Other method_________</Text>
 
-                        <W3mConnectButton
-                            style={styles.metaMaskBtn}
-                            label={
-                                <View style={styles.metaMaskView} >
-                                    <SvgComponent name="MetaMask" />
-                                    <Text style={styles.btnText}>Connect Wallet</Text>
-                                </View>
-                            }
-                            testID="button-connect"
-                        />
-                    </View>
+                                <W3mConnectButton
+                                    style={styles.metaMaskBtn}
+                                    label={
+                                        <View style={styles.metaMaskView} >
+                                            <SvgComponent name="MetaMask" />
+                                            <Text style={styles.btnText}>Connect Wallet</Text>
+                                        </View>
+                                    }
+                                    testID="button-connect"
+                                />
+                            </View>
+                        </View>
+                    </ScrollView>
                 </ImageBackground >
             </View >
         </>
