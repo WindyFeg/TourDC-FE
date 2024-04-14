@@ -1,5 +1,5 @@
 import sss from 'shamirs-secret-sharing'
-
+// import secrets from '../shamir'
 function bufferToHex(buffer) {
   return buffer.toString('hex');
 }

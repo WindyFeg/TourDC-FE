@@ -29,9 +29,19 @@ const getTouristReviews = async (user_address) => {
 }
 
 
-const getDestinationReviews = async (place_id) => {
+const getDestinationReviews = async (address, place_id) => {
   try {
-    return await contract_4R.methods.getAllReviewsOfDestinations(place_id).call()
+    const destinationReviews =  await contract_4R.methods.getAllReviewsOfDestinations(place_id).call()
+
+    const result = destinationReviews.map(async (review) => {
+      let isVoted = await contractTourDCWith4RMechanism.connect(owner).isVoted('0x1a620c351c07763f430897AeaA2883E37cA0aaCD', review[1])
+      return([...review, isVoted])
+    })
+
+    await Promise.all(result).then((resolvedResult) => {
+      console.log('Reviews: ', result)
+      return resolvedResult
+    });
   } catch (error) {
     console.error("Error in getDestinationReviews:", error);
     throw error;
@@ -115,9 +125,9 @@ const getRewardPoinFromPostID = async (postID, user_address) => {
   }
 }
 
-const account1 = '0x1a620c351c07763f430897AeaA2883E37cA0aaCD'
-const account2 = '0x2936E9fACfF3fb5DDc08d13DB19659ec093cdE69'
-const account3 = '0x9E0E58F9052aDc53986eA9ca7cf8389b0EdE364f'
+// const account1 = '0x1a620c351c07763f430897AeaA2883E37cA0aaCD'
+// const account2 = '0x2936E9fACfF3fb5DDc08d13DB19659ec093cdE69'
+// const account3 = '0x9E0E58F9052aDc53986eA9ca7cf8389b0EdE364f'
 
 
 // accoutn tourist 1: 0x1a620c351c07763f430897AeaA2883E37cA0aaCD
