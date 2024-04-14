@@ -185,7 +185,7 @@ const Login = ({ navigation }) => {
         const storeData = async () => {
             if (randomKey != '') {
                 //* Store random key as Session
-                await AsyncStorage.setItem('SessionRK', JSON.stringify(randomKey));
+                await AsyncStorage.setItem('SessionRK', String(randomKey));
                 navigation.navigate('TourDC_Main');
             }
         };
