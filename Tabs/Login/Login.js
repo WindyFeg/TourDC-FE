@@ -203,7 +203,10 @@ const Login = ({ navigation }) => {
                 //* Store random key as Session
                 await AsyncStorage.setItem('SessionRK', String(randomKey));
                 setIsLoading(false);
-                navigation.navigate('TourDC_Main');
+                // wait for 1 second
+                setTimeout(() => {
+                    navigation.navigate('TourDC_Main');
+                }, 1000);
             }
         };
 
@@ -224,7 +227,9 @@ const Login = ({ navigation }) => {
             //*Logged in with wallet address
             //*Redirect to Main page
             await AsyncStorage.setItem('SessionRK', '');
-            navigation.navigate('TourDC_Main');
+            setTimeout(() => {
+                navigation.navigate('TourDC_Main');
+            }, 1000);
         } catch (error) {
             console.log(error.response.data);
             if (error.response.data.success === false) {

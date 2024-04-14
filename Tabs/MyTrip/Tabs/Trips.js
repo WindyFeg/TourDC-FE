@@ -4,6 +4,7 @@ import TripCard from '../Card/TripCard.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 const GLOBAL = require('../../Custom/Globals.js');
+import styles from '../../../styles.js';
 
 /* 
 */
@@ -59,7 +60,7 @@ const Trips = ({ navigation }) => {
 
     return (
         <ScrollView>
-            <Text>You have 1 trip left to review. Please review them to earn bonus points!</Text>
+            <Text style={styles.normalText}>You have {numberOfTrips} trip left to review. Please review them to earn bonus points!</Text>
 
             {
                 isLoading ? <LoadingIcon /> :

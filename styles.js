@@ -1084,6 +1084,13 @@ const styles = StyleSheet.create({
         margin: 10,
     },
 
+    normalText: {
+        color: '#828282',
+        fontFamily: 'InterR',
+        fontSize: 12,
+        margin: 10,
+    },
+
     modalText: {
         color: '#828282',
         fontFamily: 'InterR',

@@ -4,7 +4,9 @@ import PostCard from '../Card/PostCard.js';
 import * as web3 from '../../../service/web3.js';
 import { useAccount } from 'wagmi'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import axios from 'axios';
+const GLOBAL = require('../../Custom/Globals.js');
+import styles from '../../../styles.js';
 /* 
 */
 const Posts = ({ navigation }) => {
@@ -60,7 +62,7 @@ const Posts = ({ navigation }) => {
         <ScrollView
             backgroundColor="#F9F9F9"
         >
-            <Text>All of your reviews</Text>
+            <Text style={styles.normalText}>All of your reviews</Text>
 
             {
                 isLoading ? <LoadingIcon /> :
