@@ -34,8 +34,8 @@ const getDestinationReviews = async (address, place_id) => {
     const destinationReviews = await contract_4R.methods.getAllReviewsOfDestinations(place_id).call()
 
     const result = destinationReviews.map(async (review) => {
-      let isVoted = await contractTourDCWith4RMechanism.connect(owner).isVoted(address, review[1])
-      return ([...review, isVoted])
+      let isVoted = await contract_4R.methods.isVoted(address, review[1])
+      return([...review, isVoted])
     })
 
     await Promise.all(result).then((resolvedResult) => {
