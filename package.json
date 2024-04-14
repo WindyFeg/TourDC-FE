@@ -51,7 +51,6 @@
     "react-native-tab-view": "^3.5.2",
     "react-native-web": "~0.19.6",
     "react-native-webview": "13.2.2",
-    "secrets.js-grempe": "^2.0.0",
     "shamirs-secret-sharing": "^2.0.0",
     "text-encoding": "^0.7.0",
     "text-encoding-polyfill": "^0.6.7",
