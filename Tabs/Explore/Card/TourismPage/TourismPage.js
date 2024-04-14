@@ -41,8 +41,8 @@ const TourismPage = ({ route, navigation }) => {
 
     useEffect(() => {
         const loadData = async () => {
-            setSessionAD(await AsyncStorage.getItem('SessionRK'));
-            setSessionRK(await AsyncStorage.getItem('SessionAD'));
+            setSessionAD(await AsyncStorage.getItem('SessionAD'));
+            setSessionRK(await AsyncStorage.getItem('SessionRK'));
 
             console.log("SessionRK: " + SessionRK);
             console.log("SessionAD: " + SessionAD);
