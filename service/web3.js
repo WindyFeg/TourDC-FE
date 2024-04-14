@@ -1,4 +1,4 @@
-import {contract_DCToken, contract_4R} from './web3config'
+import { contract_DCToken, contract_4R } from './web3config'
 
 const getBalanceOf = async (user_address) => {
   try {
@@ -31,11 +31,11 @@ const getTouristReviews = async (user_address) => {
 
 const getDestinationReviews = async (address, place_id) => {
   try {
-    const destinationReviews =  await contract_4R.methods.getAllReviewsOfDestinations(place_id).call()
+    const destinationReviews = await contract_4R.methods.getAllReviewsOfDestinations(place_id).call()
 
     const result = destinationReviews.map(async (review) => {
-      let isVoted = await contractTourDCWith4RMechanism.connect(owner).isVoted('0x1a620c351c07763f430897AeaA2883E37cA0aaCD', review[1])
-      return([...review, isVoted])
+      let isVoted = await contractTourDCWith4RMechanism.connect(owner).isVoted(address, review[1])
+      return ([...review, isVoted])
     })
 
     await Promise.all(result).then((resolvedResult) => {

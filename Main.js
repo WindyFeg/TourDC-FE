@@ -9,9 +9,6 @@ import Home from './Tabs/Main/Home';
 import MyAccount from './Tabs/Main/MyAccount';
 import MyTrip from './Tabs/Main/MyTrip';
 
-// import Home_Icon from './assets/icons/home.svg';
-// import Explore_Icon from './assets/icons/explore.svg';
-// import ReviewSection from './service/review/* S */ections'
 const Tab = createBottomTabNavigator();
 const Main = ({ navigation }) => {
     return (
@@ -36,7 +33,7 @@ const Main = ({ navigation }) => {
                     tabBarActiveTintColor: '#39a7ff',
                     tabBarInactiveTintColor: 'gray',
                     tabBarStyle: { backgroundColor: '#ffffff' },
-                    style: { backgroundColor: 'white' }, // Set the background color here
+                    style: { backgroundColor: 'white' },
                 })}
             >
 

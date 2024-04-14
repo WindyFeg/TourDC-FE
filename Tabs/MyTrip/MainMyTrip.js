@@ -30,7 +30,7 @@ const MainMyTrip = () => {
             try {
                 setUserAddress(
                     await
-                        AsyncStorage.getItem('address'));
+                        AsyncStorage.getItem('SessionAD'));
             } catch (error) {
                 console.log(error);
             }

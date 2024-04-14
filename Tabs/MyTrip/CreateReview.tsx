@@ -6,10 +6,10 @@ import styles from '../../styles.js';
 import * as ImagePicker from "expo-image-picker";
 import { StackNavigationProp } from '@react-navigation/stack';
 import {
-  useContractRead,
-  useContractWrite,
-  usePrepareContractWrite,
-//   useTransactionReceipt  
+    useContractRead,
+    useContractWrite,
+    usePrepareContractWrite,
+    //   useTransactionReceipt  
 } from "wagmi";
 import Tourism_abi from "../../contracts/Tourism.json"
 import Tourism_address from "../../contracts/Tourism-address.json"
@@ -34,35 +34,35 @@ const CreateReview: React.FC<Props> = ({ navigation }) => {
     const { chain, chains } = getNetwork()
     console.log("chain: ", chain)
 
-    const { data,error, isError, isLoading, isSuccess } = useContractRead({
-      address: Tourism_address.Token as `0x${string}`, 
-      abi: Tourism_abi.abi,
-      functionName: 'touristIdentify', // contract method
-      // account: '0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74', // current address
+    const { data, error, isError, isLoading, isSuccess } = useContractRead({
+        address: Tourism_address.Token as `0x${string}`,
+        abi: Tourism_abi.abi,
+        functionName: 'touristIdentify', // contract method
+        // account: '0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74', // current address
     })
-    console.log("dâta:", data)
+    console.log("data:", data)
 
-  const { config } = usePrepareContractWrite({
-    address: Tourism_address.Token as `0x${string}`,
-    abi: Tourism_abi.abi,
-    functionName: 'reviews',
-    args: [ '65f2c80ef60b126cb248752b',
+    const { config } = usePrepareContractWrite({
+        address: Tourism_address.Token as `0x${string}`,
+        abi: Tourism_abi.abi,
+        functionName: 'reviews',
+        args: ['65f2c80ef60b126cb248752b',
             '0x0000000000000000000000000000000000000000000000000000000000000000',
             'Romantic',
             '49',
             'Beautifullll'], // [placeID, postID, title, rate, review]
-    account: '0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74', // current address
-    chainId: 306,
-  })
-  const { data: reviewData,error: reviewError, isError: isErrorReview, isLoading: isLoadingReview , isSuccess: isSuccessReview, write: review } = useContractWrite(config)
-  useEffect(() => {
-      console.log('reviewData: ', reviewData)
-      console.log('reviewError: ', reviewError)
-      console.log('isErrorReview: ', isErrorReview)
-      console.log('isLoadingReview: ', isLoadingReview)
-      console.log('isSuccess: ', isSuccess)
-      
-  }, [reviewData, reviewError, isErrorReview, isLoadingReview, isSuccess]); 
+        account: '0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74', // current address
+        chainId: 306,
+    })
+    const { data: reviewData, error: reviewError, isError: isErrorReview, isLoading: isLoadingReview, isSuccess: isSuccessReview, write: review } = useContractWrite(config)
+    useEffect(() => {
+        console.log('reviewData: ', reviewData)
+        console.log('reviewError: ', reviewError)
+        console.log('isErrorReview: ', isErrorReview)
+        console.log('isLoadingReview: ', isLoadingReview)
+        console.log('isSuccess: ', isSuccess)
+
+    }, [reviewData, reviewError, isErrorReview, isLoadingReview, isSuccess]);
 
     const Rating: React.FC = () => {
         const stars = [5, 4, 3, 2, 1];
@@ -83,7 +83,7 @@ const CreateReview: React.FC<Props> = ({ navigation }) => {
         );
     }
 
-    
+
 
     const pickImage = async () => {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -136,7 +136,7 @@ const CreateReview: React.FC<Props> = ({ navigation }) => {
                     />
 
                     <Text style={styles.CreateReview_Text}>Upload Images</Text>
-                    <UploadImage 
+                    <UploadImage
                         setFiles={setFile}
                         setSource={setSource}
                     />

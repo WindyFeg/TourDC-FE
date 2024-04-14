@@ -22,9 +22,10 @@ const ReviewShort = (props) => {
         review,
         rate,
         title,
-        upvoteNum } = props;
+        upvoteNum,
+        isUpvoted } = props;
 
-    const [isHeartSelected, setHeartSelected] = useState(false);
+    const [isHeartSelected, setHeartSelected] = useState(isUpvoted);
 
     // ! Components
     /*

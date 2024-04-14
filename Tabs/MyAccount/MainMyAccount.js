@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, Image, TextInput, TouchableOpacity, Button } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import ExploreTab from '../Explore/ExploreTab';
@@ -20,6 +20,7 @@ import {
     useAccount,
     useDisconnect
 } from "wagmi";
+import * as web3 from '../../service/web3.js';
 
 /* 
 ! Tourism Page
@@ -30,37 +31,38 @@ const MainMyAccount = ({ navigation }) => {
     const { token, setToken } = useState('')
     const { address, isConnecting, isDisconnected } = useAccount()
     const { disconnect } = useDisconnect()
+    const [userAddress, setUserAddress] = useState('');
+    const [userData, setUserData] = useState({});
+    const [isLoading, setIsLoading] = useState(true);
 
-    //! Fetch Data
-    // Fetch token from AsyncStorage
-    const fetchToken = async () => {
-        try {
-            const token = await AsyncStorage.getItem('refreshToken');
-            if (token !== null) {
-                console.log("User Token: " + token);
-                setToken(token);
+    //! Load user address
+    useEffect(() => {
+        const loadData = async () => {
+            try {
+                setUserAddress(await AsyncStorage.getItem('SessionAD'));
+            } catch (error) {
+                console.log(error);
             }
-        } catch (error) {
-            console.error(error);
-        }
-    }
-    fetchToken();
+        };
 
-    // Fetch user data from backend
-    // const fetchUser = async () => {
-    //     try {
-    //         const userToken = token;
-    //         const response = await axios.get(`${GLOBAL.BASE_URL}/api/user/getCurrent`, {
-    //             headers: {
-    //                 'Authorization': `Bearer ${userToken}`
-    //             }
-    //         });
-    //         console.log("User Data: " + response.data);
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // }
-    // fetchUser();
+        loadData();
+    }, []);
+
+
+    //! Fetch user data from blockchain
+    // 0": "Phong", "1": "Tran", "2": "11111111111111", "3": 15n, "4": 100n, "REP": 15n, "VP": 100n, "__length__": 5, "firstName": "Phong", "lastName": "Tran", "phoneNumber": "11111111111111"}
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                setUserData(await web3.getTouristInfor(userAddress));
+            }
+            catch (error) {
+                console.log(error);
+            }
+        };
+
+        if (userAddress != '') fetchUser();
+    }, [userAddress]);
 
 
     //! Components
@@ -71,16 +73,20 @@ const MainMyAccount = ({ navigation }) => {
                 <View style={styles.UserHeader_Inline}>
                     <Image
                         style={styles.UserHeader_Avatar}
-                        source={require('../../assets/background/bai-bien-bali-2.jpg')}
+                        source={{ uri: `${GLOBAL.BASE_URL}/api/user/getAvatar/${userAddress}` }}
                     />
 
                     <View
                         style={styles.UserHeader_Text}
                     >
-                        <Text style={styles.UserHeader_UserName}>User Name</Text>
-                        <Text style={styles.UserHeader_Phone}>0903045124</Text>
-                        <Text style={styles.UserHeader_Verify}>Verify</Text>
-                        <Text style={styles.UserHeader_NumberPost}>0 Post</Text>
+                        <Text style={styles.UserHeader_UserName}>{userData.firstName + " " + userData.lastName}</Text>
+                        <Text style={styles.UserHeader_Phone}>{userData.phoneNumber}</Text>
+                        <Text style={styles.UserHeader_Verify}>
+                            Verify
+                        </Text>
+                        <Text style={styles.UserHeader_NumberPost}>
+                            Voting Power: {userData.VP}
+                        </Text>
                     </View>
 
                     <View>
@@ -162,7 +168,7 @@ const MainMyAccount = ({ navigation }) => {
         }></Text >)
     )
 
-    const deleteData = async () => {
+    const cleanSessionData = async () => {
         try {
             await Promise.all([
                 AsyncStorage.setItem('refreshToken', ''),
@@ -175,11 +181,22 @@ const MainMyAccount = ({ navigation }) => {
         }
     };
 
+    const deleteAppData = async () => {
+        try {
+            await AsyncStorage.clear();
+            console.log("App Data removed");
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+
+
     //! Navigation
     const Logout = () => {
         // navigation.navigate('Login', { screen: 'TourDC_Login' });
         navigation.navigate('TourDC_Login');
-        deleteData();
+        cleanSessionData();
         if (isConnecting) {
             close();
             open()
@@ -244,6 +261,13 @@ const MainMyAccount = ({ navigation }) => {
                 style={styles.MyAccount_BtnLogout}
             >
                 <Text style={styles.MyAccount_LogoutButtonText}>Logout</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+                onPress={deleteAppData}
+                style={styles.MyAccount_BtnLogout}
+            >
+                <Text style={styles.MyAccount_LogoutButtonText}>DELETE APPDATA</Text>
             </TouchableOpacity>
         </ScrollView >
     );

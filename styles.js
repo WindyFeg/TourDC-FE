@@ -429,7 +429,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 14,
         textAlign: 'center',
-
     },
 
     tourismPage_contentImages: {
@@ -716,7 +715,7 @@ const styles = StyleSheet.create({
         height: 120,
         backgroundColor: '#FFF',
         borderRadius: 10,
-        margin: 10,
+        margin: 5,
         // Box Shadow
         shadowColor: "#000",
         shadowOffset: {
@@ -726,14 +725,15 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 2,
         elevation: 2,
-
     },
 
     MyTripCard_Image: {
         width: 140,
-        height: 120,
-        borderRadius: 10,
+        height: 100,
+        borderRadius: 5,
+        margin: 10,
     },
+
 
     Review_BlackBtn: {
         backgroundColor: '#000',
@@ -1177,7 +1177,7 @@ const styles = StyleSheet.create({
         height: 30,
         alignItems: 'center',
         justifyContent: 'center',
-        marginVertical: 20,
+        marginVertical: 10,
         opacity: 0.8,
     },
 
@@ -1246,6 +1246,12 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         height: 44,
     },
+
+    TripCardContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: "50%"
+    }
 });
 
 export default styles;

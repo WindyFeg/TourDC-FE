@@ -20,16 +20,6 @@ const ReviewPost = ({ route, navigation }) => {
         upvoteNum } = route.params;
 
 
-
-    // useEffect(() => {
-    //     const fetchTourismPage = async () => {
-    //         const response = await web3.getDestinationReviews("1");
-    //         setReviews(response);
-    //     };
-    //     fetchTourismPage();
-    // }, []);
-
-
     // ! Components
 
     /*

@@ -70,12 +70,13 @@ const TourismPage = ({ route, navigation }) => {
     //! Smart Contract
     useEffect(() => {
         const fetchTourismPage = async () => {
-            const response = await web3.getDestinationReviews(id);
+            console.log("Fetching all reviews of id: " + placeId);
+            const response = await web3.getDestinationReviews(SessionAD, id);
             console.log("All review of id: " + id + "\n", response);
             setReviews(response);
         };
-        fetchTourismPage();
-    }, []);
+        if (SessionAD != '') fetchTourismPage();
+    }, [SessionAD]);
 
     //! Functions
 
@@ -259,6 +260,7 @@ const TourismPage = ({ route, navigation }) => {
                             rate={reviews[i].rate}
                             title={reviews[i].title}
                             upvoteNum={reviews[i].upvoteNum}
+                            isUpvoted={reviews[i].isUpvoted}
                         />
                     ))
                 }
