@@ -48,7 +48,10 @@ export default function CheckIn(
   const { chain, chains } = getNetwork()
   const [isGPSValid, setIsGPSValid] = useState(0);
   const [checkInHash, setCheckInHash] = useState('');
-  // const [result, setResult] = useState();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+
   // Writing to the Contract
   const { config } = usePrepareContractWrite({
     address: Tourism_address.Token as `0x${string}`,
@@ -66,11 +69,17 @@ export default function CheckIn(
     isSuccess: isSuccesscheckIn,
     write: checkIn } = useContractWrite(config)
 
-  const ViewTransaction = async () => {
-    if (checkInData == null) {
+  //! Update status of checkIn
+  useEffect(() => {
+    setIsSuccess(isSuccesscheckIn);
+    setIsLoading(isLoadingcheckIn);
+  }, [isSuccesscheckIn, isLoadingcheckIn]);
+
+  const ViewTransaction = async (hash) => {
+    if (hash == null) {
       return;
     }
-    const url = `https://blockchain.agridential.vn/vibi/tx/${checkInData.hash}`
+    const url = `https://blockchain.agridential.vn/vibi/tx/${hash}`
     await WebBrowser.openBrowserAsync(url);
   }
 
@@ -92,6 +101,7 @@ export default function CheckIn(
     console.log("isError:", isErrorcheckIn)
     console.log("error:", checkInError)
     console.log("data:", checkInData)
+    console.log("isWalletRegister:", isWalletRegister)
     console.log("__________________________")
 
   }, [checkInData, checkInError, isErrorcheckIn, isLoadingcheckIn, isSuccesscheckIn]);
@@ -139,11 +149,20 @@ export default function CheckIn(
       let status = response.data.success;
 
       //* if GPS is valid, check-in user to blockchain
-      if (isWalletRegister) {
-        checkInUsingWallet(status)
+      if (status == true) {
+        if (isWalletRegister) {
+          checkInUsingWallet()
+        }
+        else {
+          checkInUsingTourDC()
+        }
       }
+      //* if GPS is invalid, show popup notify
       else {
-        checkInUsingTourDC(status)
+        setIsGPSValid(-1);
+        setModalVisible(true);
+        setIsLoading(false);
+        setIsSuccess(false);
       }
 
     }).catch((error) => {
@@ -152,35 +171,29 @@ export default function CheckIn(
   }
 
   //! check-in user to blockchain using TourDC
-  function checkInUsingTourDC(status) {
-    if (status == true) {
-      checkInOnBlockchain();
-      setIsGPSValid(1);
-    }
-    else {
-      setIsGPSValid(-1);
-      setModalVisible(true);
-    }
+  function checkInUsingTourDC() {
+    setModalVisible(true);
+    checkInOnBlockchain();
+    setIsGPSValid(1);
   }
 
   //! check-in user to blockchain using Wallet
-  function checkInUsingWallet(status) {
-    if (status == true) {
-      if (checkIn) {
-        checkIn();
-        setIsGPSValid(1);
-      }
+  function checkInUsingWallet() {
+    setModalVisible(true);
+    if (checkIn) {
+      checkIn();
     }
-    else {
-      setIsGPSValid(-1);
-      setModalVisible(true);
-    }
+    setIsGPSValid(1);
   }
 
   //! check-in user to blockchain using TourDC
   async function checkInOnBlockchain() {
     let randomKey = await AsyncStorage.getItem('SessionRK');
     setCheckInHash(await autoCheckIn(randomKey, userAddress, placeId) as string);
+    console.log("CheckInHash:", checkInHash)
+
+    setIsLoading(false);
+    setIsSuccess(true);
   }
 
   const CheckInBtn = ({ text, func }) => {
@@ -236,13 +249,15 @@ export default function CheckIn(
             <View style={styles.modalCopyTextContainer}>
               <TouchableOpacity onPress={copyToClipboard}>
                 <Text style={styles.modalText}>
-                  {checkInData?.hash}
-                  {checkInData?.hash && (
-                    <Image
-                      source={require('../../../../assets/icons/clipboard.png')}
-                      style={styles.tourismPage_clipboardIcon}
-                    />
-                  )}
+                  {/* {isWalletRegister ?
+                    checkInData?.hash :
+                    checkInHash
+                  } */}
+                  {checkInHash}
+                  <Image
+                    source={require('../../../../assets/icons/clipboard.png')}
+                    style={styles.tourismPage_clipboardIcon}
+                  />
                 </Text>
               </TouchableOpacity>
             </View>
@@ -261,9 +276,9 @@ export default function CheckIn(
 
             {/* Check In Transaction Status */}
             {
-              isLoadingcheckIn ?
+              (isLoading == true) ?
                 <LoadingIcon /> :
-                (isSuccesscheckIn ?
+                (isSuccess ?
                   <CheckInStatusNotify
                     status={'Check-In Success you can closed this'}
                     statusStyle={[
@@ -283,10 +298,14 @@ export default function CheckIn(
 
             {/* View Transaction Button */}
             {
-              isSuccesscheckIn ?
+              isSuccess ?
                 <CheckInBtn
                   text={'View Transaction'}
-                  func={() => ViewTransaction()}
+                  func={() => ViewTransaction(
+                    isWalletRegister ?
+                      checkInData?.hash :
+                      checkInHash
+                  )}
                 />
                 : null
             }

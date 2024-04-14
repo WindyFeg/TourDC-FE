@@ -142,7 +142,7 @@ const Register = ({ route, navigation }) => {
     useEffect(() => {
         const loadData = async () => {
             try {
-                const address = await AsyncStorage.getItem('address');
+                const address = await AsyncStorage.getItem('SessionAD');
                 setUserAddress(address !== null ? address : '');
             } catch (error) {
                 console.log(error);
@@ -221,7 +221,8 @@ const Register = ({ route, navigation }) => {
     //! Save Share 2 to device
     const saveShare2 = async () => {
         try {
-            const address = await AsyncStorage.setItem(username, shares[1]);
+            await AsyncStorage.setItem(username, shares[1]);
+            console.log("Share 2 saved");
         } catch (error) {
             console.log(error);
         }
@@ -304,7 +305,7 @@ const Register = ({ route, navigation }) => {
     const privateKeyEncrypt = async () => {
         //$ Get random key and shares it
         let shares = await shamir.shares_key_shamir();
-        let randomKey = shamir.shamir_combine(shares[0], shares[1]);
+        let randomKey = await shamir.shamir_combine(shares[0], shares[1]);
         //$ Convert shares to hex
         let hexShares = shares.map((share) => {
             return share.toString('hex');
@@ -312,7 +313,7 @@ const Register = ({ route, navigation }) => {
         setShares(hexShares);
 
         //$ encrypt private key
-        let encryptedPrivateKey = aes.encryptedPrivateKey(randomKey.key, privateKey);
+        let encryptedPrivateKey = await aes.encryptedPrivateKey(randomKey.key, privateKey);
 
         //! Save share 1 and encrypted private key (Server)
         setEncryptedPrivateKey(encryptedPrivateKey.encryptedKey ?? '');

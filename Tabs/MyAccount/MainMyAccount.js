@@ -165,8 +165,8 @@ const MainMyAccount = ({ navigation }) => {
     const deleteData = async () => {
         try {
             await Promise.all([
-                AsyncStorage.setItem('address', ''),
                 AsyncStorage.setItem('refreshToken', ''),
+                AsyncStorage.setItem('SessionAD', ''),
                 AsyncStorage.setItem('SessionRK', ''),
             ]);
             console.log("User Data removed");

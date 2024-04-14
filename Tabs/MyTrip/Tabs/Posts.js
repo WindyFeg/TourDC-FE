@@ -17,7 +17,7 @@ const Posts = ({ navigation }) => {
     useEffect(() => {
         const loadData = async () => {
             try {
-                setUserAddress(await AsyncStorage.getItem('address'));
+                setUserAddress(await AsyncStorage.getItem('SessionAD'));
             } catch (error) {
                 console.log(error);
             }

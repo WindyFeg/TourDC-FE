@@ -134,25 +134,11 @@ const Login = ({ navigation }) => {
     console.log("Local Share Key: " + localShareKey);
     console.log("Random Key: " + randomKey);
 
-    //! Create session
-    useEffect(() => {
-        const createSession = async () => {
-            try {
-                const rawValue = JSON.stringify(session);
-                var session = await AsyncStorage.getItem('session');
-
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        createSession();
-    }, [session]);
-
     //! Get user address from storage
     useEffect(() => {
         const loadData = async () => {
             try {
-                setUserAddress(await AsyncStorage.getItem('address'));
+                setUserAddress(await AsyncStorage.getItem('SessionAD'));
                 console.log("Storage address: " + userAddress)
             } catch (error) {
                 console.log(error);
@@ -190,10 +176,22 @@ const Login = ({ navigation }) => {
         // Login with username and password
         if (tourDCAddress != undefined) {
             storeData(tourDCAddress);
-            // navigation.navigate('TourDC_Main');
             return;
         }
     }, [address, tourDCAddress]);
+
+
+    useEffect(() => {
+        const storeData = async () => {
+            if (randomKey != '') {
+                //* Store random key as Session
+                await AsyncStorage.setItem('SessionRK', JSON.stringify(randomKey));
+                navigation.navigate('TourDC_Main');
+            }
+        };
+
+        storeData();
+    }, [randomKey]);
 
     //! Check wallet address
     //! If address is already registered, navigate to Main page
@@ -205,7 +203,10 @@ const Login = ({ navigation }) => {
             });
             // Wallet address already registered,
             setWalletAddressStatus(response.data);
-            console.log("Address found in Smart Contract");
+
+            //*Logged in with wallet address
+            //*Redirect to Main page
+            await AsyncStorage.setItem('SessionRK', '');
             navigation.navigate('TourDC_Main');
         } catch (error) {
             console.log(error.response.data);
@@ -299,18 +300,6 @@ const Login = ({ navigation }) => {
             setWrong('Wrong share key!');
         }
     }
-
-    useEffect(() => {
-        const storeData = async () => {
-            if (randomKey != '') {
-                //* Store random key as Session
-                await AsyncStorage.setItem('SessionRK', randomKey);
-                navigation.navigate('TourDC_Main');
-            }
-        };
-
-        storeData();
-    }, [randomKey]);
 
     //! Login Logic
     const loginLogic = async () => {
