@@ -196,6 +196,7 @@ export default function CheckIn(
     console.log("randomKey:", randomKey)
     console.log("userAddress:", userAddress)
     console.log("placeId:", placeId)
+    setIsLoading(true);
 
     let response = await autoCheckIn(randomKey, userAddress, placeId);
 
@@ -252,8 +253,11 @@ export default function CheckIn(
         }}>
 
         <View style={styles.centeredView}>
-          <View style={styles.tourismPage_checkInNotify}>
-            <Text style={styles.tourismPage_checkInLocationText}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalBigText}>
+              Check-In at {placeName}
+            </Text>
+            <Text style={styles.modalText}>
               TourDC will check your current address to perform CheckIn in destination
             </Text>
 
@@ -335,7 +339,11 @@ export default function CheckIn(
 
   const LoadingIcon = () => {
     return (
-      <ActivityIndicator size="large" color="#39A7FF" />
+      <ActivityIndicator size="large" color="#39A7FF"
+        style={{
+          margin: 10
+        }}
+      />
     )
   }
 

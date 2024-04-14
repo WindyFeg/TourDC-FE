@@ -1,6 +1,6 @@
 
 import Web3 from "web3";
-import GLOBAL from "../Globals"
+import GLOBAL from "../Tabs/Custom/Globals";
 
 import contractABI from "../contracts/Tourism.json"
 import contractAddress from "../contracts/Tourism-address.json"
@@ -19,7 +19,8 @@ export async function autoCheckIn(randomKey, address, placeID) {
   try {
     // call api to get private_key_encrypt
     // console.log(await web3.eth.getTransactionReceipt('0xd7abc07daf4096b9ab81c9468edd298a011b216d4ae78448137b93560936fece'))
-    let enc_private_key = await axios.post(`${GLOBAL.BASE_URL}/api/user/getPrivateEnc`, { address: address })
+    let response = await axios.post(`${GLOBAL.BASE_URL}/api/user/getPrivateEnc`, { address: address })
+    let enc_private_key = response.data.data
 
     if (enc_private_key.success == false) {
       return enc_private_key

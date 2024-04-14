@@ -400,6 +400,9 @@ const Register = ({ route, navigation }) => {
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
+                        <Text style={styles.modalBigText}>
+                            Register for {firstName} to TourDC
+                        </Text>
                         <Text style={styles.modalText}>
                             TourDC will verify your information to complete the registration
                         </Text>
@@ -492,7 +495,6 @@ const Register = ({ route, navigation }) => {
                                 Close
                             </Text>
                         </TouchableOpacity>
-
                     </View>
                 </View>
             </Modal>
