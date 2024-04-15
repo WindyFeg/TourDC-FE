@@ -85,7 +85,7 @@ const MainMyAccount = ({ navigation }) => {
                             Verify
                         </Text>
                         <Text style={styles.UserHeader_NumberPost}>
-                            Voting Power: {userData.VP}
+                            Voting Power: {Number(userData.VP)}
                         </Text>
                     </View>
 
