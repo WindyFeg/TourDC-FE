@@ -18,26 +18,56 @@ const TripCard = (props) => {
 
     } = props;
     const [imageName, setImageName] = useState('');
+    const [tripName, setTripName] = useState('');
 
     useEffect(async () => {
         let response = await axios.get(`${GLOBAL.BASE_URL}/api/destination/getDestinationById/${placeId}`)
         setImageName(response.data.thumbnail);
+        setTripName(response.data.name);
     }, []);
 
     const ReviewPost = () => {
-        navigation.navigate('ReviewPost');
+        // navigation.navigate('ReviewPost');
     }
 
     const CreateReview = () => {
-        navigation.navigate('CreateReview');
+        navigation.navigate('CreateReview',
+            {
+                postId: postId,
+                trHash: trHash,
+                placeId: placeId,
+                tripName: tripName,
+                checkInTime: checkInTime,
+                placeThumbnail: imageName
+            }
+        );
+    }
+
+    function convertDateTimeString(dateTimeString) {
+        // Create a Date object from the ISO 8601 formatted string
+        const dateObject = new Date(dateTimeString);
+        // Check if the Date object is valid
+        if (isNaN(dateObject.getTime())) {
+            return null; // Return null for invalid strings
+        }
+        // Format the time (hours:minutes)
+        const time = dateObject.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+        // Format the date (day/month/year)
+        const date = dateObject.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
+
+        return `${time}, ${date}`;
     }
 
     const TripCardContent = (props) => {
         return (
             <View>
-                <Text>Post ID: {postId}</Text>
-                <Text>Check In date: {checkInTime}</Text>
-
+                <Text style={styles.tripCardBigText}>{tripName}</Text>
+                <Text
+                    style={styles.tripCardText}
+                >Check In at:
+                    {convertDateTimeString(String(checkInTime))}
+                </Text>
                 <TouchableOpacity
                     onPress={CreateReview}
                     style={props.CreateReview ? styles.Review_BlackBtn : styles.Review_BlueBtn}
@@ -46,7 +76,6 @@ const TripCard = (props) => {
                 </TouchableOpacity>
             </View>)
     }
-
 
     return (
         <View style={styles.PostCard_Container}>

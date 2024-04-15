@@ -130,7 +130,7 @@ const Register = ({ route, navigation }) => {
     const [privateKey, setPrivateKey] = useState('');
     const [errorText, setErrorText] = useState('');
     const [successText, setSuccessText] = useState('');
-    const [userAddress, setUserAddress] = useState('');
+    const [SessionAD, setSessionAD] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
     const [isSend, setIsSend] = useState(false);
     // some hash
@@ -143,7 +143,7 @@ const Register = ({ route, navigation }) => {
         const loadData = async () => {
             try {
                 const address = await AsyncStorage.getItem('SessionAD');
-                setUserAddress(address !== null ? address : '');
+                setSessionAD(address !== null ? address : '');
             } catch (error) {
                 console.log(error);
             }
@@ -167,7 +167,7 @@ const Register = ({ route, navigation }) => {
         abi: Tourism_abi.abi,
         functionName: 'register',
         args: [firstName, lastName, phoneNumber], // [placeID]
-        account: `0x${userAddress.substring(2)}`,// current address
+        account: `0x${SessionAD.substring(2)}`,// current address
         chainId: 306,
     })
 

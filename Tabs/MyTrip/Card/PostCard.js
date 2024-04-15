@@ -24,16 +24,32 @@ const PostCard = (props) => {
 
     // ! Components
     const ReviewPost = () => {
-        navigation.navigate('ReviewPost');
+        // navigation.navigate('ReviewPost');
+    }
+
+    function convertDateTimeString(dateTimeString) {
+        // Create a Date object from the ISO 8601 formatted string
+        const dateObject = new Date(dateTimeString);
+        // Check if the Date object is valid
+        if (isNaN(dateObject.getTime())) {
+            return null; // Return null for invalid strings
+        }
+        // Format the time (hours:minutes)
+        const time = dateObject.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+        // Format the date (day/month/year)
+        const date = dateObject.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
+
+        return `${time}, ${date}`;
     }
 
     const PostCardContent = () => {
         return <View>
             {/* Title */}
-            <Text>{placeName}</Text>
-            <Text>{postTitle}</Text>
+            <Text style={styles.tripCardBigText}>{postTitle}</Text>
+            <Text style={styles.tripCardText}>{placeName}</Text>
             {/* Date */}
-            <Text>{createTime}</Text>
+            <Text style={styles.tripCardText}>Create at: {convertDateTimeString(String(createTime))}</Text>
 
             {/* Token */}
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>

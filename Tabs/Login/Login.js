@@ -159,7 +159,13 @@ const Login = ({ navigation }) => {
         const loadData = async () => {
             try {
                 setUserAddress(await AsyncStorage.getItem('SessionAD'));
-                console.log("Storage address: " + userAddress)
+                let RK = await AsyncStorage.getItem('SessionRK');
+                //* If current session still ok, navigate to Main page
+                if (RK != null) {
+                    setTimeout(() => {
+                        navigation.navigate('TourDC_Main');
+                    }, 1000);
+                }
             } catch (error) {
                 console.log(error);
             }

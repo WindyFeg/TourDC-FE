@@ -686,11 +686,11 @@ const styles = StyleSheet.create({
 
     MyTrip_Navigator:
     {
-        tabBarActiveTintColor: '#75baf1',
+        tabBarActiveTintColor: '#000',
         tabBarInactiveTintColor: 'gray',
         tabBarLabelStyle: { fontSize: 10, fontWeight: 'bold' },
-        tabBarIndicatorStyle: { backgroundColor: '#75baf1' },
-        tabBarStyle: { backgroundColor: '#d9d9d9', borderRadius: 10 },
+        tabBarIndicatorStyle: { backgroundColor: '#000' },
+        tabBarStyle: { backgroundColor: '#fff', borderRadius: 10 },
         padding: 10
     },
 
@@ -774,22 +774,28 @@ const styles = StyleSheet.create({
         paddingTop: 20,
     },
 
+    CreateReview_BigText: {
+        fontFamily: 'InterR',
+        fontSize: 16,
+        margin: 10,
+        color: '#828282',
+    },
     CreateReview_Text: {
         fontFamily: 'InterL',
-        fontSize: 20,
-        margin: 10,
+        fontSize: 12,
+        marginHorizontal: 10,
+        color: '#828282',
     },
 
     CreateReview_Input: {
-        height: 100,
-        borderColor: '#b3b3b3',
-        borderWidth: 2,
-        borderRadius: 10,
+        borderColor: '#D9D9D9',
+        borderWidth: 1,
+        borderRadius: 5,
         marginBottom: 20,
         marginVertical: 10,
-        opacity: 0.7,
-        fontFamily: 'InterL',
+        fontFamily: 'InterR',
         padding: 10,
+        color: '#828282',
     },
 
     CreateReview_imageContainer: {
@@ -1091,6 +1097,20 @@ const styles = StyleSheet.create({
         margin: 10,
     },
 
+    tripCardText: {
+        color: '#828282',
+        fontFamily: 'InterR',
+        fontSize: 12,
+    },
+
+    tripCardBigText: {
+        color: '#000',
+        fontFamily: 'InterB',
+        fontSize: 14,
+        opacity: 0.7,
+        margin: 5,
+    },
+
     modalText: {
         color: '#828282',
         fontFamily: 'InterR',
@@ -1258,7 +1278,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         width: "50%"
-    }
+    },
+
+    reviewDestinationImage: {
+        width: "100%",
+        height: 50,
+        borderRadius: 5,
+    },
+
 });
 
 export default styles;

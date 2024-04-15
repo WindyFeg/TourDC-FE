@@ -69,7 +69,7 @@ const Trips = ({ navigation }) => {
                             navigation={navigation}
 
                             // Props
-                            postId={response[i]._id}
+                            postId={response[i].postID}
                             postList_imgs={response[i].list_imgs}
                             trHash={response[i].trHash}
                             placeId={response[i].placeid}

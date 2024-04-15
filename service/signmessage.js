@@ -150,7 +150,8 @@ export async function autoRegister(privateKey, firstName, lastName, phoneNumber)
 
 export async function autoCreatePost(randomKey, address, placeID, postID, title, rate, review) {
   try {
-    let enc_private_key = await axios.post(`${GLOBAL.BASE_URL}/api/user/getPrivateEnc`, { address: address })
+    let response = await axios.post(`${GLOBAL.BASE_URL}/api/user/getPrivateEnc`, { address: address })
+    let enc_private_key = response.data.data
     // let enc_private_key = '29b05dee4c7d1818c44a99dd1e098f8bb01caceff6b53c29602288a3e9bd6191'
     if (enc_private_key.success == false) {
       return enc_private_key

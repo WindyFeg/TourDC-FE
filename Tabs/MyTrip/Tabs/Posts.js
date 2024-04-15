@@ -32,6 +32,7 @@ const Posts = ({ navigation }) => {
     useEffect(() => {
         const fetchUserPosts = async () => {
             try {
+                console.log('úe:', userAddress);
                 const response = await web3.getTouristReviews(userAddress);
                 setResponse(response);
                 setNumberOfPosts(response.length);
