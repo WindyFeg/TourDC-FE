@@ -19,6 +19,7 @@ const GLOBAL = require('../../../Custom/Globals.js');
 import CheckIn from './CheckIn.tsx';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+
 const TourismPage = ({ route, navigation }) => {
     //! Variables
     /*
@@ -71,14 +72,16 @@ const TourismPage = ({ route, navigation }) => {
     useEffect(() => {
         const fetchTourismPage = async () => {
             console.log("Fetching all reviews of id: " + placeId);
-            // const response = await web3.getDestinationReviews(SessionAD, placeId);
-            const response = await web3.getDestinationReviews("0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74", "65f2c7e1f60b126cb2487527");
-            console.log("All review of id: " + id + "\n", response);
-            setReviews(response);
+            web3.getDestinationReviews(SessionAD, placeId).then((result)=>{
+                setReviews(result)
+            })
         };
         if (SessionAD != '') fetchTourismPage();
     }, [SessionAD]);
 
+    useEffect(() => {
+        console.log("All review of id update: " + placeId + "\n", reviews);
+    }, [reviews])
     //! Functions
 
 

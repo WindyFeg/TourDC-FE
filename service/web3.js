@@ -40,9 +40,8 @@ export const getDestinationReviews = async (address, place_id) => {
       return review
     })
 
-    const final = await Promise.all(result).then((resolvedResult) => {
-      return resolvedResult
-    });
+    const final = await Promise.all(result)
+    console.log((final[0]))
     return final
   } catch (error) {
     console.error("Error in getDestinationReviews:", error);
