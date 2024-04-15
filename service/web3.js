@@ -35,13 +35,15 @@ const getDestinationReviews = async (address, place_id) => {
 
     const result = destinationReviews.map(async (review) => {
       let isVoted = await contract_4R.methods.isVoted(address, review[1]).call()
-      return([...review, isVoted])
+      // console.log(isVoted)
+      review.isVoted = isVoted
+      return review
     })
 
-    await Promise.all(result).then((resolvedResult) => {
-      console.log('Reviews: ', result)
+    const final = await Promise.all(result).then((resolvedResult) => {
       return resolvedResult
     });
+    return final
   } catch (error) {
     console.error("Error in getDestinationReviews:", error);
     throw error;
@@ -143,7 +145,7 @@ const test = async () => {
   // console.log(await getBalanceOf(owner))
   // console.log("getTouristInfor function: ", await getTouristInfor(owner))
   // console.log("get all reviews of tourist: ", await getTouristReviews(owner))
-  // console.log("get all review of destination: ", await getDestinationReviews("65d6ec325ecf27cb3d803d87"))
+  // console.log("get all review of destination: ", await getDestinationReviews("0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74","65f2c7e1f60b126cb2487527"))
   // console.log("get review By Post ID: ", await getReviewByPostID(postID))
   // console.log("see postID list can get reward of account: ", await getRewardListsPostID(owner))
   // console.log("see reward of one postID of acc1: ", await getRewardPoinFromPostID(postID, owner))
@@ -157,7 +159,7 @@ const test = async () => {
   // console.log("Get Post ID can get Reward of an user: ", await rewardListOfTourist(account2))
   // console.log("Get reward number of an post by user: ", await touristRewardPointOnPostID(account1, '0x26eecb00ddef76d58362552f4fd2e782ae49d1e064ccd5b06bd70dcd8039ec35'))
 }
-
+// test()
 
 module.exports = {
   getBalanceOf,
