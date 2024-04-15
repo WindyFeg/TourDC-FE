@@ -1,6 +1,6 @@
 import { contract_DCToken, contract_4R } from './web3config'
 
-const getBalanceOf = async (user_address) => {
+export const getBalanceOf = async (user_address) => {
   try {
     return await contract_DCToken.methods.balanceOf(user_address).call()
   } catch (error) {
@@ -10,7 +10,7 @@ const getBalanceOf = async (user_address) => {
 
 }
 
-const getTouristInfor = async (user_address) => {
+export const getTouristInfor = async (user_address) => {
   try {
     return await contract_4R.methods.touristIdentify(user_address).call()
   } catch (error) {
@@ -19,7 +19,7 @@ const getTouristInfor = async (user_address) => {
   }
 }
 
-const getTouristReviews = async (user_address) => {
+export const getTouristReviews = async (user_address) => {
   try {
     return await contract_4R.methods.getAllReviewsOfTourist(user_address).call()
   } catch (error) {
@@ -29,7 +29,7 @@ const getTouristReviews = async (user_address) => {
 }
 
 
-const getDestinationReviews = async (address, place_id) => {
+export const getDestinationReviews = async (address, place_id) => {
   try {
     const destinationReviews = await contract_4R.methods.getAllReviewsOfDestinations(place_id).call()
 
@@ -51,7 +51,7 @@ const getDestinationReviews = async (address, place_id) => {
 
 }
 
-const getDestinationRates = async (place_id) => {
+export const getDestinationRates = async (place_id) => {
   try {
     return await contract_4R.methods.getDestinationRates(place_id).call()
   } catch (error) {
@@ -61,7 +61,7 @@ const getDestinationRates = async (place_id) => {
 
 }
 
-const getVotesOfReview = async (post_id) => {
+export const getVotesOfReview = async (post_id) => {
   try {
     return await contract_4R.methods.getVoteOfReview(post_id).call()
   } catch (error) {
@@ -71,7 +71,7 @@ const getVotesOfReview = async (post_id) => {
 
 }
 
-const calculationTotalReward = async (post_id) => {
+export const calculationTotalReward = async (post_id) => {
   try {
     return await contract_4R.methods.calculateTotalReward(post_id).call()
   } catch (error) {
@@ -81,7 +81,7 @@ const calculationTotalReward = async (post_id) => {
 
 }
 
-const rewardListOfTourist = async (user_address) => {
+export const rewardListOfTourist = async (user_address) => {
   try {
     return await contract_4R.methods.seeRewardLists().call({ from: user_address });
   } catch (error) {
@@ -91,7 +91,7 @@ const rewardListOfTourist = async (user_address) => {
 
 }
 
-const touristRewardPointOnPostID = async (user_address, post_id) => {
+export const touristRewardPointOnPostID = async (user_address, post_id) => {
   try {
     return await contract_4R.methods.touristRewardOnPostID(user_address, post_id).call();
   } catch (error) {
@@ -100,7 +100,7 @@ const touristRewardPointOnPostID = async (user_address, post_id) => {
   }
 }
 
-const getReviewByPostID = async (postID) => {
+export const getReviewByPostID = async (postID) => {
   try {
     return await contract_4R.methods.reviewByID(postID).call();
   } catch (error) {
@@ -109,7 +109,7 @@ const getReviewByPostID = async (postID) => {
   }
 }
 
-const getRewardListsPostID = async (userAddress) => {
+export const getRewardListsPostID = async (userAddress) => {
   try {
     return await contract_4R.methods.seeRewardLists().call({ from: userAddress });
   } catch (error) {
@@ -118,7 +118,7 @@ const getRewardListsPostID = async (userAddress) => {
   }
 }
 
-const getRewardPoinFromPostID = async (postID, user_address) => {
+export const getRewardPoinFromPostID = async (postID, user_address) => {
   try {
     return await contract_4R.methods.touristRewardOnPostID(user_address, postID).call();
   } catch (error) {
@@ -161,16 +161,16 @@ const test = async () => {
 }
 // test()
 
-module.exports = {
-  getBalanceOf,
-  getTouristInfor,
-  getTouristReviews,
-  getDestinationReviews,
-  getDestinationRates,
-  getVotesOfReview,
-  calculationTotalReward,
-  rewardListOfTourist,
-  touristRewardPointOnPostID,
-}
+// module.exports = {
+//   getBalanceOf,
+//   getTouristInfor,
+//   getTouristReviews,
+//   getDestinationReviews,
+//   getDestinationRates,
+//   getVotesOfReview,
+//   calculationTotalReward,
+//   rewardListOfTourist,
+//   touristRewardPointOnPostID,
+// }
 
 // export default getBalanceOf;
