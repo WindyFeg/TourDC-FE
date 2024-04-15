@@ -324,7 +324,7 @@ const Register = ({ route, navigation }) => {
         //! Show share 3 (User)
     }
 
-    // resgister user to blockchain
+    //! resgister user to blockchain
     async function registerOnBlockchain() {
         console.log(firstName, lastName, phoneNumber, privateKey)
         setRegisterHash(await autoRegister(privateKey, firstName, lastName, phoneNumber) as String)

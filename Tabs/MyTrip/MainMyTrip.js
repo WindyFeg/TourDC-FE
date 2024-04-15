@@ -158,7 +158,7 @@ const MainMyTrip = () => {
             >
                 <Tab.Screen name="Posts" component={Posts} />
                 <Tab.Screen name="Trips" component={Trips} />
-                <Tab.Screen name="Collections" component={Collections} />
+                {/* <Tab.Screen name="Collections" component={Collections} /> */}
                 <Tab.Screen name="My Voucher" component={MyVoucher} />
             </Tab.Navigator>
         </View>

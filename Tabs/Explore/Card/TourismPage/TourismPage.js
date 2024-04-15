@@ -40,6 +40,7 @@ const TourismPage = ({ route, navigation }) => {
     const [SessionRK, setSessionRK] = useState('');
     const [SessionAD, setSessionAD] = useState('');
 
+    //! Load SessionRK and SessionAD
     useEffect(() => {
         const loadData = async () => {
             setSessionAD(await AsyncStorage.getItem('SessionAD'));
@@ -72,7 +73,7 @@ const TourismPage = ({ route, navigation }) => {
     useEffect(() => {
         const fetchTourismPage = async () => {
             console.log("Fetching all reviews of id: " + placeId);
-            web3.getDestinationReviews(SessionAD, placeId).then((result)=>{
+            web3.getDestinationReviews(SessionAD, placeId).then((result) => {
                 setReviews(result)
             })
         };
@@ -264,7 +265,9 @@ const TourismPage = ({ route, navigation }) => {
                             rate={reviews[i].rate}
                             title={reviews[i].title}
                             upvoteNum={reviews[i].upvoteNum}
-                            isUpvoted={reviews[i].isUpvoted}
+                            isVoted={reviews[i].isVoted}
+                            SessionRK={SessionRK}
+                            SessionAD={SessionAD}
                         />
                     ))
                 }

@@ -6,6 +6,7 @@ import styles from '../../../../styles';
 import ReviewHeader from './ReviewHeader';
 import SvgComponent from '../../../../assets/SvgComponent';
 import * as web3 from '../../../../service/web3.js';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 /* 
 */
@@ -23,9 +24,12 @@ const ReviewShort = (props) => {
         rate,
         title,
         upvoteNum,
-        isUpvoted } = props;
+        isVoted,
+        SessionRK,
+        SessionAD,
+    } = props;
 
-    const [isHeartSelected, setHeartSelected] = useState(isUpvoted);
+    const [isHeartSelected, setHeartSelected] = useState(isVoted);
 
     // ! Components
     /*
@@ -49,6 +53,23 @@ const ReviewShort = (props) => {
         );
     }
 
+    // ! Upvote user on blockchain
+    async function upvoteOnBlockChain() {
+        console.log('upvoteOnBlockChain');
+        console.log('SessionRK:', SessionRK);
+        console.log('SessionAD:', SessionAD);
+        console.log('postID:', postID);
+        let response = await autoUpvote(SessionRK, SessionAD, postID)
+        console.log('response:', response);
+    }
+
+    const upVoteLogic = () => {
+        if (isHeartSelected === false) {
+            setHeartSelected(true);
+            upvoteOnBlockChain();
+        }
+    }
+
     const ReviewPostShortContent = (props) => {
         return <View >
             <Text style={styles.ReviewPostShort_content}>{review}</Text>
@@ -61,7 +82,7 @@ const ReviewShort = (props) => {
                 <View style={styles.UpvoteButtonContainer}>
                     <TouchableOpacity
                         style={styles.UpvoteButton}
-                        onPress={() => setHeartSelected(!isHeartSelected)}
+                        onPress={upVoteLogic}
                     >
                         <SvgComponent name={isHeartSelected ? 'Heart1' : 'Heart0'} />
                     </TouchableOpacity >
