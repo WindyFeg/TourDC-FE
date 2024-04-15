@@ -195,7 +195,7 @@ export async function autoUpvote(randomKey, address, postID) {
     // let enc_private_key = await axios.post(`${GLOBAL.BASE_URL}/api/user/getPrivateEnc`, {address: address})
     let response = await axios.post(`${GLOBAL.BASE_URL}/api/user/getPrivateEnc`, { address: address })
     let enc_private_key = response.data.data
-
+    console.log('enc_private_key:', enc_private_key )
     if (enc_private_key.success == false) {
       return enc_private_key
     }

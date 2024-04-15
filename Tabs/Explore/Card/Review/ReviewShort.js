@@ -5,7 +5,7 @@ import ReviewPost from './ReviewPost';
 import styles from '../../../../styles';
 import ReviewHeader from './ReviewHeader';
 import SvgComponent from '../../../../assets/SvgComponent';
-import * as web3 from '../../../../service/web3.js';
+import * as web3 from '../../../../service/signmessage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 /* 
@@ -59,8 +59,8 @@ const ReviewShort = (props) => {
         console.log('SessionRK:', SessionRK);
         console.log('SessionAD:', SessionAD);
         console.log('postID:', postID);
-        let response = await autoUpvote(SessionRK, SessionAD, postID)
-        console.log('response:', response);
+        const response = await web3.autoUpvote(SessionRK, SessionAD, postID)
+        console.log('response:', response)
     }
 
     const upVoteLogic = () => {
