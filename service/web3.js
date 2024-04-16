@@ -126,15 +126,26 @@ export const getRewardPoinFromPostID = async (postID, user_address) => {
   }
 }
 
-// const account1 = '0x1a620c351c07763f430897AeaA2883E37cA0aaCD'
-// const account2 = '0x2936E9fACfF3fb5DDc08d13DB19659ec093cdE69'
-// const account3 = '0x9E0E58F9052aDc53986eA9ca7cf8389b0EdE364f'
+export const getTouristVP = async (address) => {
+  try {
+    const userVP =  await contract_4R.methods.touristVP(address).call()
+    return Number(userVP);
+  } catch (error) {
+    console.error("Error in getTouristVP:", error);
+    throw error;
+  }
+}
 
+export const getTouristREP = async (address) => {
+  try {
+    const userREP =  await contract_4R.methods.touristREP(address).call()
+    return Number(userREP);
+  } catch (error) {
+    console.error("Error in getTouristREP:", error);
+    throw error;
+  }
+}
 
-// accoutn tourist 1: 0x1a620c351c07763f430897AeaA2883E37cA0aaCD
-// post ID: 0x26eecb00ddef76d58362552f4fd2e782ae49d1e064ccd5b06bd70dcd8039ec35
-// account tourist 2: 0x2936E9fACfF3fb5DDc08d13DB19659ec093cdE69
-// account Tourist 3: 0x9E0E58F9052aDc53986eA9ca7cf8389b0EdE364f
 const test = async () => {
   const owner = "0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74";
   const address1 = "0x1a620c351c07763f430897AeaA2883E37cA0aaCD"
@@ -157,6 +168,8 @@ const test = async () => {
   // console.log("calculation Total reward: ", await calculationTotalReward("0x26eecb00ddef76d58362552f4fd2e782ae49d1e064ccd5b06bd70dcd8039ec35"))
   // console.log("Get Post ID can get Reward of an user: ", await rewardListOfTourist(account2))
   // console.log("Get reward number of an post by user: ", await touristRewardPointOnPostID(account1, '0x26eecb00ddef76d58362552f4fd2e782ae49d1e064ccd5b06bd70dcd8039ec35'))
+  // console.log("Get tourist REP: ", await getTouristREP(owner))
+  // console.log("Get tourist VP: ", await getTouristVP(owner))
 }
 // test()
 
