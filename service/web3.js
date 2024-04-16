@@ -146,6 +146,16 @@ export const getTouristREP = async (address) => {
   }
 }
 
+export const getCommentsOfReviewPost = async (postID) => {
+  try {
+    const comments = await contract_4R.methods.getAllCommentOfReviewPost(postID).call()
+    return comments;
+  } catch (error) {
+    console.error("Error in getTouristREP:", error);
+    throw error;
+  }
+}
+
 const test = async () => {
   const owner = "0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74";
   const address1 = "0x1a620c351c07763f430897AeaA2883E37cA0aaCD"

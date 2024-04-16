@@ -231,6 +231,46 @@ export async function autoUpvote(randomKey, address, postID) {
   }
 }
 
+export async function autoComment(randomKey, address, postID, content) {
+  try {
+    // let enc_private_key = await axios.post(`${GLOBAL.BASE_URL}/api/user/getPrivateEnc`, {address: address})
+    let response = await axios.post(`${GLOBAL.BASE_URL}/api/user/getPrivateEnc`, { address: address })
+    let enc_private_key = response.data.data
+    console.log('enc_private_key:', enc_private_key )
+    if (enc_private_key.success == false) {
+      return enc_private_key
+    }
+
+    // decrypted private_key
+    let privateKey = AES.decryptedPrivateKey(randomKey, enc_private_key).privateKey
+    const account = web3.eth.accounts.privateKeyToAccount(privateKey).address
+
+    let nonce = await web3.eth.getTransactionCount(account, 'latest');
+    const txObject = {
+      nonce: web3.utils.toHex(nonce),
+      from: account,
+      gasLimit: web3.utils.toHex(5000000), // Raise the gas limit to a much higher amount
+      to: contractAddress.Token,
+      data: await contract.methods.comment(postID, content).encodeABI(),
+      gasPrice: 3000000,
+    }
+    console.log('txObject:', txObject)
+    const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
+
+    const privateKeyBytes = Buffer.from(privateKey.slice(2), 'hex')
+    const signedTx = tx.sign(privateKeyBytes)
+
+    const serializedTx = signedTx.serialize()
+    const raw = '0x' + Buffer.from(serializedTx).toString('hex')
+    const txHash = web3.utils.sha3(serializedTx);
+    console.log('txHash: ', txHash)
+    const sendTransction = await web3.eth.sendSignedTransaction(raw)
+    return txHash
+
+  } catch (error) {
+    console.error("ERR: ", error.message)
+  }
+}
 
 // async function main() {
 //   await autoRegister('043f55c66a491d0c74bf1484d01876d28ea7ef02ca105af557944c3e3bfb7aa3', 'David', 'John', '0918812313')
