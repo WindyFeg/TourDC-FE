@@ -3,6 +3,8 @@ const DCToken_abi = require("../contracts/ERC20With4RMechanism.json")
 const Tourism_abi = require("../contracts/Tourism.json")
 const DCToken_address = require("../contracts/ERC20With4RMechanism-address.json")
 const Tourism_address = require("../contracts/Tourism-address.json")
+const axios = require("axios");
+const GLOBAL = require("../Tabs/Custom/Globals")
 
 const VBCProvider = "https://vibi.vbchain.vn/"
 var web3 = new Web3(VBCProvider);
@@ -12,7 +14,15 @@ contract_4R = new web3.eth.Contract(Tourism_abi.abi, Tourism_address.Token)
 const getCommentsOfReviewPost = async (postID) => {
   try {
     const comments = await contract_4R.methods.getAllCommentOfReviewPost(postID).call()
-    return comments;
+    const promises = comments.map(async (ele) => {
+      ele.userInfor = (await axios.post(`${GLOBAL.BASE_URL}/api/user/getCurrent`, {address: ele.author })).data.user
+      ele.REP = Number(await contract_4R.methods.touristREP(ele.author).call())
+      ele.VP = Number(await contract_4R.methods.touristVP(ele.author).call())
+      ele.upvoteNum = Number(ele.upvoteNum)
+      return ele
+    })
+    const result = await Promise.all(promises)
+    return result;
   } catch (error) {
     console.error("Error in getTouristREP:", error);
     throw error;

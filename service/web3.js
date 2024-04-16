@@ -149,18 +149,26 @@ export const getTouristREP = async (address) => {
 export const getCommentsOfReviewPost = async (postID) => {
   try {
     const comments = await contract_4R.methods.getAllCommentOfReviewPost(postID).call()
-    return comments;
+    const promises = comments.map(async (ele) => {
+      ele.userInfor = (await axios.post(`${GLOBAL.BASE_URL}/api/user/getCurrent`, {address: ele.author })).data.user
+      ele.REP = Number(await contract_4R.methods.touristREP(ele.author).call())
+      ele.VP = Number(await contract_4R.methods.touristVP(ele.author).call())
+      ele.upvoteNum = Number(ele.upvoteNum)
+      return ele
+    })
+    const result = await Promise.all(promises)
+    return result;
   } catch (error) {
     console.error("Error in getTouristREP:", error);
     throw error;
   }
 }
 
-const test = async () => {
-  const owner = "0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74";
-  const address1 = "0x1a620c351c07763f430897AeaA2883E37cA0aaCD"
-  const address2 = "0x9E0E58F9052aDc53986eA9ca7cf8389b0EdE364f"
-  const postID = "0x5a28a54a254168fde809b36b87260f51a07c299f232380cc09e5d6c271c2b77c"
+// const test = async () => {
+//   const owner = "0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74";
+//   const address1 = "0x1a620c351c07763f430897AeaA2883E37cA0aaCD"
+//   const address2 = "0x9E0E58F9052aDc53986eA9ca7cf8389b0EdE364f"
+//   const postID = "0x5a28a54a254168fde809b36b87260f51a07c299f232380cc09e5d6c271c2b77c"
 
   // console.log(await getBalanceOf(owner))
   // console.log("getTouristInfor function: ", await getTouristInfor(owner))
@@ -180,7 +188,7 @@ const test = async () => {
   // console.log("Get reward number of an post by user: ", await touristRewardPointOnPostID(account1, '0x26eecb00ddef76d58362552f4fd2e782ae49d1e064ccd5b06bd70dcd8039ec35'))
   // console.log("Get tourist REP: ", await getTouristREP(owner))
   // console.log("Get tourist VP: ", await getTouristVP(owner))
-}
+// }
 // test()
 
 // module.exports = {
