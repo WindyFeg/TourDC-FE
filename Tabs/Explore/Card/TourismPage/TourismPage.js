@@ -1,5 +1,5 @@
 import 'react-native-get-random-values';
-import { Button, View, Text, Image, ImageBackground, TouchableOpacity, ScrollView, Platform } from 'react-native';
+import { Button, View, Text, Image, ImageBackground, TouchableOpacity, ScrollView, Platform, ActivityIndicator } from 'react-native';
 import ReviewShort from '../Review/ReviewShort.js';
 import styles from '../../../../styles.js';
 import SvgComponent from '../../../../assets/SvgComponent.js';
@@ -18,6 +18,7 @@ import {
 const GLOBAL = require('../../../Custom/Globals.js');
 import CheckIn from './CheckIn.tsx';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { isLoading } from 'expo-font';
 
 
 const TourismPage = ({ route, navigation }) => {
@@ -39,6 +40,8 @@ const TourismPage = ({ route, navigation }) => {
     const [reviews, setReviews] = useState([]);
     const [SessionRK, setSessionRK] = useState('');
     const [SessionAD, setSessionAD] = useState('');
+    const [IsLoadingReview, setIsLoadingReview] = useState(true);
+
 
     //! Load SessionRK and SessionAD
     useEffect(() => {
@@ -75,6 +78,7 @@ const TourismPage = ({ route, navigation }) => {
             console.log("Fetching all reviews of id: " + placeId);
             web3.getDestinationReviews(SessionAD, placeId).then((result) => {
                 setReviews(result)
+                setIsLoadingReview(false);
             })
         };
         if (SessionAD != '') fetchTourismPage();
@@ -87,6 +91,16 @@ const TourismPage = ({ route, navigation }) => {
 
 
     //! Components
+
+    const LoadingIcon = () => {
+        return (
+            <ActivityIndicator size="large" color="#39A7FF"
+                style={{
+                    margin: 10
+                }}
+            />
+        )
+    }
 
     const NavigationBar = () => {
         return (
@@ -250,26 +264,27 @@ const TourismPage = ({ route, navigation }) => {
         return (
             <View>
                 {
-                    Array.from({ length: reviews.length }, (_, i) => (
-                        <ReviewShort
-                            key={i}
-                            navigation={navigation}
-                            // props
-                            author={reviews[i].author}
-                            placeId={reviews[i].placeId}
-                            placeName={reviews[i].placeName}
-                            postID={reviews[i].postID}
-                            arrivalDate={reviews[i].arrivalDate}
-                            createTime={reviews[i].createTime}
-                            review={reviews[i].review}
-                            rate={reviews[i].rate}
-                            title={reviews[i].title}
-                            upvoteNum={reviews[i].upvoteNum}
-                            isVoted={reviews[i].isVoted}
-                            SessionRK={SessionRK}
-                            SessionAD={SessionAD}
-                        />
-                    ))
+                    IsLoadingReview ? <LoadingIcon /> :
+                        Array.from({ length: reviews.length }, (_, i) => (
+                            <ReviewShort
+                                key={i}
+                                navigation={navigation}
+                                // props
+                                author={reviews[i].author}
+                                placeId={reviews[i].placeId}
+                                placeName={reviews[i].placeName}
+                                postId={reviews[i].postID}
+                                arrivalDate={reviews[i].arrivalDate}
+                                createTime={reviews[i].createTime}
+                                review={reviews[i].review}
+                                rate={reviews[i].rate}
+                                title={reviews[i].title}
+                                upvoteNum={reviews[i].upvoteNum}
+                                isVoted={reviews[i].isVoted}
+                                SessionRK={SessionRK}
+                                SessionAD={SessionAD}
+                            />
+                        ))
                 }
             </View>
         )

@@ -15,7 +15,7 @@ const getCommentsOfReviewPost = async (postID) => {
   try {
     const comments = await contract_4R.methods.getAllCommentOfReviewPost(postID).call()
     const promises = comments.map(async (ele) => {
-      ele.userInfor = (await axios.post(`${GLOBAL.BASE_URL}/api/user/getCurrent`, {address: ele.author })).data.user
+      ele.userInfor = (await axios.post(`${GLOBAL.BASE_URL}/api/user/getCurrent`, { address: ele.author })).data.user
       ele.REP = Number(await contract_4R.methods.touristREP(ele.author).call())
       ele.VP = Number(await contract_4R.methods.touristVP(ele.author).call())
       ele.upvoteNum = Number(ele.upvoteNum)
@@ -34,7 +34,7 @@ const test = async () => {
   const address1 = "0x1a620c351c07763f430897AeaA2883E37cA0aaCD"
   const address2 = "0x9E0E58F9052aDc53986eA9ca7cf8389b0EdE364f"
   const postID = "0x93ff9780601a717502fe88a3f2de9dfc95c179af1d02e48d382a19d60afdfde8"
-   console.log("getCommentsOfReviewPost", await getCommentsOfReviewPost(postID))
+  console.log("getCommentsOfReviewPost", await getCommentsOfReviewPost(postID))
 }
 
 test()

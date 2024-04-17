@@ -15,7 +15,7 @@ const ReviewShort = (props) => {
     const {
         navigation,
         author,
-        postID,
+        postId,
         placeId,
         placeName,
         arrivalDate,
@@ -40,7 +40,7 @@ const ReviewShort = (props) => {
             {
                 navigation: navigation,
                 author: author,
-                postID: postID,
+                postId: postId,
                 placeId: placeId,
                 placeName: placeName,
                 arrivalDate: arrivalDate,
@@ -58,8 +58,8 @@ const ReviewShort = (props) => {
         console.log('upvoteOnBlockChain');
         console.log('SessionRK:', SessionRK);
         console.log('SessionAD:', SessionAD);
-        console.log('postID:', postID);
-        const response = await web3.autoUpvote(SessionRK, SessionAD, postID)
+        console.log('postId:', postId);
+        const response = await web3.autoUpvote(SessionRK, SessionAD, postId)
         console.log('response:', response)
     }
 

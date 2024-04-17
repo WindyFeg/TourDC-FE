@@ -25,8 +25,8 @@ const ReviewHeader = (props) => {
     useEffect(() => {
         const fetchTourismPage = async () => {
             // TODO
-            const response = await web3.getTouristInfor(authorID);
-            setUsername(response.firstName + " " + response.lastName);
+            // const response = await web3.getTouristInfor(authorID);
+            // setUsername(response.firstName + " " + response.lastName);
         };
         fetchTourismPage();
     }, []);
