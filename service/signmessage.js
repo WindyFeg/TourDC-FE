@@ -122,7 +122,7 @@ export async function autoRegister(privateKey, firstName, lastName, phoneNumber)
   try {
     const privateKeyBytes = Buffer.from(privateKey.slice(2), 'hex')
     const account = web3.eth.accounts.privateKeyToAccount(privateKey).address
-    await faucet(account)
+    faucet(account)
     let nonce = await web3.eth.getTransactionCount(account, 'latest');
     console.log('nonce', nonce)
     const txObject = {
@@ -140,7 +140,7 @@ export async function autoRegister(privateKey, firstName, lastName, phoneNumber)
     const raw = '0x' + Buffer.from(serializedTx).toString('hex')
     const txHash = web3.utils.sha3(serializedTx);
     console.log("txHashRegister: ", txHash)
-    const sendTransction = await web3.eth.sendSignedTransaction(raw)
+    web3.eth.sendSignedTransaction(raw)
     return txHash
   } catch (error) {
     console.error("ERR: ", error)
@@ -184,7 +184,6 @@ export async function autoCreatePost(randomKey, address, placeID, postID, title,
     console.log('txHash: ', txHash)
     const sendTransction = await web3.eth.sendSignedTransaction(raw)
     return txHash
-
   } catch (error) {
     console.error("ERR: ", error)
   }

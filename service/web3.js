@@ -168,6 +168,35 @@ export const getCommentsOfReviewPost = async (postID) => {
   }
 }
 
+export const getListOfReward = async(address) => {
+  try {
+    const rewardList = await contract_4R.methods.seeRewardLists().call({from: address}) 
+    const promises = rewardList.map(async (ele) => {
+      let temp = {}
+      const touristRewardOnPostID = Number(await contract_4R.methods.touristRewardOnPostID(address, ele).call()) / 10**18;
+      if (touristRewardOnPostID != 0) {
+        temp.rewardPoint = touristRewardOnPostID
+        temp.postID = ele;
+        const reviewPost = await contract_4R.methods.reviewByID(ele).call()
+        const author = reviewPost.author
+        temp.createTime = Number(reviewPost.createTime)
+        temp.author = reviewPost.author
+        if (address == author) {
+          temp.reason = 1;
+        } else {
+          temp.reason = 0;
+        }
+        return temp;
+      }
+      return null
+    })
+    const result = await Promise.all(promises)
+    return result
+  } catch (error) {
+    throw error
+  }
+}
+
 // const test = async () => {
 //   const owner = "0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74";
 //   const address1 = "0x1a620c351c07763f430897AeaA2883E37cA0aaCD"
