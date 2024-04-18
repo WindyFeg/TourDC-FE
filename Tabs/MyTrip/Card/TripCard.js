@@ -20,10 +20,13 @@ const TripCard = (props) => {
     const [imageName, setImageName] = useState('');
     const [tripName, setTripName] = useState('');
 
-    useEffect(async () => {
-        let response = await axios.get(`${GLOBAL.BASE_URL}/api/destination/getDestinationById/${placeId}`)
-        setImageName(response.data.thumbnail);
-        setTripName(response.data.name);
+    useEffect(() => {
+        const fetchTripImage = async () => {
+            let response = await axios.get(`${GLOBAL.BASE_URL}/api/destination/getDestinationById/${placeId}`)
+            setImageName(response.data.thumbnail);
+            setTripName(response.data.name);
+        }
+        fetchTripImage();
     }, []);
 
     const ReviewPost = () => {

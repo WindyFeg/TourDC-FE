@@ -10,7 +10,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import ExchangeVoucher from './ExchangeVoucher.js';
 import { SearchBarHeader } from '../Explore/MainExplore.js';
 import { Svg } from 'react-native-svg';
-import MyVoucher from '../MyTrip/Tabs/MyVoucher.js';
 import { useWeb3Modal } from '@web3modal/wagmi-react-native'
 import { ScrollView } from 'react-native-gesture-handler';
 import axios from 'axios';
@@ -31,7 +30,7 @@ const MainMyAccount = ({ navigation }) => {
     const { token, setToken } = useState('')
     const { address, isConnecting, isDisconnected } = useAccount()
     const { disconnect } = useDisconnect()
-    const [userAddress, setUserAddress] = useState('');
+    const [SessionAD, setSessionAD] = useState('');
     const [userData, setUserData] = useState({});
     const [isLoading, setIsLoading] = useState(true);
 
@@ -39,7 +38,7 @@ const MainMyAccount = ({ navigation }) => {
     useEffect(() => {
         const loadData = async () => {
             try {
-                setUserAddress(await AsyncStorage.getItem('SessionAD'));
+                setSessionAD(await AsyncStorage.getItem('SessionAD'));
             } catch (error) {
                 console.log(error);
             }
@@ -54,15 +53,16 @@ const MainMyAccount = ({ navigation }) => {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                // setUserData(await web3.getTouristInfor(userAddress));
+                let response = await axios.post(`${GLOBAL.BASE_URL}/api/user/getCurrent`, { address: SessionAD });
+                setUserData(response.data.user);
             }
             catch (error) {
                 console.log(error);
             }
         };
 
-        if (userAddress != '') fetchUser();
-    }, [userAddress]);
+        if (SessionAD != '') fetchUser();
+    }, [SessionAD]);
 
 
     //! Components
@@ -73,7 +73,7 @@ const MainMyAccount = ({ navigation }) => {
                 <View style={styles.UserHeader_Inline}>
                     <Image
                         style={styles.UserHeader_Avatar}
-                        source={{ uri: `${GLOBAL.BASE_URL}/api/user/getAvatar/${userAddress}` }}
+                        source={{ uri: `${GLOBAL.BASE_URL}/api/user/getAvatar/${SessionAD}` }}
                     />
 
                     <View
@@ -84,9 +84,9 @@ const MainMyAccount = ({ navigation }) => {
                         <Text style={styles.UserHeader_Verify}>
                             Verify
                         </Text>
-                        <Text style={styles.UserHeader_NumberPost}>
+                        {/* <Text style={styles.UserHeader_NumberPost}>
                             Voting Power: {Number(userData.VP)}
-                        </Text>
+                        </Text> */}
                     </View>
 
                     <View>
@@ -260,7 +260,7 @@ const MainMyAccount = ({ navigation }) => {
                 onPress={() => Logout()}
                 style={styles.MyAccount_BtnLogout}
             >
-                <Text style={styles.MyAccount_LogoutButtonText}>Logout</Text>
+                <Text style={styles.MyAccount_LogoutButtonText}>LOGOUT</Text>
             </TouchableOpacity>
 
             <TouchableOpacity

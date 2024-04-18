@@ -596,49 +596,40 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        paddingHorizontal: 20,
+        paddingHorizontal: 10,
     },
 
     MyTrip_headerText: {
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'center',
-        alignItems: 'center',
-        paddingTop: 30,
+        alignItems: 'flex-start',
+        paddingTop: 20,
+        paddingLeft: 20,
         fontFamily: 'InterR',
     },
 
     MyTrip_headerToken: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 10,
         backgroundColor: '#192733',
         borderRadius: 20,
         width: 80,
         height: 30,
     },
     MyTrip_headerBackground: {
-
-        // Drop Shadow
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 4,
-        },
-        elevation: 2,
         shadowOpacity: 0.5,
-        marginBottom: 20,
-
-        borderBottomEndRadius: 20,
-        borderBottomStartRadius: 20,
+        marginBottom: 10,
+        borderRadius: 10,
         width: '100%',
     },
 
     MyTrip_headerIconContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
+        // flexDirection: 'row',
+        alignItems: 'flex-start',
         justifyContent: 'center',
-        opacity: 0.8,
         margin: 10,
     },
 
@@ -659,9 +650,9 @@ const styles = StyleSheet.create({
     },
 
     MyTrip_headerIcon: {
-        marginHorizontal: 20,
-        opacity: 0.7,
-        flexDirection: 'column',
+        // marginHorizontal: 20,
+        opacity: 0.8,
+        flexDirection: 'row',
         alignItems: 'center',
     },
 
@@ -681,7 +672,29 @@ const styles = StyleSheet.create({
     MyTrip_headerStatText: {
         fontFamily: 'InterB',
         fontSize: 12,
-        opacity: 0.7,
+        // opacity: 0.7,
+        color: '#828282',
+    },
+
+    MyTrip_headerStatBig: {
+        alignItems: 'center',
+        justifyContent: 'center',
+
+    },
+
+    MyTrip_headerStatLinkText: {
+        fontFamily: 'InterR',
+        fontSize: 12,
+        opacity: 0.9,
+        color: '#828282',
+        textDecorationLine: 'underline',
+    },
+
+    MyTrip_headerStatTextBig: {
+        fontFamily: 'InterB',
+        fontSize: 10,
+        opacity: 0.8,
+        color: '#4e4e4e',
     },
 
     MyTrip_Navigator:
@@ -1156,7 +1169,7 @@ const styles = StyleSheet.create({
         width: 10,
         height: 10,
         opacity: 0.7,
-        margin: 10,
+        margin: 5,
     },
 
 
@@ -1211,7 +1224,7 @@ const styles = StyleSheet.create({
     },
 
     MyAccount_LogoutButtonText: {
-        fontFamily: 'InterR',
+        fontFamily: 'InterB',
         fontSize: 14,
         color: 'white',
     },
@@ -1288,6 +1301,32 @@ const styles = StyleSheet.create({
         borderRadius: 5,
     },
 
+    typeOfAccount: {
+        fontFamily: 'InterB',
+        fontSize: 9,
+        backgroundColor: "#39A7FF",
+        color: 'white',
+        padding: 5,
+        borderRadius: 5,
+    }
+
+    , Cpvp_container: {
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+        backgroundColor: '#FFF',
+        marginVertical: 10,
+        padding: 5,
+        borderBottomRightRadius: 10,
+        borderBottomLeftRadius: 10,
+        width: "100%",
+    },
+
+    MyTrip_headerTokenText: {
+        color: '#FFF',
+        fontSize: 12,
+        fontFamily: 'InterB',
+    },
 });
 
 export default styles;

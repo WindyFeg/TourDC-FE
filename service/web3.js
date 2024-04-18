@@ -141,6 +141,7 @@ export const getTouristVP = async (address) => {
 export const getTouristREP = async (address) => {
   try {
     const userREP = await contract_4R.methods.touristREP(address).call()
+    console.log("REP: ", Number(userREP))
     return Number(userREP);
   } catch (error) {
     console.error("Error in getTouristREP:", error);

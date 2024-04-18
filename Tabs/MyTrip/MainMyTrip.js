@@ -7,30 +7,59 @@ import SvgComponent from '../../assets/SvgComponent';
 import styles from '../../styles.js';
 import DCToken from './DCToken.js';
 import Trips from './Tabs/Trips.js';
-import MyVoucher from './Tabs/MyVoucher.js';
+import Vouchers from './Tabs/Vouchers.js';
 import Posts from './Tabs/Posts.js';
-import Collections from './Tabs/Collections.js';
+import Rewards from './Tabs/Rewards.js';
 import * as web3 from '../../service/web3.js';
 import { useAccount } from 'wagmi';
 import axios from 'axios';
-const GLOBAL = require('../Custom/Globals.js');
+import GLOBAL from '../Custom/Globals.js';
+import * as Clipboard from 'expo-clipboard';
 
 const Tab = createMaterialTopTabNavigator();
 /* 
 */
 const MainMyTrip = () => {
     // const { address, isConnecting, isDisconnected } = useAccount()
-    const [userAddress, setUserAddress] = useState('');
+    const [SessionAD, setSessionAD] = useState('');
+    const [SessionRK, setSessionRK] = useState('');
     const [userData, setUserData] = useState({});
+    const [userREP, setUserREP] = useState(0);
+    const [userVP, setUserVP] = useState(0);
+    const [numberOfToken, setNumberOfToken] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
+    const [typeOfAccount, setTypeOfAccount] = useState('Verified');
+
+    //! Debugging 
+    console.log("---My Trip Page---");
+    console.log("SessionAD: " + SessionAD);
+    console.log("userData: " + userData);
+    console.log("userREP: " + userREP);
+    console.log("userVP: " + userVP);
+    console.log("numberOfToken: " + numberOfToken);
+
+    //! Copy Share 3 to clipboard
+    const copyToClipboard = async () => {
+        if (SessionAD == null) {
+            return;
+        }
+        await Clipboard.setStringAsync(SessionAD);
+    };
 
     //! Load user address
     useEffect(() => {
         const loadData = async () => {
             try {
-                setUserAddress(
-                    await
-                        AsyncStorage.getItem('SessionAD'));
+                setSessionAD(await AsyncStorage.getItem('SessionAD'));
+                let randomKey = await AsyncStorage.getItem('SessionRK');
+                if (randomKey != null) {
+                    setSessionRK(randomKey)
+                    setTypeOfAccount('TourDC Account');
+                }
+                else {
+                    setTypeOfAccount('Wallet Account');
+                }
+                ;
             } catch (error) {
                 console.log(error);
             }
@@ -45,15 +74,49 @@ const MainMyTrip = () => {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                // setUserData(await web3.getTouristInfor(userAddress));
+                let response = await axios.post(`${GLOBAL.BASE_URL}/api/user/getCurrent`, { address: SessionAD });
+                web3.getTouristREP(SessionAD).then((rep) => {
+                    setUserREP(rep);
+                });
+                web3.getTouristVP(SessionAD).then((vp) => {
+                    setUserVP(vp);
+                });
+                web3.getBalanceOf(SessionAD).then((token) => {
+                    setNumberOfToken(Number(token))
+                });
+                setUserData(response.data.user);
             }
             catch (error) {
                 console.log(error);
             }
         };
 
-        if (userAddress != '') fetchUser();
-    }, [userAddress]);
+        if (SessionAD != '') fetchUser();
+    }, [SessionAD]);
+
+    const Cpvp = () => {
+        return (
+            <View style={styles.Cpvp_container}>
+                <View style={styles.MyTrip_headerStatBig}>
+                    <Text style={styles.MyTrip_headerStatTextBig}>
+                        {userREP} Ⓡ
+                    </Text>
+                    <Text style={styles.MyTrip_headerStatTextBig}>
+                        Reputation
+                    </Text>
+                </View>
+                <Separator />
+                <View style={styles.MyTrip_headerStatBig}>
+                    <Text style={styles.MyTrip_headerStatTextBig}>
+                        {userVP} Ⓥ
+                    </Text>
+                    <Text style={styles.MyTrip_headerStatTextBig}>
+                        Voting power
+                    </Text>
+                </View>
+            </View>
+        )
+    }
 
     const HeaderMyTrip = (props) => (
         <View>
@@ -67,14 +130,11 @@ const MainMyTrip = () => {
                     <View style={styles.MyTrip_backgroundUserAvatar}>
                         <Image
                             style={styles.MyTrip_userAvatar}
-                            source={{ uri: `${GLOBAL.BASE_URL}/api/user/getAvatar/${userAddress}` }} />
+                            source={{ uri: `${GLOBAL.BASE_URL}/api/user/getAvatar/${SessionAD}` }} />
                     </View>
 
                     <View style={styles.MyTrip_headerText}>
                         {/* Username section */}
-                        <Text style={{ fontFamily: 'InterL', fontSize: 16 }}>
-                            Hello, Traveler
-                        </Text>
                         <Text style={{ fontFamily: 'InterB', fontSize: 18 }}>
                             {props.username}
                         </Text>
@@ -82,27 +142,39 @@ const MainMyTrip = () => {
                         {/* Icon Sections */}
                         <View style={styles.MyTrip_headerIconContainer}>
                             <View style={styles.MyTrip_headerIcon}>
-                                <SvgComponent name="UserVerification" style={styles.MyTrip_headerIcon} />
-                                <Text style={{ fontFamily: 'InterB', fontSize: 9 }}>Verified</Text>
+                                {/* <SvgComponent name="UserVerification" style={styles.MyTrip_headerIcon} /> */}
+                                <Text style={styles.typeOfAccount}>{typeOfAccount}</Text>
                             </View>
 
                             <View style={styles.MyTrip_headerIcon}>
-                                <SvgComponent name="Reputation" />
-                                <Text style={{ fontFamily: 'InterB', fontSize: 9 }}>REP: {props.REP}</Text>
+                                {/* <SvgComponent name="Reputation" /> */}
+                                <TouchableOpacity onPress={copyToClipboard}>
+                                    <Text style={styles.MyTrip_headerStatLinkText}>
+                                        {SessionAD.length > 7 ? `${SessionAD.slice(0, 5)}...${SessionAD.slice(-5)}` : SessionAD}
+                                    </Text>
+                                </TouchableOpacity>
+                                <Image
+                                    source={require('../../assets/icons/clipboard.png')}
+                                    style={styles.tourismPage_clipboardIcon}
+                                />
                             </View>
                         </View>
+
                     </View>
 
                     {/* Token Section */}
-                    <DCToken />
+                    <DCToken
+                        numberOfToken={numberOfToken}
+                    />
 
                 </View>
                 {/* Stats Section */}
-                <UserStats
+                <Cpvp />
+                {/* <UserStats
                     Posts={props.Posts}
-                    Trips={props.Trips}
+                    Reputation={userREP}
                     Upvote={props.Upvote}
-                />
+                /> */}
 
 
             </ImageBackground>
@@ -116,15 +188,6 @@ const MainMyTrip = () => {
                     {props.Posts}
                 </Text>
                 <Text style={styles.MyTrip_headerStatText}>Posts</Text>
-            </View>
-            <Separator />
-            <View style={styles.MyTrip_headerStat}>
-                <Text style={styles.MyTrip_headerStatText}>
-                    {props.Trips}
-                </Text>
-                <Text style={styles.MyTrip_headerStatText}>
-                    Trips
-                </Text>
             </View>
             <Separator />
             <View style={styles.MyTrip_headerStat}>
@@ -147,9 +210,9 @@ const MainMyTrip = () => {
         <View style={{ flex: 1, padding: 10 }}>
             <HeaderMyTrip
                 username={userData.firstName + " " + userData.lastName}
-                REP={userData.REP}
+                REP={userREP}
                 Posts="10"
-                Trips="5"
+                Reputation="6"
                 Upvote="20"
             />
 
@@ -158,8 +221,8 @@ const MainMyTrip = () => {
             >
                 <Tab.Screen name="Posts" component={Posts} />
                 <Tab.Screen name="Trips" component={Trips} />
-                {/* <Tab.Screen name="Collections" component={Collections} /> */}
-                <Tab.Screen name="My Voucher" component={MyVoucher} />
+                <Tab.Screen name="Rewards" component={Rewards} />
+                <Tab.Screen name="Vouchers" component={Vouchers} />
             </Tab.Navigator>
         </View>
     );
