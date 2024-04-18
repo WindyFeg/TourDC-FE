@@ -6,7 +6,7 @@ import BackNavigationButton from '../../../Custom/BackNavigationButton';
 import * as web3 from '../../../../service/web3.js';
 import CommentSection from '../Comment/CommentSection.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import GLOBAL from '../../../Custom/Globals';
 /* 
 */
 const ReviewPost = ({ route, navigation }) => {
@@ -19,7 +19,8 @@ const ReviewPost = ({ route, navigation }) => {
         review,
         rate,
         title,
-        upvoteNum } = route.params;
+        upvoteNum,
+        listImgs } = route.params;
 
     const [SessionRK, setSessionRK] = useState('');
     const [SessionAD, setSessionAD] = useState('');
@@ -77,22 +78,22 @@ const ReviewPost = ({ route, navigation }) => {
                         style={styles.readMoreBtn}>Images</Text>
                     <View style={styles.tourismPage_contentImages}>
                         <Image
-                            source={require('../../../../assets/destinations/dc_dalat.jpg')}
+                            source={{ uri: `${GLOBAL.BASE_URL}/api/post/getImg/${listImgs[0]}` }}
                             style={styles.tourismPage_contentImage}
                         />
                         <Image
-                            source={require('../../../../assets/destinations/dc_dalat.jpg')}
+                            source={{ uri: `${GLOBAL.BASE_URL}/api/post/getImg/${listImgs[1]}` }}
                             style={styles.tourismPage_contentImage}
                         />
                     </View>
 
                     <View style={styles.tourismPage_contentImages}>
                         <Image
-                            source={require('../../../../assets/destinations/dc_dalat.jpg')}
+                            source={{ uri: `${GLOBAL.BASE_URL}/api/post/getImg/${listImgs[2]}` }}
                             style={styles.tourismPage_contentImage}
                         />
                         <Image
-                            source={require('../../../../assets/destinations/dc_dalat.jpg')}
+                            source={{ uri: `${GLOBAL.BASE_URL}/api/post/getImg/${listImgs[3]}` }}
                             style={styles.tourismPage_contentImage}
                         />
                     </View>
@@ -117,6 +118,7 @@ const ReviewPost = ({ route, navigation }) => {
                     ticketVerified={true}
                     blockchainVerified={true}
                     reputationVerified={true}
+                    thumbnail={listImgs[0]}
                 />
 
                 <ReviewContent />

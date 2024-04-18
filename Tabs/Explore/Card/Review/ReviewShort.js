@@ -7,6 +7,8 @@ import ReviewHeader from './ReviewHeader';
 import SvgComponent from '../../../../assets/SvgComponent';
 import * as web3 from '../../../../service/signmessage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import GLOBAL from '../../../Custom/Globals';
+import axios from 'axios';
 
 /* 
 */
@@ -30,6 +32,18 @@ const ReviewShort = (props) => {
     } = props;
 
     const [isHeartSelected, setHeartSelected] = useState(isVoted);
+    const [listImgs, setListImgs] = useState([]);
+
+    // ! Fetch review images
+    useEffect(() => {
+        const fetchReviewImages = async () => {
+            console.log('postId:', postId);
+            console.log(`${GLOBAL.BASE_URL}/api/post/getImgs/${postId}`);
+            const response = await axios.get(`${GLOBAL.BASE_URL}/api/post/getImgs/${postId}`);
+            setListImgs(response.data.data);
+        };
+        fetchReviewImages();
+    }, []);
 
     // ! Components
     /*
@@ -48,7 +62,8 @@ const ReviewShort = (props) => {
                 review: review,
                 rate: rate,
                 title: title,
-                upvoteNum: upvoteNum
+                upvoteNum: upvoteNum,
+                listImgs: listImgs,
             }
         );
     }
@@ -109,6 +124,7 @@ const ReviewShort = (props) => {
                 ticketVerified={true}
                 blockchainVerified={true}
                 reputationVerified={true}
+                thumbnail={listImgs[0]}
             />
 
             {/* Content */}

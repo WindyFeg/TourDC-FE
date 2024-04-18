@@ -36,8 +36,8 @@ const CreateReview: React.FC<Props> = ({ route, navigation }) => {
         checkInTime,
         placeThumbnail,
     } = route.params;
-    const [file, setFile] = useState<string | null>(null);
-    const [source, setSource] = useState<string | null>(null);
+    const [file, setFile] = useState('');
+    const [source, setSource] = useState('');
     const [title, onChangeTitle] = useState<string>('This is an title');
     const [reviewText, onChangeReviewText] = useState<string>('This is an review');
     const [rating, setRating] = useState<number>(0);
@@ -75,6 +75,60 @@ const CreateReview: React.FC<Props> = ({ route, navigation }) => {
         await Clipboard.setStringAsync(txHash);
     };
 
+    function getImageType(filename) {
+        const extension = filename.split('.').pop().toLowerCase();
+        switch (extension) {
+            case 'png': return 'image/png';
+            case 'jpg': return 'image/jpeg';
+            case 'jpeg': return 'image/jpeg';
+            case 'gif': return 'image/gif';
+            case 'bmp': return 'image/bmp';
+            case 'pdf': return 'application/pdf';
+
+            default: return 'application/octet-stream';
+        }
+    }
+
+    const uploadImageToServer = async () => {
+        if (file === null) {
+            return;
+        }
+
+        console.log(source);
+        const sourceObj = typeof source === 'string' ? { uri: source } : source;
+        const filename = sourceObj.uri.split('/').pop();
+        const imageType = getImageType(filename);
+        console.log(filename);
+        console.log(imageType);
+
+        const createReviewForm = new FormData();
+        createReviewForm.append('postID', postId);
+        createReviewForm.append('file', {
+            uri: sourceObj.uri,
+            type: imageType,
+            name: filename,
+        });
+
+
+        try {
+            const response = await axios.post(`${GLOBAL.BASE_URL}/api/post/uploadImgs`,
+                createReviewForm,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    },
+                    transformRequest: (data, headers) => {
+                        return data;
+                    },
+                },
+            );
+            console.log(response.data);
+        }
+        catch (error) {
+            console.error(error);
+        }
+    }
+
     async function createPostLogic() {
         if (SessionRK === '') {
             console.log('Wallet');
@@ -83,6 +137,7 @@ const CreateReview: React.FC<Props> = ({ route, navigation }) => {
         else {
             console.log('TourDC');
             setModalVisible(true);
+            uploadImageToServer();
             createPostOnBlockChain();
         }
     }
@@ -261,33 +316,6 @@ const CreateReview: React.FC<Props> = ({ route, navigation }) => {
             </Modal>
         );
     }
-
-
-    const pickImage = async () => {
-        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-
-        if (status !== "granted") {
-            Alert.alert(
-                "Permission Denied",
-                `Sorry, we need camera roll permission to upload images.`
-            );
-        } else {
-            let result = await ImagePicker.launchImageLibraryAsync({
-                mediaTypes: ImagePicker.MediaTypeOptions.All,
-                allowsEditing: true,
-                aspect: [4, 3],
-                quality: 1,
-            });
-
-            console.log(result);
-
-            if (!result.canceled) {
-                setFile(result.assets[0].uri);
-                onChangeTitle(result.assets[0].uri);
-                setErrorText(null);
-            }
-        }
-    };
 
     return (
         <View style={{ backgroundColor: '#fff', height: "100%" }}>
