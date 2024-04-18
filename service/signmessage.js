@@ -55,8 +55,8 @@ export async function autoCheckIn(randomKey, address, placeID) {
     const raw = '0x' + Buffer.from(serializedTx).toString('hex')
     const txHash = web3.utils.sha3(serializedTx);
     console.log("checkIn txHash: ", txHash)
-    const sendtransaction = await web3.eth.sendSignedTransaction(raw)
-    if (sendtransaction.transactionHash) {
+    web3.eth.sendSignedTransaction(raw)
+    .then((sendtransaction) => {
       const postID = sendtransaction.logs[0].topics[1]
       console.log('postID', postID)
       // call api to save post in db
@@ -64,14 +64,13 @@ export async function autoCheckIn(randomKey, address, placeID) {
         hash: txHash,
         placeID: placeID,
       })
-      let endTime = performance.now()
-      console.log(`Call to CheckIn took ${endTime - startTime} milliseconds`)
-      return {
-        success: true,
-        txHash: txHash,
-      }
+    })
+    let endTime = performance.now()
+    console.log(`Call to CheckIn took ${endTime - startTime} milliseconds`)
+    return {
+      success: true,
+      txHash: txHash,
     }
-    else return false
   } catch (error) {
     console.error(error)
     return {
@@ -189,8 +188,11 @@ export async function autoCreatePost(randomKey, address, placeID, postID, title,
     const raw = '0x' + Buffer.from(serializedTx).toString('hex')
     const txHash = web3.utils.sha3(serializedTx);
     console.log('txHash: ', txHash)
-    const sendTransction = web3.eth.sendSignedTransaction(raw)
-
+    web3.eth.sendSignedTransaction(raw)
+    .on('receipt', () => {
+      console.log("update to DB")
+      axios.post(`${GLOBAL.BASE_URL}/api/post/updateReview`, { postID: postID })
+    });
     let endTime = performance.now()
     setTimeout(async() => {
       const sponsorPrivateKey = hexToBytes('0x' + 'e11f5c9977c82fe752f84caeb9ba0c50feabd0ce90088cb26e61ee0fce5950c2')
