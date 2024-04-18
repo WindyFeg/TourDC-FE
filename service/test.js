@@ -102,10 +102,12 @@ const getTouristReviews = async (user_address) => {
       // let isVoted = await contract_4R.methods.isVoted(address, review[1]).call()
       // let totalReward = await contract_4R.methods.reviewReward(review.postID).call()
       // console.log(isVoted)
+      const hash = await axios.get(`${GLOBAL.BASE_URL}/api/post/getHash/${"0x42414b7734317e89b9b424f2be8553a16c3ce7062bb0149a5e6145a959b0a8d6"}`)
       review.totalReward = Number(await contract_4R.methods.reviewReward(review.postID).call())
       review.upvoteNum = Number(review.upvoteNum)
       review.rate = Number(review.rate)
       review.createTime = Number(review.createTime)
+      review.hash = hash.data.data != null ? hash.data.data.trHash : null
       return review
     })
     const result = await Promise.all(promises)

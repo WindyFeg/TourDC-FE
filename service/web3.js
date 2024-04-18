@@ -28,10 +28,12 @@ export const getTouristReviews = async (user_address) => {
       // let isVoted = await contract_4R.methods.isVoted(address, review[1]).call()
       // let totalReward = await contract_4R.methods.reviewReward(review.postID).call()
       // console.log(isVoted)
+      const hash = await axios.get(`${GLOBAL.BASE_URL}/api/post/getHash/${review.postID}`)
       review.totalReward = Number(await contract_4R.methods.reviewReward(review.postID).call())
       review.upvoteNum = Number(review.upvoteNum)
       review.rate = Number(review.rate)
       review.createTime = Number(review.createTime)
+      review.hash = hash.data.data != null ? hash.data.data.trHash : null
       return review
     })
     const result = await Promise.all(promises)
@@ -48,11 +50,13 @@ export const getDestinationReviews = async (address, place_id) => {
     const destinationReviews = await contract_4R.methods.getAllReviewsOfDestinations(place_id).call()
 
     const result = destinationReviews.map(async (review) => {
+      const hash = await axios.get(`${GLOBAL.BASE_URL}/api/post/getHash/${review.postID}`)
       review.totalReward = Number(await contract_4R.methods.reviewReward(review.postID).call())
       review.isVoted = Number(await contract_4R.methods.isVoted(address, review[1]).call())
       review.upvoteNum = Number(review.upvoteNum)
       review.rate = Number(review.rate)
       review.createTime = Number(review.createTime)
+      review.hash = hash.data.data != null ? hash.data.data.trHash : null
       return review
     })
 
@@ -63,7 +67,7 @@ export const getDestinationReviews = async (address, place_id) => {
     console.error("Error in getDestinationReviews:", error);
     throw error;
   }
-
+    
 }
 
 export const getDestinationRates = async (place_id) => {
