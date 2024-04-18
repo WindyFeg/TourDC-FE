@@ -4,7 +4,8 @@ import { Button } from 'react-native-web';
 import styles from '../../../../styles.js';
 import SvgComponent from '../../../../assets/SvgComponent.js';
 import * as web3 from '../../../../service/web3.js';
-
+import GLOBAL from '../../../Custom/Globals.js';
+import axios from 'axios';
 /* 
 */
 const ReviewHeader = (props) => {
@@ -17,18 +18,22 @@ const ReviewHeader = (props) => {
         userVerification,
         ticketVerified,
         blockchainVerified,
-        reputationVerified } = props;
+        reputationVerified,
+        thumbnail
+    } = props;
     const [username, setUsername] = useState("username");
+    const [userData, setUserData] = useState({});
 
 
-    //! Smart Contract
+    //! Fetch user data of the post
     useEffect(() => {
-        const fetchTourismPage = async () => {
-            // TODO
-            // const response = await web3.getTouristInfor(authorID);
-            // setUsername(response.firstName + " " + response.lastName);
+        const fetchUserPostInfo = async () => {
+            console.log("Fetching user post info of: " + authorID);
+            let response = await axios.post(`${GLOBAL.BASE_URL}/api/user/getCurrent`, { address: authorID });
+            setUserData(response.data.user);
+            setUsername(response.data.user.firstName + " " + response.data.user.lastName);
         };
-        fetchTourismPage();
+        fetchUserPostInfo();
     }, []);
 
 
@@ -36,7 +41,7 @@ const ReviewHeader = (props) => {
         return (
             // Title image
             <ImageBackground
-                source={require('../../../../assets/destinations/dc_dalat.jpg')}
+                source={{ uri: `${GLOBAL.BASE_URL}/api/post/getImg/${thumbnail}` }}
                 style={styles.ReviewPostHeader_image}
                 imageStyle={styles.ReviewPostHeader_image}
             >
@@ -50,7 +55,7 @@ const ReviewHeader = (props) => {
                     <View style={styles.ReviewPostHeader_backgroundUserAvatar}>
                         <Image
                             style={styles.ReviewPostHeader_userAvatar}
-                            source={require('../../../../assets/destinations/dc_dalat.jpg')}
+                            source={{ uri: `${GLOBAL.BASE_URL}/api/user/getAvatar/${authorID}` }}
                         />
                     </View>
                     <View style={{ flexDirection: 'column', alignItems: 'center' }}>
