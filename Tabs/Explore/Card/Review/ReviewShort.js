@@ -29,6 +29,8 @@ const ReviewShort = (props) => {
         isVoted,
         SessionRK,
         SessionAD,
+        totalReward,
+        txHash
     } = props;
 
     const [isHeartSelected, setHeartSelected] = useState(isVoted);
@@ -64,6 +66,8 @@ const ReviewShort = (props) => {
                 title: title,
                 upvoteNum: upvoteNum,
                 listImgs: listImgs,
+                totalReward: totalReward,
+                txHash: txHash
             }
         );
     }
@@ -91,6 +95,22 @@ const ReviewShort = (props) => {
         </View>
     }
 
+    function convertDateTimeString(dateTimeString) {
+        // Create a Date object from the ISO 8601 formatted string
+        const dateObject = new Date(dateTimeString);
+        // Check if the Date object is valid
+        if (isNaN(dateObject.getTime())) {
+            return null; // Return null for invalid strings
+        }
+        // Format the time (hours:minutes)
+        const time = dateObject.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+        // Format the date (day/month/year)
+        const date = dateObject.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
+
+        return `${time}, ${date}`;
+    }
+
     const ReviewPostShortFooter = () => {
         return (
             <View style={styles.ReviewPostFooter}>
@@ -104,8 +124,7 @@ const ReviewShort = (props) => {
                     <Text style={styles.UpvoteButtonText}>{upvoteNum}</Text>
                 </View>
                 <Text style={styles.UpvoteButtonText}>
-                    {/* {new Date(arrivalDate * 1000).toISOString()} */}
-                    {arrivalDate}
+                    {convertDateTimeString(Number(createTime))}
                 </Text>
             </View >
         )
@@ -125,6 +144,8 @@ const ReviewShort = (props) => {
                 blockchainVerified={true}
                 reputationVerified={true}
                 thumbnail={listImgs[0]}
+                totalReward={totalReward}
+                txHash={txHash}
             />
 
             {/* Content */}

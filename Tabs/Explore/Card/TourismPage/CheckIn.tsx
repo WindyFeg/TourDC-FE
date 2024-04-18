@@ -27,7 +27,7 @@ import * as Clipboard from 'expo-clipboard';
 import * as WebBrowser from 'expo-web-browser';
 import {
   autoCheckIn,
-}
+} 
   from '../../../../service/signmessage.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 interface CheckInProps {
@@ -81,7 +81,7 @@ export default function CheckIn(
     if (hash == null) {
       return;
     }
-    const url = `https://blockchain.agridential.vn/vibi/tx/${hash}`
+    const url = `https://explorer.vbchain.vn/vibi/tx/${hash}`
     await WebBrowser.openBrowserAsync(url);
   }
 

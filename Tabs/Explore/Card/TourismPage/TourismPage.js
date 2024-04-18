@@ -283,6 +283,8 @@ const TourismPage = ({ route, navigation }) => {
                                 isVoted={reviews[i].isVoted}
                                 SessionRK={SessionRK}
                                 SessionAD={SessionAD}
+                                totalReward={reviews[i].totalReward}
+                                txHash={reviews[i].hash}
                             />
                         ))
                 }

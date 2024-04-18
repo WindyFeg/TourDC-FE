@@ -1,11 +1,13 @@
 import { React, useState, useEffect } from 'react';
-import { View, Text, Image, ImageBackground } from 'react-native';
+import { View, Text, Image, ImageBackground, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-web';
 import styles from '../../../../styles.js';
 import SvgComponent from '../../../../assets/SvgComponent.js';
 import * as web3 from '../../../../service/web3.js';
 import GLOBAL from '../../../Custom/Globals.js';
 import axios from 'axios';
+import * as WebBrowser from 'expo-web-browser';
+
 /* 
 */
 const ReviewHeader = (props) => {
@@ -19,11 +21,29 @@ const ReviewHeader = (props) => {
         ticketVerified,
         blockchainVerified,
         reputationVerified,
-        thumbnail
+        thumbnail,
+        totalReward,
+        txHash
     } = props;
     const [username, setUsername] = useState("username");
     const [userData, setUserData] = useState({});
 
+    const ViewTransaction = async (hash) => {
+        console.log("Viewing transaction: " + hash);
+        if (hash == null) {
+            return;
+        }
+        const url = `https://explorer.vbchain.vn/vibi/tx/${hash}`
+        await WebBrowser.openBrowserAsync(url);
+    }
+
+    const ViewProfile = async (address) => {
+        if (address == null) {
+            return;
+        }
+        const url = `https://explorer.vbchain.vn/vibi/account/${address}`
+        await WebBrowser.openBrowserAsync(url);
+    }
 
     //! Fetch user data of the post
     useEffect(() => {
@@ -82,27 +102,47 @@ const ReviewHeader = (props) => {
             <View style={styles.ReviewPostShort_achievement}>
                 <View style={styles.ReviewPost_achievementContainer}>
                     {userVerification && (
-                        <View style={styles.tourismPage_contentHeaderIcons}>
+                        <TouchableOpacity
+                            style={styles.tourismPage_contentHeaderIcons}
+                            onPress={() => ViewProfile(authorID)}
+                        >
                             <SvgComponent name='UserVerification' />
                             <Text style={styles.tourismPage_contentHeaderTextTitle}>User Verified</Text>
-                        </View>
+                        </TouchableOpacity>
+                    )}
+                    {blockchainVerified && (
+                        <TouchableOpacity
+                            style={styles.tourismPage_contentHeaderIcons}
+                            onPress={() => ViewTransaction(txHash)}
+                        >
+                            <SvgComponent name='Blockchain' />
+                            <Text style={styles.tourismPage_contentHeaderTextTitle}>Blockchain Verified</Text>
+                        </TouchableOpacity>
                     )}
                     {ticketVerified && (
                         <View style={styles.tourismPage_contentHeaderIcons}>
-                            <SvgComponent name='Ticket' />
-                            <Text style={styles.tourismPage_contentHeaderTextTitle}>Ticket Verified</Text>
-                        </View>
-                    )}
-                    {blockchainVerified && (
-                        <View style={styles.tourismPage_contentHeaderIcons}>
-                            <SvgComponent name='Blockchain' />
-                            <Text style={styles.tourismPage_contentHeaderTextTitle}>Blockchain Verified</Text>
+                            <SvgComponent name='TotalReward' />
+                            {
+                                totalReward != 0 ?
+                                    <Text style={styles.tourismPage_contentHeaderTextTitle}>Total Reward
+                                        {'\n'}
+                                        {totalReward}
+                                    </Text>
+                                    :
+                                    <Text style={styles.tourismPage_contentHeaderTextTitle}>
+                                        Waiting for reward
+                                    </Text>
+                            }
                         </View>
                     )}
                     {reputationVerified && (
                         <View style={styles.tourismPage_contentHeaderIcons}>
                             <SvgComponent name='Reputation' />
-                            <Text style={styles.tourismPage_contentHeaderTextTitle}>{REP} REP</Text>
+                            <Text style={styles.tourismPage_contentHeaderTextTitle}>
+                                Author Reputation
+                                {'\n'}
+                                {REP}
+                            </Text>
                         </View>
                     )}
                 </View>

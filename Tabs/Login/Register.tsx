@@ -206,7 +206,7 @@ const Register = ({ route, navigation }) => {
     }
 
     const ViewTransaction = async () => {
-        const url = `https://blockchain.agridential.vn/vibi/tx/${registerHash}`
+        const url = `https://explorer.vbchain.vn/vibi/tx/${registerHash}`
         await WebBrowser.openBrowserAsync(url);
     }
 
