@@ -23,7 +23,19 @@ export const getTouristInfor = async (user_address) => {
 
 export const getTouristReviews = async (user_address) => {
   try {
-    return await contract_4R.methods.getAllReviewsOfTourist(user_address).call()
+    let reviews = await contract_4R.methods.getAllReviewsOfTourist(user_address).call()
+    const promises = reviews.map(async (review) => {
+      // let isVoted = await contract_4R.methods.isVoted(address, review[1]).call()
+      // let totalReward = await contract_4R.methods.reviewReward(review.postID).call()
+      // console.log(isVoted)
+      review.totalReward = Number(await contract_4R.methods.reviewReward(review.postID).call())
+      review.upvoteNum = Number(review.upvoteNum)
+      review.rate = Number(review.rate)
+      review.createTime = Number(review.createTime)
+      return review
+    })
+    const result = await Promise.all(promises)
+    return result
   } catch (error) {
     console.error("Error in getTouristReviews:", error);
     throw error;
@@ -36,9 +48,11 @@ export const getDestinationReviews = async (address, place_id) => {
     const destinationReviews = await contract_4R.methods.getAllReviewsOfDestinations(place_id).call()
 
     const result = destinationReviews.map(async (review) => {
-      let isVoted = await contract_4R.methods.isVoted(address, review[1]).call()
-      // console.log(isVoted)
-      review.isVoted = isVoted
+      review.totalReward = Number(await contract_4R.methods.reviewReward(review.postID).call())
+      review.isVoted = Number(await contract_4R.methods.isVoted(address, review[1]).call())
+      review.upvoteNum = Number(review.upvoteNum)
+      review.rate = Number(review.rate)
+      review.createTime = Number(review.createTime)
       return review
     })
 
@@ -196,6 +210,14 @@ export const getListOfReward = async(address) => {
     throw error
   }
 }
+export const getTotalRewardOfReview = async(postID) => {
+  try {
+    return Number(await contract_4R.methods.reviewReward(postID).call())
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 
 // const test = async () => {
 //   const owner = "0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74";

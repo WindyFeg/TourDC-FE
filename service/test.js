@@ -87,16 +87,68 @@ async function divide(postID) {
       return sendTx
 }
 
+const getTotalRewardOfReview = async(postID) => {
+  try {
+    return Number(await contract_4R.methods.reviewReward(postID).call())
+  } catch (error) {
+    console.log(error)
+  }
+}
 
+const getTouristReviews = async (user_address) => {
+  try {
+    let reviews = await contract_4R.methods.getAllReviewsOfTourist(user_address).call()
+    const promises = reviews.map(async (review) => {
+      // let isVoted = await contract_4R.methods.isVoted(address, review[1]).call()
+      // let totalReward = await contract_4R.methods.reviewReward(review.postID).call()
+      // console.log(isVoted)
+      review.totalReward = Number(await contract_4R.methods.reviewReward(review.postID).call())
+      review.upvoteNum = Number(review.upvoteNum)
+      review.rate = Number(review.rate)
+      review.createTime = Number(review.createTime)
+      return review
+    })
+    const result = await Promise.all(promises)
+    return result
+  } catch (error) {
+    console.error("Error in getTouristReviews:", error);
+    throw error;
+  }
+}
+const getDestinationReviews = async (address, place_id) => {
+  try {
+    const destinationReviews = await contract_4R.methods.getAllReviewsOfDestinations(place_id).call()
+
+    const result = destinationReviews.map(async (review) => {
+      // let isVoted = await contract_4R.methods.isVoted(address, review[1]).call()
+      // let totalReward = await contract_4R.methods.reviewReward(review.postID).call()
+      // console.log(isVoted)
+      review.totalReward = Number(await contract_4R.methods.reviewReward(review.postID).call())
+      review.isVoted = Number(await contract_4R.methods.isVoted(address, review[1]).call())
+      review.upvoteNum = Number(review.upvoteNum)
+      review.rate = Number(review.rate)
+      review.createTime = Number(review.createTime)
+      return review
+    })
+
+    const final = await Promise.all(result)
+    return final
+  } catch (error) {
+    console.error("Error in getDestinationReviews:", error);
+    throw error;
+  }
+
+}
 const test = async () => {
   const owner = "0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74";
   const address1 = "0x1a620c351c07763f430897AeaA2883E37cA0aaCD"
   const address2 = "0x6481bd19Ff98F34E53099F08B907d916cF22b210"
-  const postID = "0x8a7740697eb7f4a92041812ff4a432b47af4f70273c5d4d15bec5510c2b0262e"
-      // 0x4665d33e56519c29ba14eca5dd03b700e33585fb9dc96d63614be75cab4a6552
-    // 0x6481bd19Ff98F34E53099F08B907d916cF22b210
-  // console.log("getCommentsOfReviewPost", await getCommentsOfReviewPost(postID))
-  console.log("See reward lists of user: ",await divide(postID))
+  const postID = "0xdc7a2cd94317c3b058fd07561342427e3c1dd6fe39e06f189397ab650ba4ec1f"
+  // 0x4665d33e56519c29ba14eca5dd03b700e33585fb9dc96d63614be75cab4a6552
+  // 0x6481bd19Ff98F34E53099F08B907d916cF22b210
+  
+  console.log("See reward lists of user: ",await getTouristReviews(owner))
+  // console.log("get destination reviews: ", await getDestinationReviews(owner, '65f2c7e1f60b126cb2487527'))
 }
 
 test()
