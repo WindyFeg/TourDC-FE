@@ -4,11 +4,11 @@ import CollectionCard from '../Card/CollectionCard.js';
 
 /* 
 */
-const Collections = ({ navigation }) => {
+const Rewards = ({ navigation }) => {
     return (
         <View>
 
-            <Text>Collections</Text>
+            <Text>Rewards</Text>
 
             {Array.from({ length: 4 }, (_, i) => (
                 <CollectionCard key={i} navigation={navigation} />
@@ -17,5 +17,4 @@ const Collections = ({ navigation }) => {
     );
 };
 
-
-export default Collections;
+export default Rewards;

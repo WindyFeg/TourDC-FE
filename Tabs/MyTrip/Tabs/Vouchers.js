@@ -3,7 +3,7 @@ import { View, Text, Image, Button } from 'react-native';
 import VoucherCard from '../Card/VoucherCard.js';
 /* 
 */
-const MyVoucher = ({ navigation }) => {
+const Vouchers = ({ navigation }) => {
     return (
         <View>
             <Text>My Voucher</Text>
@@ -15,4 +15,4 @@ const MyVoucher = ({ navigation }) => {
 };
 
 
-export default MyVoucher;
+export default Vouchers;
