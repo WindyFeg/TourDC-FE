@@ -878,6 +878,8 @@ const styles = StyleSheet.create({
     CommentContentContainer: {
         backgroundColor: '#ececec',
         maxWidth: "90%",
+        minWidth: "70%",
+        minHeight: 100,
         borderRadius: 10,
         padding: 5,
     },

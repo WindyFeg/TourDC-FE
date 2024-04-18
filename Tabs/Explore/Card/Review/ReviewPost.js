@@ -5,11 +5,13 @@ import ReviewHeader from './ReviewHeader';
 import BackNavigationButton from '../../../Custom/BackNavigationButton';
 import * as web3 from '../../../../service/web3.js';
 import CommentSection from '../Comment/CommentSection.js';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 /* 
 */
 const ReviewPost = ({ route, navigation }) => {
     const { author,
-        postID,
+        postId,
         placeId,
         placeName,
         arrivalDate,
@@ -19,9 +21,28 @@ const ReviewPost = ({ route, navigation }) => {
         title,
         upvoteNum } = route.params;
 
+    const [SessionRK, setSessionRK] = useState('');
+    const [SessionAD, setSessionAD] = useState('');
+
+
+    //! Debugging
+    console.log("Post ID: " + postId);
+    console.log("Place ID: " + placeId);
+    console.log("SessionRK: " + SessionRK);
+    console.log("SessionAD: " + SessionAD);
+
+    //! Load SessionRK and SessionAD
+    useEffect(() => {
+        const loadData = async () => {
+            setSessionAD(await AsyncStorage.getItem('SessionAD'));
+            setSessionRK(await AsyncStorage.getItem('SessionRK'));
+        }
+        loadData();
+    }, []);
+
+
 
     // ! Components
-
     /*
     Show the content of the page
     If the content is more than 4 lines, show the "Read more" button
@@ -100,7 +121,12 @@ const ReviewPost = ({ route, navigation }) => {
 
                 <ReviewContent />
 
-                <CommentSection />
+                <CommentSection
+                    postId={postId}
+                    placeId={placeId}
+                    SessionRK={SessionRK}
+                    SessionAD={SessionAD}
+                />
             </View>
         </ScrollView>
     );

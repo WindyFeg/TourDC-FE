@@ -1,4 +1,6 @@
 import { contract_DCToken, contract_4R } from './web3config'
+import axios from 'axios'
+import GLOBAL from '../Tabs/Custom/Globals'
 
 export const getBalanceOf = async (user_address) => {
   try {
@@ -128,7 +130,7 @@ export const getRewardPoinFromPostID = async (postID, user_address) => {
 
 export const getTouristVP = async (address) => {
   try {
-    const userVP =  await contract_4R.methods.touristVP(address).call()
+    const userVP = await contract_4R.methods.touristVP(address).call()
     return Number(userVP);
   } catch (error) {
     console.error("Error in getTouristVP:", error);
@@ -138,7 +140,7 @@ export const getTouristVP = async (address) => {
 
 export const getTouristREP = async (address) => {
   try {
-    const userREP =  await contract_4R.methods.touristREP(address).call()
+    const userREP = await contract_4R.methods.touristREP(address).call()
     return Number(userREP);
   } catch (error) {
     console.error("Error in getTouristREP:", error);
@@ -150,13 +152,14 @@ export const getCommentsOfReviewPost = async (postID) => {
   try {
     const comments = await contract_4R.methods.getAllCommentOfReviewPost(postID).call()
     const promises = comments.map(async (ele) => {
-      ele.userInfor = (await axios.post(`${GLOBAL.BASE_URL}/api/user/getCurrent`, {address: ele.author })).data.user
+      ele.userInfor = (await axios.post(`${GLOBAL.BASE_URL}/api/user/getCurrent`, { address: ele.author })).data.user
       ele.REP = Number(await contract_4R.methods.touristREP(ele.author).call())
       ele.VP = Number(await contract_4R.methods.touristVP(ele.author).call())
       ele.upvoteNum = Number(ele.upvoteNum)
       return ele
     })
     const result = await Promise.all(promises)
+    console.log(result)
     return result;
   } catch (error) {
     console.error("Error in getTouristREP:", error);
@@ -199,24 +202,24 @@ export const getListOfReward = async(address) => {
 //   const address2 = "0x9E0E58F9052aDc53986eA9ca7cf8389b0EdE364f"
 //   const postID = "0x5a28a54a254168fde809b36b87260f51a07c299f232380cc09e5d6c271c2b77c"
 
-  // console.log(await getBalanceOf(owner))
-  // console.log("getTouristInfor function: ", await getTouristInfor(owner))
-  // console.log("get all reviews of tourist: ", await getTouristReviews(owner))
-  // console.log("get all review of destination: ", await getDestinationReviews("0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74","65f2c7e1f60b126cb2487527"))
-  // console.log("get review By Post ID: ", await getReviewByPostID(postID))
-  // console.log("see postID list can get reward of account: ", await getRewardListsPostID(owner))
-  // console.log("see reward of one postID of acc1: ", await getRewardPoinFromPostID(postID, owner))
-  // console.log("see reward of one postID of acc2: ", await getRewardPoinFromPostID(postID, address1))
-  // console.log("see reward of one postID of acc3: ", await getRewardPoinFromPostID(postID, address2))
+// console.log(await getBalanceOf(owner))
+// console.log("getTouristInfor function: ", await getTouristInfor(owner))
+// console.log("get all reviews of tourist: ", await getTouristReviews(owner))
+// console.log("get all review of destination: ", await getDestinationReviews("0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74","65f2c7e1f60b126cb2487527"))
+// console.log("get review By Post ID: ", await getReviewByPostID(postID))
+// console.log("see postID list can get reward of account: ", await getRewardListsPostID(owner))
+// console.log("see reward of one postID of acc1: ", await getRewardPoinFromPostID(postID, owner))
+// console.log("see reward of one postID of acc2: ", await getRewardPoinFromPostID(postID, address1))
+// console.log("see reward of one postID of acc3: ", await getRewardPoinFromPostID(postID, address2))
 
 
-  // console.log("get all rates of destination: ", await getDestinationRates("1"))
-  // console.log("get all votes of review: ", await getVotesOfReview("0x26eecb00ddef76d58362552f4fd2e782ae49d1e064ccd5b06bd70dcd8039ec35"))
-  // console.log("calculation Total reward: ", await calculationTotalReward("0x26eecb00ddef76d58362552f4fd2e782ae49d1e064ccd5b06bd70dcd8039ec35"))
-  // console.log("Get Post ID can get Reward of an user: ", await rewardListOfTourist(account2))
-  // console.log("Get reward number of an post by user: ", await touristRewardPointOnPostID(account1, '0x26eecb00ddef76d58362552f4fd2e782ae49d1e064ccd5b06bd70dcd8039ec35'))
-  // console.log("Get tourist REP: ", await getTouristREP(owner))
-  // console.log("Get tourist VP: ", await getTouristVP(owner))
+// console.log("get all rates of destination: ", await getDestinationRates("1"))
+// console.log("get all votes of review: ", await getVotesOfReview("0x26eecb00ddef76d58362552f4fd2e782ae49d1e064ccd5b06bd70dcd8039ec35"))
+// console.log("calculation Total reward: ", await calculationTotalReward("0x26eecb00ddef76d58362552f4fd2e782ae49d1e064ccd5b06bd70dcd8039ec35"))
+// console.log("Get Post ID can get Reward of an user: ", await rewardListOfTourist(account2))
+// console.log("Get reward number of an post by user: ", await touristRewardPointOnPostID(account1, '0x26eecb00ddef76d58362552f4fd2e782ae49d1e064ccd5b06bd70dcd8039ec35'))
+// console.log("Get tourist REP: ", await getTouristREP(owner))
+// console.log("Get tourist VP: ", await getTouristVP(owner))
 // }
 // test()
 

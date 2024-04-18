@@ -45,7 +45,7 @@ const MainMyTrip = () => {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                setUserData(await web3.getTouristInfor(userAddress));
+                // setUserData(await web3.getTouristInfor(userAddress));
             }
             catch (error) {
                 console.log(error);
