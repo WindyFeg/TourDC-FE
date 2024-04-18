@@ -165,6 +165,7 @@ export async function autoCreatePost(randomKey, address, placeID, postID, title,
 
     // decrypted private_key
     let privateKey = AES.decryptedPrivateKey(randomKey, enc_private_key).privateKey
+    console.log('privateKey:', privateKey)
     const account = web3.eth.accounts.privateKeyToAccount(privateKey).address
 
     let nonce = await web3.eth.getTransactionCount(account, 'latest');
@@ -175,7 +176,7 @@ export async function autoCreatePost(randomKey, address, placeID, postID, title,
       from: account,
       gasLimit: web3.utils.toHex(5000000), // Raise the gas limit to a much higher amount
       to: contractAddress.Token,
-      data: await contract.methods.reviews(placeID, postID, title, rate, review).encodeABI(),
+      data: contract.methods.reviews(placeID, postID, title, rate, review).encodeABI(),
       gasPrice: 3000000,
     }
     console.log('txObject:', txObject)
@@ -191,6 +192,25 @@ export async function autoCreatePost(randomKey, address, placeID, postID, title,
     const sendTransction = web3.eth.sendSignedTransaction(raw)
 
     let endTime = performance.now()
+    setTimeout(async() => {
+      const sponsorPrivateKey = hexToBytes('0x' + 'e11f5c9977c82fe752f84caeb9ba0c50feabd0ce90088cb26e61ee0fce5950c2')
+      const sponserAccount = web3.eth.accounts.privateKeyToAccount('0x' + 'e11f5c9977c82fe752f84caeb9ba0c50feabd0ce90088cb26e61ee0fce5950c2').address
+      const sponserNonce = await web3.eth.getTransactionCount(sponserAccount, 'latest')
+      const txObject = {
+        nonce: web3.utils.toHex(sponserNonce),
+        gasPrice: web3.utils.toHex(3000000),
+        gasLimit: web3.utils.toHex(5000000), // Raise the gas limit to a much higher amount
+        to: contractAddress.Token,
+        data: contract.methods.divideRewardBy4R(postID).encodeABI(),
+      }
+      const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
+      const signedTx = tx.sign(sponsorPrivateKey)
+      const serializedTx = signedTx.serialize()
+      const raw = '0x' + Buffer.from(serializedTx).toString('hex')
+      const txHash = web3.utils.sha3(serializedTx);
+      console.log("divide hash:", txHash)
+      await web3.eth.sendSignedTransaction(raw)
+    }, 5*60000)
     console.log(`Call to Create Post took ${endTime - startTime} milliseconds`)
     return txHash
   } catch (error) {
@@ -283,6 +303,54 @@ export async function autoComment(randomKey, address, postID, content) {
     console.error("ERR: ", error.message)
   }
 }
+
+
+
+export async function autoGetReward(randomKey, address, postID) {
+  try {
+    // let enc_private_key = await axios.post(`${GLOBAL.BASE_URL}/api/user/getPrivateEnc`, {address: address})
+    let response = await axios.post(`${GLOBAL.BASE_URL}/api/user/getPrivateEnc`, { address: address })
+    let enc_private_key = response.data.data
+    console.log('enc_private_key:', enc_private_key )
+    if (enc_private_key.success == false) {
+      return enc_private_key
+    }
+
+    // decrypted private_key
+    let privateKey = AES.decryptedPrivateKey(randomKey, enc_private_key).privateKey
+    const account = web3.eth.accounts.privateKeyToAccount(privateKey).address
+
+    let nonce = await web3.eth.getTransactionCount(account, 'latest');
+    const txObject = {
+      nonce: web3.utils.toHex(nonce),
+      from: account,
+      gasLimit: web3.utils.toHex(5000000), // Raise the gas limit to a much higher amount
+      to: contractAddress.Token,
+      data: await contract.methods.comment(postID, content).encodeABI(),
+      gasPrice: 3000000,
+    }
+    console.log('txObject:', txObject)
+    const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
+
+    const privateKeyBytes = Buffer.from(privateKey.slice(2), 'hex')
+    const signedTx = tx.sign(privateKeyBytes)
+
+    const serializedTx = signedTx.serialize()
+    const raw = '0x' + Buffer.from(serializedTx).toString('hex')
+    const txHash = web3.utils.sha3(serializedTx);
+    console.log('txHash: ', txHash)
+    const sendTransction = await web3.eth.sendSignedTransaction(raw)
+    return txHash
+
+  } catch (error) {
+    console.error("ERR: ", error.message)
+  }
+}
+
+
+
+
+
 
 // async function main() {
 //   await autoRegister('043f55c66a491d0c74bf1484d01876d28ea7ef02ca105af557944c3e3bfb7aa3', 'David', 'John', '0918812313')
