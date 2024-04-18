@@ -38,10 +38,8 @@ import { autoRegister } from '../../service/signmessage.js'
 import * as WebBrowser from 'expo-web-browser';
 import { render } from 'react-native-web';
 
-import FormData from 'form-data';
-import GLOBAL from '../Custom/Globals.js'
-// const FormData = require('form-data');
-// const GLOBAL = require('../Custom/Globals.js');
+const FormData = require('form-data');
+const GLOBAL = require('../Custom/Globals.js');
 
 //! Components put outside for not being re-rendered
 const RegisterInputUI = ({ label,

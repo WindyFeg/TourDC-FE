@@ -19,6 +19,7 @@ export async function autoCheckIn(randomKey, address, placeID) {
   try {
     // call api to get private_key_encrypt
     // console.log(await web3.eth.getTransactionReceipt('0xd7abc07daf4096b9ab81c9468edd298a011b216d4ae78448137b93560936fece'))
+    let startTime = performance.now()
     let response = await axios.post(`${GLOBAL.BASE_URL}/api/user/getPrivateEnc`, { address: address })
     let enc_private_key = response.data.data
 
@@ -41,7 +42,7 @@ export async function autoCheckIn(randomKey, address, placeID) {
       from: account,
       gasLimit: web3.utils.toHex(5000000), // Raise the gas limit to a much higher amount
       to: contractAddress.Token,
-      data: await contract.methods.checkIn(placeID).encodeABI(),
+      data: contract.methods.checkIn(placeID).encodeABI(),
       gasPrice: 3000000,
     }
     console.log('txObject:', txObject)
@@ -53,17 +54,18 @@ export async function autoCheckIn(randomKey, address, placeID) {
     const serializedTx = signedTx.serialize()
     const raw = '0x' + Buffer.from(serializedTx).toString('hex')
     const txHash = web3.utils.sha3(serializedTx);
-
+    console.log("checkIn txHash: ", txHash)
     const sendtransaction = await web3.eth.sendSignedTransaction(raw)
     if (sendtransaction.transactionHash) {
       const postID = sendtransaction.logs[0].topics[1]
       console.log('postID', postID)
       // call api to save post in db
-      await axios.post(`${GLOBAL.BASE_URL}/api/post/add`, {
+      axios.post(`${GLOBAL.BASE_URL}/api/post/add`, {
         hash: txHash,
         placeID: placeID,
       })
-      console.log('success')
+      let endTime = performance.now()
+      console.log(`Call to CheckIn took ${endTime - startTime} milliseconds`)
       return {
         success: true,
         txHash: txHash,
@@ -120,9 +122,10 @@ const faucet = async (address) => {
 
 export async function autoRegister(privateKey, firstName, lastName, phoneNumber) {
   try {
+    let startTime = performance.now()
     const privateKeyBytes = Buffer.from(privateKey.slice(2), 'hex')
     const account = web3.eth.accounts.privateKeyToAccount(privateKey).address
-    faucet(account)
+    await faucet(account)
     let nonce = await web3.eth.getTransactionCount(account, 'latest');
     console.log('nonce', nonce)
     const txObject = {
@@ -130,7 +133,7 @@ export async function autoRegister(privateKey, firstName, lastName, phoneNumber)
       from: account,
       gasLimit: web3.utils.toHex(5000000), // Raise the gas limit to a much higher amount
       to: contractAddress.Token,
-      data: contract.methods.register(firstName, lastName, phoneNumber).encodeABI(),
+      data: contract.methods.register().encodeABI(),
       gasPrice: 3000000,
     }
     const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
@@ -141,6 +144,8 @@ export async function autoRegister(privateKey, firstName, lastName, phoneNumber)
     const txHash = web3.utils.sha3(serializedTx);
     console.log("txHashRegister: ", txHash)
     web3.eth.sendSignedTransaction(raw)
+    let endTime = performance.now()
+    console.log(`Call to Register took ${endTime - startTime} milliseconds`)
     return txHash
   } catch (error) {
     console.error("ERR: ", error)
@@ -150,6 +155,7 @@ export async function autoRegister(privateKey, firstName, lastName, phoneNumber)
 
 export async function autoCreatePost(randomKey, address, placeID, postID, title, rate, review) {
   try {
+    let startTime = performance.now()
     let response = await axios.post(`${GLOBAL.BASE_URL}/api/user/getPrivateEnc`, { address: address })
     let enc_private_key = response.data.data
     // let enc_private_key = '29b05dee4c7d1818c44a99dd1e098f8bb01caceff6b53c29602288a3e9bd6191'
@@ -182,7 +188,10 @@ export async function autoCreatePost(randomKey, address, placeID, postID, title,
     const raw = '0x' + Buffer.from(serializedTx).toString('hex')
     const txHash = web3.utils.sha3(serializedTx);
     console.log('txHash: ', txHash)
-    const sendTransction = await web3.eth.sendSignedTransaction(raw)
+    const sendTransction = web3.eth.sendSignedTransaction(raw)
+
+    let endTime = performance.now()
+    console.log(`Call to Create Post took ${endTime - startTime} milliseconds`)
     return txHash
   } catch (error) {
     console.error("ERR: ", error)
@@ -192,6 +201,7 @@ export async function autoCreatePost(randomKey, address, placeID, postID, title,
 export async function autoUpvote(randomKey, address, postID) {
   try {
     // let enc_private_key = await axios.post(`${GLOBAL.BASE_URL}/api/user/getPrivateEnc`, {address: address})
+    let startTime = performance.now()
     let response = await axios.post(`${GLOBAL.BASE_URL}/api/user/getPrivateEnc`, { address: address })
     let enc_private_key = response.data.data
     console.log('enc_private_key:', enc_private_key )
@@ -222,7 +232,10 @@ export async function autoUpvote(randomKey, address, postID) {
     const raw = '0x' + Buffer.from(serializedTx).toString('hex')
     const txHash = web3.utils.sha3(serializedTx);
     console.log('txHash: ', txHash)
-    const sendTransction = await web3.eth.sendSignedTransaction(raw)
+    const sendTransction = web3.eth.sendSignedTransaction(raw)
+    let endTime = performance.now()
+    console.log(`Call to Upvote Post took ${endTime - startTime} milliseconds`)
+
     return txHash
 
   } catch (error) {
