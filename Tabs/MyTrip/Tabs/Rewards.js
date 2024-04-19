@@ -81,9 +81,10 @@ const Rewards = ({ navigation }) => {
 
             {
                 isLoading ? <LoadingIcon /> :
-                    Array.from({ length: rewards.length }, (_, i) => (
-                        rewards[i].reason == 0
-                            ? <RewardUpvoteCard
+                    <>
+                        {Array.from({ length: rewards.length }, (_, i) => (
+                            rewards[i].reason == 0 &&
+                            <RewardUpvoteCard
                                 key={i}
                                 navigation={navigation}
                                 authorId={rewards[i].author}
@@ -93,7 +94,10 @@ const Rewards = ({ navigation }) => {
                                 SessionAD={SessionAD}
                                 SessionRK={SessionRK}
                             />
-                            : <RewardPostCard
+                        ))}
+                        {Array.from({ length: rewards.length }, (_, i) => (
+                            rewards[i].reason == 1 &&
+                            <RewardPostCard
                                 key={i}
                                 navigation={navigation}
                                 authorId={rewards[i].author}
@@ -103,7 +107,8 @@ const Rewards = ({ navigation }) => {
                                 SessionAD={SessionAD}
                                 SessionRK={SessionRK}
                             />
-                    ))
+                        ))}
+                    </>
             }
         </ScrollView>
     );

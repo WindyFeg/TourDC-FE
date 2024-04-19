@@ -189,4 +189,20 @@
         "title": "This is an review",
         "upvoteNum": 1n
     }
+],
+[
+    {
+        "author": "0x386a8c2FA60065dFfd433902a0d9952609285289",
+        "createTime": 1713548233,
+        "postID": "0x42b26f56e213dd03543e157db191a9eb54e41d74bc208a48d573e0de7c723adc",
+        "reason": 1,
+        "rewardPoint": 8.46
+    },
+    {
+        "author": "0x386a8c2FA60065dFfd433902a0d9952609285289",
+        "createTime": 1713548233,
+        "postID": "0x42b26f56e213dd03543e157db191a9eb54e41d74bc208a48d573e0de7c723adc",
+        "reason": 1,
+        "rewardPoint": 8.46
+    }
 ]

@@ -60,12 +60,16 @@ export const RewardUpvoteCard = (props) => {
         SessionRK
     } = props;
     const [postInfor, setPostInfor] = useState({});
+    const [authorName, setAuthorName] = useState('');
 
     const fetchTripInfor = async () => {
         web3.getReviewByPostID(postId).then((response) => {
             setPostInfor(response);
             console.log(response);
         });
+        let _user = (await axios.post(`${GLOBAL.BASE_URL}/api/user/getCurrent`, { address: authorId })).data.user
+        console.log(_user)
+        setAuthorName(_user.firstName + ' ' + _user.lastName)
     }
     useEffect(() => {
         fetchTripInfor();
@@ -83,13 +87,29 @@ export const RewardUpvoteCard = (props) => {
                     <Image
                         style={styles.RewardCard_userAvatar}
                         source={{ uri: `${GLOBAL.BASE_URL}/api/user/getAvatar/${authorId}` }} />
+
+                    <View style={styles.RewardCard_InforContainer}>
+                        <Text style={styles.rewardCardBigText}>{
+                            authorName
+                        }</Text>
+
+                        <Text style={styles.rewardCardText}>Title: {
+                            postInfor && postInfor.title &&
+                            (postInfor.title.length > 20 ? `${postInfor.title.slice(0, 17)}...` : postInfor.title)
+                        }</Text>
+                        <Text style={styles.rewardCardText}>Upvote Reward: {rewardPoint}
+                            <Image
+                                source={TourDCToken}
+                                style={{ width: 15, height: 15 }}
+                            />
+                        </Text>
+
+                    </View>
                     <ClaimRewardButton
                         postId={postId}
                         SessionAD={SessionAD}
                         SessionRK={SessionRK}
                     />
-                    <Text>Total Reward</Text>
-                    <Text>{rewardPoint}</Text>
                 </View>
             </TouchableOpacity>
         </View>
@@ -110,7 +130,7 @@ export const RewardPostCard = (props) => {
 
     const [postInfor, setPostInfor] = useState({});
     const [imageName, setImageName] = useState('');
-    const [tripName, setTripName] = useState('');
+
 
 
 
@@ -130,6 +150,7 @@ export const RewardPostCard = (props) => {
             setPostInfor(response);
             console.log(response);
         });
+
     }
     useEffect(() => {
         fetchReviewImages();
@@ -166,14 +187,17 @@ export const RewardPostCard = (props) => {
                         style={styles.MyTripCard_Image}
                     />
                     <View style={styles.RewardCard_InforContainer}>
-
+                        <Text style={styles.rewardCardBigText}>{
+                            postInfor && postInfor.title &&
+                            (postInfor.title.length > 20 ? `${postInfor.title.slice(0, 17)}...` : postInfor.title)
+                        }</Text>
                         <Text style={styles.rewardCardText}>Total Reward: {postInfor.reward}
                             <Image
                                 source={TourDCToken}
                                 style={{ width: 15, height: 15 }}
                             />
                         </Text>
-                        <Text style={styles.rewardCardText}>Your reward point {rewardPoint}
+                        <Text style={styles.rewardCardText}>Your Reward: {rewardPoint}
                             <Image
                                 source={TourDCToken}
                                 style={{ width: 15, height: 15 }}

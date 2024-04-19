@@ -1175,7 +1175,7 @@ const styles = StyleSheet.create({
         fontFamily: 'InterB',
         fontSize: 14,
         opacity: 0.7,
-        margin: 5,
+        margin: 2,
     },
 
     tripCardBigText: {
@@ -1183,7 +1183,7 @@ const styles = StyleSheet.create({
         fontFamily: 'InterB',
         fontSize: 14,
         opacity: 0.7,
-        margin: 5,
+        margin: 2,
     },
 
     modalText: {
@@ -1429,6 +1429,12 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
         borderRadius: 100,
+        margin: 10,
+    },
+
+    RewardCard_InforContainer: {
+        flexDirection: 'column',
+        marginHorizontal: 5,
     },
 
 
