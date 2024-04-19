@@ -328,7 +328,7 @@ export async function autoGetReward(randomKey, address, postID) {
       from: account,
       gasLimit: web3.utils.toHex(5000000), // Raise the gas limit to a much higher amount
       to: contractAddress.Token,
-      data: await contract.methods.comment(postID, content).encodeABI(),
+      data: await contract.methods.divideRewardBy4R(postID).encodeABI(),
       gasPrice: 3000000,
     }
     console.log('txObject:', txObject)
