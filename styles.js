@@ -409,7 +409,7 @@ const styles = StyleSheet.create({
     },
 
     tourismPage_contentImageContainer: {
-        borderRadius: 30,
+        borderRadius: 20,
         backgroundColor: '#fff',
         // Drop Shadow
         shadowColor: "#000",
@@ -417,7 +417,7 @@ const styles = StyleSheet.create({
             width: 0,
             height: 4,
         },
-        elevation: 5,
+        elevation: 2,
         shadowOpacity: 0.7,
         // height: 360,
     },
@@ -566,7 +566,38 @@ const styles = StyleSheet.create({
         borderColor: '#ff7676',
     },
 
+    ReplyCommentButton: {
+        width: 35,
+        height: 35,
+        borderRadius: 5,
+        backgroundColor: '#e6f7ff',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#39A7FF',
+
+    },
+
+    UserContainer: {
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        backgroundColor: '#ececec',
+        borderRadius: 5,
+        padding: 5,
+        maxHeight: 140,
+        borderWidth: 2,
+        borderColor: '#dfdfdf',
+    },
+
     UpvoteButtonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        margin: 2,
+    },
+
+    CommentButtonContainer:
+    {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -673,7 +704,7 @@ const styles = StyleSheet.create({
         fontFamily: 'InterB',
         fontSize: 12,
         // opacity: 0.7,
-        color: '#828282',
+        color: '#6d6d6d',
     },
 
     MyTrip_headerStatBig: {
@@ -883,18 +914,18 @@ const styles = StyleSheet.create({
     },
 
     Comment_avatar: {
-        width: 50,
-        height: 50,
-        borderRadius: 100,
-        marginRight: 10,
+        width: 40,
+        height: 40,
+        borderRadius: 40,
     },
     CommentContentContainer: {
         backgroundColor: '#ececec',
-        maxWidth: "90%",
+        maxWidth: "85%",
         minWidth: "70%",
         minHeight: 100,
-        borderRadius: 10,
+        borderRadius: 5,
         padding: 5,
+        marginLeft: 5,
     },
 
     Comment_username: {
@@ -904,7 +935,14 @@ const styles = StyleSheet.create({
 
     Comment_text: {
         fontFamily: 'InterR',
-        fontSize: 15,
+        fontSize: 14,
+    },
+
+    Comment_title: {
+        fontFamily: 'InterB',
+        fontSize: 14,
+        margin: 10,
+        color: '#828282',
     },
 
     CommentFooterContainer: {
@@ -941,6 +979,14 @@ const styles = StyleSheet.create({
         width: '80%',
         height: 40,
         marginLeft: 10,
+        borderRadius: 5,
+        borderColor: '#D9D9D9',
+        borderWidth: 1,
+        flexDirection: 'row',
+        // alignItems: 'space-between',
+        backgroundColor: '#FFF',
+        paddingHorizontal: 10,
+        height: 44,
     },
 
     MyAccount_Container: {

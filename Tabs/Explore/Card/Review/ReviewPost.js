@@ -50,7 +50,7 @@ const ReviewPost = ({ route, navigation }) => {
     */
     const ReviewContent = (props) => {
         return (
-            <View style={{ backgroundColor: 'white' }}>
+            <View style={{ backgroundColor: 'white', borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}>
                 <View style={styles.mainContainer}>
                     <Text
                         style={styles.tourismPage_contentHeaderTextContent}>{review}</Text>

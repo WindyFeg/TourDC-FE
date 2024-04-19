@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import Comment from './Comment.js';
 import styles from '../../../../styles.js';
@@ -17,7 +17,8 @@ const CommentSection = (props) => {
     const [comments, setComments] = useState([]);
     const [numberOfComments, setNumberOfComments] = useState(0);
     const [isLoadingComments, setIsLoadingComments] = useState(true);
-
+    // const [reload, setReload] = useState(false);
+    const commentInputRef = useRef(null);
 
     //! Debugging
     console.log("Number of Comments: " + comments.length);
@@ -25,9 +26,9 @@ const CommentSection = (props) => {
 
 
     //! Smart Contract load all Comments
+
     useEffect(() => {
-        const fetchPostComment = async () => {
-            console.log("Fetching all fetchPostComment of postId: " + placeId);
+        const fetchPostComment = () => {
             console.log("Post ID: " + postId);
             web3.getCommentsOfReviewPost(postId).then((result) => {
                 setComments(result);
@@ -49,6 +50,8 @@ const CommentSection = (props) => {
             postId,
             text);
         console.log("Commenting to blockchain result: " + result);
+        setText('');
+        // setReload(true);
     }
 
     const LoadingIcon = () => {
@@ -64,6 +67,7 @@ const CommentSection = (props) => {
     return (
         <View style={styles.CommentSection}>
             {/* Write Comment */}
+            <Text style={styles.Comment_title}>COMMENT SECTION</Text>
             {/* input */}
             <View style={styles.CommentInputContainer}>
                 <Image
@@ -75,6 +79,7 @@ const CommentSection = (props) => {
                     placeholder="Write a comment..."
                     onChangeText={setText}
                     value={text}
+                    ref={commentInputRef}
                 />
 
                 {text !== '' && (
@@ -101,6 +106,9 @@ const CommentSection = (props) => {
                             VP={comments[i].VP}
                             comment={comments[i].reviewPostId}
                             postId={comments[i].postId}
+                            SessionAD={SessionAD}
+                            SessionRK={SessionRK}
+                            commentInputRef={commentInputRef}
                         // time,
                         // upvote
                         />
