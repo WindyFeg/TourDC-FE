@@ -31,12 +31,12 @@ const MainMyTrip = () => {
     const [typeOfAccount, setTypeOfAccount] = useState('Verified');
 
     //! Debugging 
-    console.log("---My Trip Page---");
-    console.log("SessionAD: " + SessionAD);
-    console.log("userData: " + userData);
-    console.log("userREP: " + userREP);
-    console.log("userVP: " + userVP);
-    console.log("numberOfToken: " + numberOfToken);
+    // console.log("---My Trip Page---");
+    // console.log("SessionAD: " + SessionAD);
+    // console.log("userData: " + userData);
+    // console.log("userREP: " + userREP);
+    // console.log("userVP: " + userVP);
+    // console.log("numberOfToken: " + numberOfToken);
 
     //! Copy Share 3 to clipboard
     const copyToClipboard = async () => {
@@ -150,7 +150,11 @@ const MainMyTrip = () => {
                                 {/* <SvgComponent name="Reputation" /> */}
                                 <TouchableOpacity onPress={copyToClipboard}>
                                     <Text style={styles.MyTrip_headerStatLinkText}>
-                                        {SessionAD.length > 7 ? `${SessionAD.slice(0, 5)}...${SessionAD.slice(-5)}` : SessionAD}
+                                        {
+                                            SessionAD != null ?
+                                                (SessionAD.length > 7 ? `${SessionAD.slice(0, 5)}...${SessionAD.slice(-5)}` : SessionAD) :
+                                                "No Address"
+                                        }
                                     </Text>
                                 </TouchableOpacity>
                                 <Image

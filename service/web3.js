@@ -67,7 +67,7 @@ export const getDestinationReviews = async (address, place_id) => {
     console.error("Error in getDestinationReviews:", error);
     throw error;
   }
-    
+
 }
 
 export const getDestinationRates = async (place_id) => {
@@ -186,12 +186,12 @@ export const getCommentsOfReviewPost = async (postID) => {
   }
 }
 
-export const getListOfReward = async(address) => {
+export const getListOfReward = async (address) => {
   try {
-    const rewardList = await contract_4R.methods.seeRewardLists().call({from: address}) 
+    const rewardList = await contract_4R.methods.seeRewardLists().call({ from: address })
     const promises = rewardList.map(async (ele) => {
       let temp = {}
-      const touristRewardOnPostID = Number(await contract_4R.methods.touristRewardOnPostID(address, ele).call()) / 10**18;
+      const touristRewardOnPostID = Number(await contract_4R.methods.touristRewardOnPostID(address, ele).call()) / 10 ** 18;
       if (touristRewardOnPostID != 0) {
         temp.rewardPoint = touristRewardOnPostID
         temp.postID = ele;
@@ -214,7 +214,7 @@ export const getListOfReward = async(address) => {
     throw error
   }
 }
-export const getTotalRewardOfReview = async(postID) => {
+export const getTotalRewardOfReview = async (postID) => {
   try {
     return Number(await contract_4R.methods.reviewReward(postID).call())
   } catch (error) {

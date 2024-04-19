@@ -1373,6 +1373,52 @@ const styles = StyleSheet.create({
         fontSize: 12,
         fontFamily: 'InterB',
     },
+
+    RewardUpvoteCard_Container: {
+        height: 60,
+        backgroundColor: '#FFF',
+        borderRadius: 10,
+        margin: 5,
+        // Box Shadow
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+        elevation: 2,
+    }
+
+    , RewardPostCard_Container: {
+        height: 120,
+        backgroundColor: '#FFF',
+        borderRadius: 10,
+        margin: 5,
+        // Box Shadow
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+        elevation: 2,
+    },
+
+    RewardCard_avatarContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        margin: 10,
+    },
+
+    RewardCard_userAvatar: {
+        width: 40,
+        height: 40,
+        borderRadius: 100,
+    },
+
+
 });
 
 export default styles;

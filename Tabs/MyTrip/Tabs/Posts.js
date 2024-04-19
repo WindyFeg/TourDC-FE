@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, Button, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, Image, Button, ActivityIndicator, ScrollView, RefreshControl } from 'react-native';
 import PostCard from '../Card/PostCard.js';
 import * as web3 from '../../../service/web3.js';
 import { useAccount } from 'wagmi'
@@ -12,14 +12,22 @@ import styles from '../../../styles.js';
 const Posts = ({ navigation }) => {
     const [numberOfPosts, setNumberOfPosts] = useState(0);
     const [response, setResponse] = useState([]);
-    const [userAddress, setUserAddress] = useState('');
+    const [SessionAD, setSessionAD] = useState('');
     const [isLoading, setIsLoading] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
+
+    const pullToRefreshFunction = () => {
+        setIsLoading(true);
+        setRefreshing(true);
+        fetchUserPosts();
+        setRefreshing(false);
+    }
 
     //! Load user address
     useEffect(() => {
         const loadData = async () => {
             try {
-                setUserAddress(await AsyncStorage.getItem('SessionAD'));
+                setSessionAD(await AsyncStorage.getItem('SessionAD'));
             } catch (error) {
                 console.log(error);
             }
@@ -29,22 +37,22 @@ const Posts = ({ navigation }) => {
     }, []);
 
     //! Fetch user posts
-    useEffect(() => {
-        const fetchUserPosts = async () => {
-            try {
-                console.log('úe:', userAddress);
-                const response = await web3.getTouristReviews(userAddress);
-                setResponse(response);
-                setNumberOfPosts(response.length);
-                setIsLoading(false);
-            } catch (error) {
-                console.log(error);
-                setIsLoading(false);
-            }
-        };
+    const fetchUserPosts = async () => {
+        try {
+            console.log('úe:', SessionAD);
+            const response = await web3.getTouristReviews(SessionAD);
+            setResponse(response);
+            setNumberOfPosts(response.length);
+            setIsLoading(false);
+        } catch (error) {
+            console.log(error);
+            setIsLoading(false);
+        }
+    };
 
-        if (userAddress != '') fetchUserPosts();
-    }, [userAddress]);
+    useEffect(() => {
+        if (SessionAD != '') fetchUserPosts();
+    }, [SessionAD]);
 
 
     const LoadingIcon = () => {
@@ -61,6 +69,12 @@ const Posts = ({ navigation }) => {
 
     return (
         <ScrollView
+            refreshControl={
+                <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={pullToRefreshFunction}
+                />
+            }
             backgroundColor="#F9F9F9"
         >
             <Text style={styles.normalText}>All of your reviews</Text>
