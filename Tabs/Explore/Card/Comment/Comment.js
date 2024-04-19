@@ -44,7 +44,7 @@ const Comment = (props) => {
         console.log('SessionRK:', SessionRK);
         console.log('SessionAD:', SessionAD);
         console.log('postId:', postId);
-        // const response = await web3.autoUpvote(SessionRK, SessionAD, postId)
+        const response = await web3.autoUpvote(SessionRK, SessionAD, commentPostId)
         console.log('response:', response)
     }
 

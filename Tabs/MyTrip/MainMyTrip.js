@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, Image, TextInput, TouchableOpacity, ImageBackground } from 'react-native';
+import { Text, View, Image, TextInput, TouchableOpacity, ImageBackground, RefreshControl } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import ExploreTab from '../Explore/ExploreTab';
@@ -29,14 +29,22 @@ const MainMyTrip = () => {
     const [numberOfToken, setNumberOfToken] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
     const [typeOfAccount, setTypeOfAccount] = useState('Verified');
+    const [refreshing, setRefreshing] = useState(false);
+
+    const pullToRefreshFunction = () => {
+        setIsLoading(true);
+        setRefreshing(true);
+        fetchUser();
+        setRefreshing(false);
+    }
 
     //! Debugging 
-    console.log("---My Trip Page---");
-    console.log("SessionAD: " + SessionAD);
-    console.log("userData: " + userData);
-    console.log("userREP: " + userREP);
-    console.log("userVP: " + userVP);
-    console.log("numberOfToken: " + numberOfToken);
+    // console.log("---My Trip Page---");
+    // console.log("SessionAD: " + SessionAD);
+    // console.log("userData: " + userData);
+    // console.log("userREP: " + userREP);
+    // console.log("userVP: " + userVP);
+    // console.log("numberOfToken: " + numberOfToken);
 
     //! Copy Share 3 to clipboard
     const copyToClipboard = async () => {
@@ -71,25 +79,25 @@ const MainMyTrip = () => {
 
     //! Fetch user data from blockchain
     // 0": "Phong", "1": "Tran", "2": "11111111111111", "3": 15n, "4": 100n, "REP": 15n, "VP": 100n, "__length__": 5, "firstName": "Phong", "lastName": "Tran", "phoneNumber": "11111111111111"}
+    const fetchUser = async () => {
+        try {
+            let response = await axios.post(`${GLOBAL.BASE_URL}/api/user/getCurrent`, { address: SessionAD });
+            web3.getTouristREP(SessionAD).then((rep) => {
+                setUserREP(rep);
+            });
+            web3.getTouristVP(SessionAD).then((vp) => {
+                setUserVP(vp);
+            });
+            web3.getBalanceOf(SessionAD).then((token) => {
+                setNumberOfToken(Number(token))
+            });
+            setUserData(response.data.user);
+        }
+        catch (error) {
+            console.log(error);
+        }
+    };
     useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                let response = await axios.post(`${GLOBAL.BASE_URL}/api/user/getCurrent`, { address: SessionAD });
-                web3.getTouristREP(SessionAD).then((rep) => {
-                    setUserREP(rep);
-                });
-                web3.getTouristVP(SessionAD).then((vp) => {
-                    setUserVP(vp);
-                });
-                web3.getBalanceOf(SessionAD).then((token) => {
-                    setNumberOfToken(Number(token))
-                });
-                setUserData(response.data.user);
-            }
-            catch (error) {
-                console.log(error);
-            }
-        };
 
         if (SessionAD != '') fetchUser();
     }, [SessionAD]);
@@ -127,11 +135,13 @@ const MainMyTrip = () => {
             >
                 {/* Avatar and Icon */}
                 <View style={styles.MyTrip_headerContainer}>
-                    <View style={styles.MyTrip_backgroundUserAvatar}>
+                    <TouchableOpacity
+                        onPress={pullToRefreshFunction}
+                        style={styles.MyTrip_backgroundUserAvatar}>
                         <Image
                             style={styles.MyTrip_userAvatar}
                             source={{ uri: `${GLOBAL.BASE_URL}/api/user/getAvatar/${SessionAD}` }} />
-                    </View>
+                    </TouchableOpacity>
 
                     <View style={styles.MyTrip_headerText}>
                         {/* Username section */}
@@ -150,7 +160,11 @@ const MainMyTrip = () => {
                                 {/* <SvgComponent name="Reputation" /> */}
                                 <TouchableOpacity onPress={copyToClipboard}>
                                     <Text style={styles.MyTrip_headerStatLinkText}>
-                                        {SessionAD.length > 7 ? `${SessionAD.slice(0, 5)}...${SessionAD.slice(-5)}` : SessionAD}
+                                        {
+                                            SessionAD != null ?
+                                                (SessionAD.length > 7 ? `${SessionAD.slice(0, 5)}...${SessionAD.slice(-5)}` : SessionAD) :
+                                                "No Address"
+                                        }
                                     </Text>
                                 </TouchableOpacity>
                                 <Image

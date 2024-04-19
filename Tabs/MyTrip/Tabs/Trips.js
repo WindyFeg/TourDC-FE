@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, Button, ActivityIndicator, ScrollView } from 'react-native';
+import { View, Text, Image, Button, ActivityIndicator, ScrollView, RefreshControl } from 'react-native';
 import TripCard from '../Card/TripCard.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -13,6 +13,14 @@ const Trips = ({ navigation }) => {
     const [response, setResponse] = useState([]);
     const [userAddress, setUserAddress] = useState('');
     const [isLoading, setIsLoading] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
+
+    const pullToRefreshFunction = () => {
+        setIsLoading(true);
+        setRefreshing(true);
+        fetchUserTrips();
+        setRefreshing(false);
+    }
 
     //! Load user address
     useEffect(() => {
@@ -28,25 +36,25 @@ const Trips = ({ navigation }) => {
     }, []);
 
     //! Fetch user trips
-    useEffect(() => {
-        const fetchPosts = async () => {
-            axios({
-                method: 'post',
-                url: `${GLOBAL.BASE_URL}/api/post/getCheckInPosts`,
-                data: {
-                    "address": userAddress
-                }
-            }).then((response) => {
-                setResponse(response.data.data);
-                setNumberOfTrips(response.data.data.length);
-                setIsLoading(false);
-            }).catch((error) => {
-                console.error('Error:', error);
-                setIsLoading(false);
-            });
-        };
+    const fetchUserTrips = async () => {
+        axios({
+            method: 'post',
+            url: `${GLOBAL.BASE_URL}/api/post/getCheckInPosts`,
+            data: {
+                "address": userAddress
+            }
+        }).then((response) => {
+            setResponse(response.data.data);
+            setNumberOfTrips(response.data.data.length);
+            setIsLoading(false);
+        }).catch((error) => {
+            console.error('Error:', error);
+            setIsLoading(false);
+        });
+    };
 
-        if (userAddress != '') fetchPosts();
+    useEffect(() => {
+        if (userAddress != '') fetchUserTrips();
     }, [userAddress]);
 
 
@@ -59,7 +67,14 @@ const Trips = ({ navigation }) => {
     }
 
     return (
-        <ScrollView>
+        <ScrollView
+            refreshControl={
+                <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={pullToRefreshFunction}
+                />
+            }
+        >
             <Text style={styles.normalText}>You have {numberOfTrips} trip left to review. Please review them to earn bonus points!</Text>
 
             {

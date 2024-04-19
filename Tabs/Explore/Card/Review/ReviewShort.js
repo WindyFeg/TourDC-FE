@@ -33,7 +33,7 @@ const ReviewShort = (props) => {
         txHash
     } = props;
 
-    const [isHeartSelected, setHeartSelected] = useState(isVoted);
+    const [isHeartSelected, setHeartSelected] = useState(isVoted === 0 ? false : true);
     const [listImgs, setListImgs] = useState([]);
 
     // ! Fetch review images
@@ -83,6 +83,7 @@ const ReviewShort = (props) => {
     }
 
     const upVoteLogic = () => {
+        console.log('upVoteLogic' + isHeartSelected);
         if (isHeartSelected === false) {
             setHeartSelected(true);
             upvoteOnBlockChain();

@@ -39,7 +39,8 @@ const getCommentsOfReviewPost = async (postID) => {
 
 const getListOfReward = async(address) => {
   try {
-    return rewardList
+    const arr = []
+    const rewardList = await contract_4R.methods.seeRewardLists().call({from: address}) 
     const promises = rewardList.map(async (ele) => {
       let temp = {}
       const touristRewardOnPostID = Number(await contract_4R.methods.touristRewardOnPostID(address, ele).call()) / 10**18;
@@ -55,12 +56,11 @@ const getListOfReward = async(address) => {
         } else {
           temp.reason = 0;
         }
-        return temp;
+        arr.push(temp);
       }
-      return null
     })
     const result = await Promise.all(promises)
-    return result
+    return arr
   } catch (error) {
     throw error
   }
@@ -162,7 +162,7 @@ const test = async () => {
   // 0x4665d33e56519c29ba14eca5dd03b700e33585fb9dc96d63614be75cab4a6552
   // 0x6481bd19Ff98F34E53099F08B907d916cF22b210
   
-  console.log("See reward lists of user: ",await getReviewByPostID('0x3ff3784b8a1d9bff8b59cc876f6cd7d92b0ddc844f952db3a1a3046bcd3e76e0'))
+  console.log("See reward lists of user: ",await getListOfReward('0x386a8c2FA60065dFfd433902a0d9952609285289'))
   // console.log("get destination reviews: ", await getDestinationReviews(owner, '65f2c7e1f60b126cb2487527'))
 }
 
