@@ -4,12 +4,11 @@ import GLOBAL from '../Tabs/Custom/Globals'
 
 export const getBalanceOf = async (user_address) => {
   try {
-    return await contract_DCToken.methods.balanceOf(user_address).call()
+    return Number(await contract_DCToken.methods.balanceOf(user_address).call())/10**18
   } catch (error) {
     console.error("Error in getBalanceOf:", error);
     throw error; // Re-throw the error if needed
   }
-
 }
 
 export const getTouristInfor = async (user_address) => {
