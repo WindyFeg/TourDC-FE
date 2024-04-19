@@ -1164,6 +1164,20 @@ const styles = StyleSheet.create({
         fontSize: 12,
     },
 
+    rewardCardText: {
+        color: '#828282',
+        fontFamily: 'InterR',
+        fontSize: 12,
+    },
+
+    rewardCardBigText: {
+        color: '#000',
+        fontFamily: 'InterB',
+        fontSize: 14,
+        opacity: 0.7,
+        margin: 5,
+    },
+
     tripCardBigText: {
         color: '#000',
         fontFamily: 'InterB',
@@ -1409,7 +1423,6 @@ const styles = StyleSheet.create({
     RewardCard_avatarContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        margin: 10,
     },
 
     RewardCard_userAvatar: {
