@@ -21,21 +21,21 @@ const CommentSection = (props) => {
     const commentInputRef = useRef(null);
 
     //! Debugging
-    console.log("Number of Comments: " + comments.length);
+    console.log("Comments: " + comments);
     // console.log("Comments: " + comments[0].userInfor);
 
 
     //! Smart Contract load all Comments
+    const fetchPostComment = () => {
+        console.log("Post ID: " + postId);
+        web3.getCommentsOfReviewPost(postId).then((result) => {
+            setComments(result);
+            setNumberOfComments(result.length);
+            setIsLoadingComments(false);
+        })
+    };
 
     useEffect(() => {
-        const fetchPostComment = () => {
-            console.log("Post ID: " + postId);
-            web3.getCommentsOfReviewPost(postId).then((result) => {
-                setComments(result);
-                setNumberOfComments(result.length);
-                setIsLoadingComments(false);
-            })
-        };
         if (SessionAD != '') fetchPostComment();
     }, [SessionAD]);
 
@@ -104,8 +104,8 @@ const CommentSection = (props) => {
                             commentTime={comments[i].createTime}
                             REP={comments[i].REP}
                             VP={comments[i].VP}
-                            comment={comments[i].reviewPostId}
-                            postId={comments[i].postId}
+                            commentPostId={comments[i].postID}
+                            postId={comments[i].reviewPostID}
                             SessionAD={SessionAD}
                             SessionRK={SessionRK}
                             commentInputRef={commentInputRef}

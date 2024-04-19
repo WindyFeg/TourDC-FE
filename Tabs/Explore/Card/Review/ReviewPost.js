@@ -20,7 +20,8 @@ const ReviewPost = ({ route, navigation }) => {
         rate,
         title,
         upvoteNum,
-        listImgs } = route.params;
+        listImgs,
+        totalReward } = route.params;
 
     const [SessionRK, setSessionRK] = useState('');
     const [SessionAD, setSessionAD] = useState('');
@@ -51,6 +52,7 @@ const ReviewPost = ({ route, navigation }) => {
     const ReviewContent = (props) => {
         return (
             <View style={{ backgroundColor: 'white', borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}>
+                <Text style={styles.Comment_title}>REVIEW SECTION</Text>
                 <View style={styles.mainContainer}>
                     <Text
                         style={styles.tourismPage_contentHeaderTextContent}>{review}</Text>
@@ -106,6 +108,7 @@ const ReviewPost = ({ route, navigation }) => {
                     blockchainVerified={true}
                     reputationVerified={true}
                     thumbnail={listImgs[0]}
+                    totalReward={totalReward}
                 />
 
                 <ReviewContent />

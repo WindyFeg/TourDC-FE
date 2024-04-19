@@ -581,10 +581,10 @@ const styles = StyleSheet.create({
     UserContainer: {
         alignItems: 'center',
         justifyContent: 'flex-start',
-        backgroundColor: '#ececec',
+        backgroundColor: 'white',
         borderRadius: 5,
         padding: 5,
-        maxHeight: 140,
+        maxHeight: 100,
         borderWidth: 2,
         borderColor: '#dfdfdf',
     },
@@ -605,7 +605,8 @@ const styles = StyleSheet.create({
 
     UpvoteButtonText: {
         color: '#7c7979',
-        fontWeight: 'bold',
+        fontFamily: 'InterR',
+        fontSize: 13,
         marginLeft: 5,
     },
 
@@ -702,8 +703,8 @@ const styles = StyleSheet.create({
 
     MyTrip_headerStatText: {
         fontFamily: 'InterB',
-        fontSize: 12,
-        // opacity: 0.7,
+        fontSize: 10,
+        opacity: 0.7,
         color: '#6d6d6d',
     },
 
@@ -805,6 +806,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         color: 'white',
+    },
+
+    CommentFooterText: {
+        color: '#828282',
+        fontFamily: 'InterR',
+        fontSize: 12,
     },
 
     Review_BlueBtn_Text: {
@@ -921,7 +928,7 @@ const styles = StyleSheet.create({
     CommentContentContainer: {
         backgroundColor: '#ececec',
         maxWidth: "85%",
-        minWidth: "70%",
+        minWidth: "80%",
         minHeight: 100,
         borderRadius: 5,
         padding: 5,
@@ -948,7 +955,9 @@ const styles = StyleSheet.create({
     CommentFooterContainer: {
         flexDirection: 'row',
         opacity: 0.7,
-        justifyContent: 'space-evenly',
+        justifyContent: 'space-between',
+        width: '80%',
+        alignItems: 'center',
     },
 
     CommentSection: {
@@ -1389,7 +1398,7 @@ const styles = StyleSheet.create({
     },
 
     RewardUpvoteCard_Container: {
-        height: 60,
+        height: 70,
         backgroundColor: '#FFF',
         borderRadius: 10,
         margin: 5,
@@ -1426,8 +1435,8 @@ const styles = StyleSheet.create({
     },
 
     RewardCard_userAvatar: {
-        width: 40,
-        height: 40,
+        width: 45,
+        height: 45,
         borderRadius: 100,
         margin: 10,
     },

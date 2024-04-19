@@ -19,7 +19,7 @@ const Comment = (props) => {
         SessionAD,
         commentInputRef,
     } = props;
-    const [isHeartSelected, setHeartSelected] = useState(false);
+    const [isHeartSelected, setHeartSelected] = useState(commentUpvoteNumber === 0 ? false : true);
     const [upvoteNum, setUpvoteNum] = useState(0);
 
     function convertDateTimeString(dateTimeString) {
@@ -43,7 +43,7 @@ const Comment = (props) => {
         console.log('upvoteOnBlockChain');
         console.log('SessionRK:', SessionRK);
         console.log('SessionAD:', SessionAD);
-        console.log('postId:', postId);
+        console.log('commentPostId:', commentPostId);
         const response = await web3.autoUpvote(SessionRK, SessionAD, commentPostId)
         console.log('response:', response)
     }
@@ -96,16 +96,11 @@ const Comment = (props) => {
                         source={{ uri: `${GLOBAL.BASE_URL}/api/user/getAvatar/${userAddress}` }}
                     />
                     <Text style={styles.MyTrip_headerStatText}>
-                        REP: {REP} Ⓡ
+                        REP: {REP}
                     </Text>
                     <Text style={styles.MyTrip_headerStatText}>
-                        VP: {VP} Ⓥ
+                        VP: {VP}
                     </Text>
-
-                    <View style={{ flexDirection: 'column' }}>
-                        <UpvoteButton />
-                        <ReplyCommentButton />
-                    </View>
                 </View>
                 {/* Comment section */}
                 <View>
@@ -124,7 +119,8 @@ const Comment = (props) => {
                         <Text style={styles.CommentFooterText}>
                             {convertDateTimeString(Number(commentTime))}
                         </Text>
-
+                        <UpvoteButton />
+                        <ReplyCommentButton />
                     </View>
                 </View>
             </View>
