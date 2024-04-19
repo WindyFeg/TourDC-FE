@@ -121,7 +121,10 @@ export const touristRewardPointOnPostID = async (user_address, post_id) => {
 
 export const getReviewByPostID = async (postID) => {
   try {
-    return await contract_4R.methods.reviewByID(postID).call();
+    const reward = Number(await contract_4R.methods.reviewReward(postID).call())
+    const post = await contract_4R.methods.reviewByID(postID).call();
+    post.reward = reward
+    return post
   } catch (error) {
     console.error("Error in touristRewardPointOnPostID:", error);
     throw error; // Re-throw the error if needed

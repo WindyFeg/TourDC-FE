@@ -141,14 +141,19 @@ const getDestinationReviews = async (address, place_id) => {
   }
 
 }
+
 const getReviewByPostID = async (postID) => {
   try {
-    return await contract_4R.methods.reviewByID(postID).call();
+    const reward = Number(await contract_4R.methods.reviewReward(postID).call())
+    const post = await contract_4R.methods.reviewByID(postID).call();
+    post.reward = reward
+    return post
   } catch (error) {
     console.error("Error in touristRewardPointOnPostID:", error);
     throw error; // Re-throw the error if needed
   }
 }
+
 const test = async () => {
   const owner = "0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74";
   const address1 = "0x1a620c351c07763f430897AeaA2883E37cA0aaCD"
