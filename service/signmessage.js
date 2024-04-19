@@ -328,7 +328,7 @@ export async function autoGetReward(randomKey, address, postID) {
       from: account,
       gasLimit: web3.utils.toHex(5000000), // Raise the gas limit to a much higher amount
       to: contractAddress.Token,
-      data: await contract.methods.comment(postID, content).encodeABI(),
+      data: await contract.methods.divideRewardBy4R(postID).encodeABI(),
       gasPrice: 3000000,
     }
     console.log('txObject:', txObject)
@@ -341,9 +341,16 @@ export async function autoGetReward(randomKey, address, postID) {
     const raw = '0x' + Buffer.from(serializedTx).toString('hex')
     const txHash = web3.utils.sha3(serializedTx);
     console.log('txHash: ', txHash)
-    const sendTransction = await web3.eth.sendSignedTransaction(raw)
+    const sendTransction = web3.eth.sendSignedTransaction(raw)
+    .on("receipt", async(receipt) => {
+      const postID = receipt.logs[1].topics[1]
+      let reason;
+      if (postID.author != address) {
+        reason = "Upvote Reward"
+      } else reason = "Author Reward"
+      axios.post(`${GLOBAL.BASE_URL}/api/transaction/add`, {hash: receipt.hash, reason: reason})
+    })
     return txHash
-
   } catch (error) {
     console.error("ERR: ", error.message)
   }

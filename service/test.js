@@ -141,6 +141,19 @@ const getDestinationReviews = async (address, place_id) => {
   }
 
 }
+
+const getReviewByPostID = async (postID) => {
+  try {
+    const reward = Number(await contract_4R.methods.reviewReward(postID).call())
+    const post = await contract_4R.methods.reviewByID(postID).call();
+    post.reward = reward
+    return post
+  } catch (error) {
+    console.error("Error in touristRewardPointOnPostID:", error);
+    throw error; // Re-throw the error if needed
+  }
+}
+
 const test = async () => {
   const owner = "0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74";
   const address1 = "0x1a620c351c07763f430897AeaA2883E37cA0aaCD"
@@ -149,7 +162,7 @@ const test = async () => {
   // 0x4665d33e56519c29ba14eca5dd03b700e33585fb9dc96d63614be75cab4a6552
   // 0x6481bd19Ff98F34E53099F08B907d916cF22b210
   
-  console.log("See reward lists of user: ",await getTouristReviews(owner))
+  console.log("See reward lists of user: ",await getReviewByPostID('0x3ff3784b8a1d9bff8b59cc876f6cd7d92b0ddc844f952db3a1a3046bcd3e76e0'))
   // console.log("get destination reviews: ", await getDestinationReviews(owner, '65f2c7e1f60b126cb2487527'))
 }
 
