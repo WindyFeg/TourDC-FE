@@ -341,9 +341,16 @@ export async function autoGetReward(randomKey, address, postID) {
     const raw = '0x' + Buffer.from(serializedTx).toString('hex')
     const txHash = web3.utils.sha3(serializedTx);
     console.log('txHash: ', txHash)
-    const sendTransction = await web3.eth.sendSignedTransaction(raw)
+    const sendTransction = web3.eth.sendSignedTransaction(raw)
+    .on("receipt", async(receipt) => {
+      const postID = receipt.logs[1].topics[1]
+      let reason;
+      if (postID.author != address) {
+        reason = "Upvote Reward"
+      } else reason = "Author Reward"
+      axios.post(`${GLOBAL.BASE_URL}/api/transaction/add`, {hash: receipt.hash, reason: reason})
+    })
     return txHash
-
   } catch (error) {
     console.error("ERR: ", error.message)
   }
