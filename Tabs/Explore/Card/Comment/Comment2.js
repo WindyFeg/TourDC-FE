@@ -18,7 +18,7 @@ const Comment2 = (props) => {
     } = props;
 
     function convertDateTimeString(dateTimeString) {
-        const dateObject = new Date(dateTimeString);
+        const dateObject = new Date(dateTimeString * 1000);
         if (isNaN(dateObject.getTime())) {
             return "? Ago";
         }

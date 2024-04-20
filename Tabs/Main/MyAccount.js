@@ -15,7 +15,7 @@ import ExchangeVoucher from '../MyAccount/ExchangeVoucher.js';
 import MyProfile from '../MyAccount/MyProfile.js';
 import Settings from '../MyAccount/Settings.js';
 import HelpCentre from '../MyAccount/HelpCentre.js';
-import Point from '../MyAccount/Point.js';
+import TransactionHistory from '../MyAccount/TransactionHistory.js';
 
 const Stack = createStackNavigator();
 
@@ -31,22 +31,27 @@ const MyAccount = ({ navigation }) => {
 
             <Stack.Screen name="ExchangeVoucher"
                 component={ExchangeVoucher}
+                options={{ headerShown: false }}
             />
 
             <Stack.Screen name="MyProfile"
                 component={MyProfile}
+                options={{ headerShown: false }}
             />
 
             <Stack.Screen name="Settings"
                 component={Settings}
+                options={{ headerShown: false }}
             />
 
             <Stack.Screen name="HelpCentre"
                 component={HelpCentre}
+                options={{ headerShown: false }}
             />
 
-            <Stack.Screen name="Point"
-                component={Point}
+            <Stack.Screen name="TransactionHistory"
+                component={TransactionHistory}
+                options={{ headerShown: false }}
             />
 
         </Stack.Navigator>

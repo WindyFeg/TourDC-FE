@@ -135,6 +135,25 @@ const styles = StyleSheet.create({
         height: 40,
         marginLeft: 10,
     },
+    Transaction_SearchBar: {
+        height: 40,
+        borderRadius: 5,
+        borderColor: '#D9D9D9',
+        borderWidth: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#FFF',
+        width: "90%",
+        height: 44,
+        paddingHorizontal: 10,
+        marginVertical: 10,
+    },
+
+    Transaction_SearchInput: {
+        width: '100%',
+        height: 40,
+        marginLeft: 10,
+    },
 
     loginBtn: {
         borderRadius: 10,
@@ -1470,6 +1489,84 @@ const styles = StyleSheet.create({
         marginHorizontal: 5,
     },
 
+    TransactionCard_Container: {
+        height: 90,
+        width: 330,
+        backgroundColor: '#f7f7f7',
+        borderRadius: 10,
+        margin: 5,
+        // Box Shadow
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+        elevation: 2,
+    },
+
+    TransactionHistory_Container: {
+        backgroundColor: '#FFF',
+        borderRadius: 10,
+        margin: 5,
+        // Box Shadow
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+        elevation: 2,
+        height: "100%",
+        width: "100%",
+        // center
+        alignItems: 'center',
+    },
+
+    TransactionCard_Inline: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        margin: 10,
+    },
+
+    TransactionCard_Information: {
+        flexDirection: 'column',
+        marginHorizontal: 10,
+    },
+
+    TransactionCard_icon: {
+        width: 55,
+        height: 55,
+        paddingLeft: 7,
+        paddingBottom: 5,
+        borderRadius: 100,
+        backgroundColor: '#FFF',
+        alignItems: 'center',
+        justifyContent: 'center',
+        opacity: 0.9,
+    },
+
+    TransactionCard_TextCopy: {
+        color: '#828282',
+        fontFamily: 'InterR',
+        fontSize: 12,
+        textDecorationLine: 'underline',
+    },
+    TransactionCard_TextBig: {
+        color: '#000',
+        fontFamily: 'InterB',
+        fontSize: 12,
+        opacity: 0.7,
+    },
+
+    TransactionCard_Text: {
+        color: '#000',
+        fontFamily: 'InterR',
+        opacity: 0.7,
+        fontSize: 12,
+    },
 
 });
 

@@ -222,6 +222,10 @@ const MainMyAccount = ({ navigation }) => {
         navigation.navigate('Point');
     }
 
+    const History = () => {
+        navigation.navigate('TransactionHistory');
+    }
+
 
     return (
         <ScrollView style={styles.MyAccount_Container}>

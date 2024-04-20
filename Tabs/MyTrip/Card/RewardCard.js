@@ -159,7 +159,7 @@ export const RewardPostCard = (props) => {
 
     function convertDateTimeString(dateTimeString) {
         // Create a Date object from the ISO 8601 formatted string
-        const dateObject = new Date(dateTimeString);
+        const dateObject = new Date(dateTimeString * 1000);
         // Check if the Date object is valid
         if (isNaN(dateObject.getTime())) {
             return null; // Return null for invalid strings

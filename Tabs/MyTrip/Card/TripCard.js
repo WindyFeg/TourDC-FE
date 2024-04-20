@@ -47,16 +47,13 @@ const TripCard = (props) => {
     }
 
     function convertDateTimeString(dateTimeString) {
-        // Create a Date object from the ISO 8601 formatted string
-        const dateObject = new Date(dateTimeString);
-        // Check if the Date object is valid
+        const dateObject = new Date(dateTimeString * 1000);
         if (isNaN(dateObject.getTime())) {
-            return null; // Return null for invalid strings
+            return null;
         }
-        // Format the time (hours:minutes)
+
         const time = dateObject.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
 
-        // Format the date (day/month/year)
         const date = dateObject.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
 
         return `${time}, ${date}`;
