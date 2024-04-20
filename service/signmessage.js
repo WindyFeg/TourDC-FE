@@ -254,7 +254,7 @@ export async function autoUpvote(randomKey, address, postID) {
     const raw = '0x' + Buffer.from(serializedTx).toString('hex')
     const txHash = web3.utils.sha3(serializedTx);
     console.log('txHash: ', txHash)
-    const sendTransction = web3.eth.sendSignedTransaction(raw)
+    const sendTransction = await web3.eth.sendSignedTransaction(raw)
     let endTime = performance.now()
     console.log(`Call to Upvote Post took ${endTime - startTime} milliseconds`)
 
