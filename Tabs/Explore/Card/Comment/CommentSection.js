@@ -11,14 +11,18 @@ const CommentSection = (props) => {
     const { postId,
         SessionRK,
         SessionAD,
-        placeId
+        placeId,
+        refreshing,
+        setRefreshing
     } = props;
     const [text, setText] = useState('');
     const [comments, setComments] = useState([]);
     const [numberOfComments, setNumberOfComments] = useState(0);
     const [isLoadingComments, setIsLoadingComments] = useState(true);
     // const [reload, setReload] = useState(false);
+    const [replyCommentPostId, setReplyCommentPostId] = useState('');
     const commentInputRef = useRef(null);
+
 
     //! Debugging
     console.log("Comments: " + comments);
@@ -32,25 +36,39 @@ const CommentSection = (props) => {
             setComments(result);
             setNumberOfComments(result.length);
             setIsLoadingComments(false);
+            setRefreshing(false);
         })
     };
 
     useEffect(() => {
         if (SessionAD != '') fetchPostComment();
-    }, [SessionAD]);
+    }, [SessionAD, refreshing]);
 
     async function commentToBlockChain() {
         console.log("Commenting to blockchain: " + text);
         console.log("SessionRK: " + SessionRK);
         console.log("SessionAD: " + SessionAD);
-        console.log("postId: " + postId);
-        let result = await autoComment(
-            SessionRK,
-            SessionAD,
-            postId,
-            text);
-        console.log("Commenting to blockchain result: " + result);
-        setText('');
+        if (text[0] === '@') {
+            console.log("Replying to comment: " + replyCommentPostId);
+            let result = await autoComment(
+                SessionRK,
+                SessionAD,
+                replyCommentPostId,
+                text,
+            );
+            console.log("Commenting^2 to blockchain result: " + result);
+        }
+        else {
+            console.log("postId: " + postId);
+            let result = await autoComment(
+                SessionRK,
+                SessionAD,
+                postId,
+                text);
+            console.log("Commenting to blockchain result: " + result);
+            setT
+        }
+        text('');
         // setReload(true);
     }
 
@@ -82,14 +100,18 @@ const CommentSection = (props) => {
                     ref={commentInputRef}
                 />
 
-                {text !== '' && (
-                    <TouchableOpacity
-                        style={styles.Comment_BlueBtn}
-                        onPress={commentToBlockChain}
-                    >
-                        <SvgComponent name="Send" />
-                    </TouchableOpacity>
-                )}
+                {
+                    text.length > 0 ?
+                        (
+                            <TouchableOpacity
+                                style={styles.Comment_BlueBtn}
+                                onPress={commentToBlockChain}
+                            >
+                                <SvgComponent name="Send" />
+                            </TouchableOpacity>
+                        )
+                        : (<></>)
+                }
             </View>
 
             {/* Comments */}
@@ -109,6 +131,7 @@ const CommentSection = (props) => {
                             SessionAD={SessionAD}
                             SessionRK={SessionRK}
                             commentInputRef={commentInputRef}
+                            setReplyCommentPostId={setReplyCommentPostId}
                         // time,
                         // upvote
                         />

@@ -938,11 +938,14 @@ const styles = StyleSheet.create({
     Comment_username: {
         fontFamily: 'InterM',
         fontSize: 15,
+        opacity: 0.8,
     },
 
     Comment_text: {
         fontFamily: 'InterR',
-        fontSize: 14,
+        fontSize: 12,
+        color: '#000',
+        opacity: 0.7,
     },
 
     Comment_title: {
@@ -982,6 +985,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: 30,
         height: 30,
+        marginLeft: 10,
     },
 
     Comment_Input: {

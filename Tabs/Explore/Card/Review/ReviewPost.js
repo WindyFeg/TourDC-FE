@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from 'react';
-import { Button, ScrollView, View, Text, Image } from 'react-native';
+import { Button, ScrollView, View, Text, Image, RefreshControl } from 'react-native';
 import styles from '../../../../styles';
 import ReviewHeader from './ReviewHeader';
 import BackNavigationButton from '../../../Custom/BackNavigationButton';
@@ -25,6 +25,15 @@ const ReviewPost = ({ route, navigation }) => {
 
     const [SessionRK, setSessionRK] = useState('');
     const [SessionAD, setSessionAD] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
+
+    const pullToRefreshFunction = () => {
+        setIsLoading(true);
+        setRefreshing(true);
+        loadData();
+        // fetchComment (Done Refreshing)
+    }
 
 
     //! Debugging
@@ -34,11 +43,11 @@ const ReviewPost = ({ route, navigation }) => {
     console.log("SessionAD: " + SessionAD);
 
     //! Load SessionRK and SessionAD
+    const loadData = async () => {
+        setSessionAD(await AsyncStorage.getItem('SessionAD'));
+        setSessionRK(await AsyncStorage.getItem('SessionRK'));
+    }
     useEffect(() => {
-        const loadData = async () => {
-            setSessionAD(await AsyncStorage.getItem('SessionAD'));
-            setSessionRK(await AsyncStorage.getItem('SessionRK'));
-        }
         loadData();
     }, []);
 
@@ -93,7 +102,14 @@ const ReviewPost = ({ route, navigation }) => {
 
 
     return (
-        <ScrollView>
+        <ScrollView
+            refreshControl={
+                <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={pullToRefreshFunction}
+                />
+            }
+        >
             <View>
 
                 <BackNavigationButton navigation={navigation} />
@@ -118,6 +134,8 @@ const ReviewPost = ({ route, navigation }) => {
                     placeId={placeId}
                     SessionRK={SessionRK}
                     SessionAD={SessionAD}
+                    refreshing={refreshing}
+                    setRefreshing={setRefreshing}
                 />
             </View>
         </ScrollView>

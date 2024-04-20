@@ -4,6 +4,7 @@ import styles from '../../../../styles.js';
 import GLOBAL from '../../../Custom/Globals.js';
 import SvgComponent from '../../../../assets/SvgComponent.js';
 import * as web3 from '../../../../service/web3.js';
+import Comment2 from './Comment2.js';
 
 const Comment = (props) => {
     const { username,
@@ -18,23 +19,36 @@ const Comment = (props) => {
         SessionRK,
         SessionAD,
         commentInputRef,
+        setReplyCommentPostId
     } = props;
     const [isHeartSelected, setHeartSelected] = useState(commentUpvoteNumber === 0 ? false : true);
-    const [upvoteNum, setUpvoteNum] = useState(0);
+    const [upvoteNum, setUpvoteNum] = useState(commentUpvoteNumber);
+    const [comments2, setComments2] = useState([]);
+    const [numberOfComments2, setNumberOfComments2] = useState(0);
+    const [isLoadingComments2, setIsLoadingComments2] = useState(true);
+
+    //! Smart Contract load all Comments of Comment
+    const fetchPostComment = () => {
+        console.log("Comment Post ID: " + commentPostId);
+        web3.getCommentsOfReviewPost(commentPostId).then((result) => {
+            setComments2(result);
+            setNumberOfComments2(result.length);
+            setIsLoadingComments2(false);
+        })
+    };
+
+    useEffect(() => {
+        fetchPostComment();
+    }, []);
 
     function convertDateTimeString(dateTimeString) {
-        // Create a Date object from the ISO 8601 formatted string
         const dateObject = new Date(dateTimeString);
-        // Check if the Date object is valid
         if (isNaN(dateObject.getTime())) {
-            return "? Ago"; // Return null for invalid strings
+            return "? Ago";
         }
-        // Format the time (hours:minutes)
         const time = dateObject.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
 
-        // Format the date (day/month/year)
         const date = dateObject.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
-
         return `${time}, ${date}`;
     }
 
@@ -76,6 +90,8 @@ const Comment = (props) => {
                     // style={styles.ReplyCommentButton}
                     onPress={() => {
                         commentInputRef.current.focus();
+                        commentInputRef.current.setNativeProps({ text: `@${username} ` });
+                        setReplyCommentPostId(commentPostId);
                     }}
                 >
                     <SvgComponent name='ReplyComment' />
@@ -87,46 +103,49 @@ const Comment = (props) => {
 
 
     return (
-        <View style={styles.CommentContainer}>
-            <View style={styles.CommentHeader}>
-                {/* User avatar */}
-                <View style={styles.UserContainer}>
-                    <Image
-                        style={styles.Comment_avatar}
-                        source={{ uri: `${GLOBAL.BASE_URL}/api/user/getAvatar/${userAddress}` }}
-                    />
-                    <Text style={styles.MyTrip_headerStatText}>
-                        REP: {REP}
-                    </Text>
-                    <Text style={styles.MyTrip_headerStatText}>
-                        VP: {VP}
-                    </Text>
-                </View>
-                {/* Comment section */}
-                <View>
-                    <View style={styles.CommentContentContainer}>
-                        <Text style={styles.Comment_username}>
-                            {username}
+        <>
+            <View style={styles.CommentContainer}>
+                <View style={styles.CommentHeader}>
+                    {/* User avatar */}
+                    <View style={styles.UserContainer}>
+                        <Image
+                            style={styles.Comment_avatar}
+                            source={{ uri: `${GLOBAL.BASE_URL}/api/user/getAvatar/${userAddress}` }}
+                        />
+                        <Text style={styles.MyTrip_headerStatText}>
+                            REP: {REP}
                         </Text>
-                        <Text
-                            style={styles.Comment_text}
-                        >
-                            {commentContent}
+                        <Text style={styles.MyTrip_headerStatText}>
+                            VP: {VP}
                         </Text>
                     </View>
-                    {/* Comment Footer */}
-                    <View style={styles.CommentFooterContainer}>
-                        <Text style={styles.CommentFooterText}>
-                            {convertDateTimeString(Number(commentTime))}
-                        </Text>
-                        <UpvoteButton />
-                        <ReplyCommentButton />
+                    {/* Comment section */}
+                    <View>
+                        <View style={styles.CommentContentContainer}>
+                            <Text style={styles.Comment_username}>
+                                {username}
+                            </Text>
+                            <Text
+                                style={styles.Comment_text}
+                            >
+                                {commentContent}
+                            </Text>
+                        </View>
+                        {/* Comment Footer */}
+                        <View style={styles.CommentFooterContainer}>
+                            <Text style={styles.CommentFooterText}>
+                                {convertDateTimeString(Number(commentTime))}
+                            </Text>
+                            <UpvoteButton />
+                            <ReplyCommentButton />
+                        </View>
                     </View>
+
+                    {/* ReplyComment (Comment 2) */}
                 </View>
             </View>
-
-
-        </View>
+            {/* <Comment2 /> */}
+        </>
     );
 };
 
