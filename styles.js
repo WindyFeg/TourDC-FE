@@ -912,6 +912,14 @@ const styles = StyleSheet.create({
 
     CommentContainer: {
         margin: 5,
+        backgroundColor: '#f7f7f7',
+        borderRadius: 5,
+    },
+
+    Comment2Container: {
+        margin: 5,
+        paddingLeft: 40,
+        paddingRight: 0,
     },
 
     CommentHeader: {
@@ -926,18 +934,30 @@ const styles = StyleSheet.create({
         borderRadius: 40,
     },
     CommentContentContainer: {
-        backgroundColor: '#ececec',
+        backgroundColor: '#f7f7f7',
         maxWidth: "85%",
         minWidth: "80%",
         minHeight: 100,
         borderRadius: 5,
         padding: 5,
         marginLeft: 5,
+        opacity: 0.9,
+    },
+
+    Comment2ContentContainer: {
+        backgroundColor: '#f7f7f7',
+        maxWidth: "90%",
+        minWidth: "85%",
+        minHeight: 100,
+        borderRadius: 5,
+        padding: 5,
+        marginLeft: 5,
+        opacity: 0.9,
     },
 
     Comment_username: {
         fontFamily: 'InterM',
-        fontSize: 15,
+        fontSize: 13,
         opacity: 0.8,
     },
 

@@ -3,6 +3,7 @@ import { View, Text, Image, TouchableOpacity } from 'react-native';
 import styles from '../../../../styles.js';
 import GLOBAL from '../../../Custom/Globals.js';
 import SvgComponent from '../../../../assets/SvgComponent.js';
+import { autoUpvote } from '../../../../service/signmessage.js';
 import * as web3 from '../../../../service/web3.js';
 import Comment2 from './Comment2.js';
 
@@ -34,12 +35,24 @@ const Comment = (props) => {
             setComments2(result);
             setNumberOfComments2(result.length);
             setIsLoadingComments2(false);
+            console.log("Comments2: " + result);
         })
     };
 
     useEffect(() => {
         fetchPostComment();
     }, []);
+
+    // ! Upvote user on blockchain
+    async function upvoteOnBlockChain() {
+        console.log('upvoteOnBlockChain');
+        console.log('SessionRK:', SessionRK);
+        console.log('SessionAD:', SessionAD);
+        console.log('commentPostId:', commentPostId);
+        const response = autoUpvote(SessionRK, SessionAD, commentPostId)
+        console.log('response:', response)
+    }
+
 
     function convertDateTimeString(dateTimeString) {
         const dateObject = new Date(dateTimeString);
@@ -50,16 +63,6 @@ const Comment = (props) => {
 
         const date = dateObject.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
         return `${time}, ${date}`;
-    }
-
-    // ! Upvote user on blockchain
-    async function upvoteOnBlockChain() {
-        console.log('upvoteOnBlockChain');
-        console.log('SessionRK:', SessionRK);
-        console.log('SessionAD:', SessionAD);
-        console.log('commentPostId:', commentPostId);
-        const response = await web3.autoUpvote(SessionRK, SessionAD, commentPostId)
-        console.log('response:', response)
     }
 
     const upVoteLogic = () => {
@@ -144,7 +147,21 @@ const Comment = (props) => {
                     {/* ReplyComment (Comment 2) */}
                 </View>
             </View>
-            {/* <Comment2 /> */}
+            {
+                Array.from({ length: numberOfComments2 }).map((_, i) => (
+                    <Comment2
+                        authorId={comments2[i].author}
+                        comment2UpvoteNumber={comments2[i].upvoteNum}
+                        comment2Content={comments2[i].content}
+                        Comment2Time={comments2[i].createTime}
+                        comment2PostId={comments2[i].postID}
+                        CommentPostId={comments2[i].reviewPostID}
+                        REP={comments2[i].REP}
+                        VP={comments2[i].VP}
+                        username={comments2[i].userInfor.firstName + " " + comments2[i].userInfor.lastName}
+                    />
+                ))
+            }
         </>
     );
 };

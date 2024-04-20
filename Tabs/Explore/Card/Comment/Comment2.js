@@ -5,21 +5,16 @@ import GLOBAL from '../../../Custom/Globals.js';
 import SvgComponent from '../../../../assets/SvgComponent.js';
 import * as web3 from '../../../../service/web3.js';
 
-
 const Comment2 = (props) => {
-    const { username,
-        userAddress,
-        commentContent,
+    const { authorId,
+        comment2Content,
+        comment2UpvoteNumber,
+        Comment2Time,
         REP,
         VP,
-        commentTime,
-        commentPostId,
-        postID,
-        commentUpvoteNumber,
-        SessionRK,
-        SessionAD,
-        commentInputRef,
-        setReplyCommentPostId
+        comment2PostId,
+        CommentPostId,
+        username
     } = props;
 
     function convertDateTimeString(dateTimeString) {
@@ -35,13 +30,13 @@ const Comment2 = (props) => {
 
     return (
 
-        <View style={styles.CommentContainer}>
+        <View style={styles.Comment2Container}>
             <View style={styles.CommentHeader}>
                 {/* User avatar */}
                 <View style={styles.UserContainer}>
                     <Image
                         style={styles.Comment_avatar}
-                        source={{ uri: `${GLOBAL.BASE_URL}/api/user/getAvatar/${'0xec2d5E57E1c4B9450D1b9cB3E50dF8CC07bBfC6F'}` }}
+                        source={{ uri: `${GLOBAL.BASE_URL}/api/user/getAvatar/${authorId}` }}
                     />
                     <Text style={styles.MyTrip_headerStatText}>
                         REP: {REP}
@@ -52,25 +47,25 @@ const Comment2 = (props) => {
                 </View>
                 {/* Comment section */}
                 <View>
-                    <View style={styles.CommentContentContainer}>
+                    <View style={styles.Comment2ContentContainer}>
                         <Text style={styles.Comment_username}>
                             {username}
                         </Text>
                         <Text
                             style={styles.Comment_text}
                         >
-                            {commentContent}
+                            {comment2Content}
                         </Text>
                     </View>
                     {/* Comment Footer */}
                     <View style={styles.CommentFooterContainer}>
                         <Text style={styles.CommentFooterText}>
-                            {convertDateTimeString(Number(commentTime))}
+                            {convertDateTimeString(Number(Comment2Time))}
                         </Text>
+                        {/* <SvgComponent name={'HeartSmall1'} />
+                        <Text style={styles.UpvoteButtonText}>{comment2UpvoteNumber}</Text> */}
                     </View>
                 </View>
-
-                {/* ReplyComment (Comment 2) */}
             </View>
         </View>
     );
