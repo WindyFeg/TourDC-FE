@@ -4,11 +4,14 @@ import GLOBAL from "../Tabs/Custom/Globals";
 
 import contractABI from "../contracts/Tourism.json"
 import contractAddress from "../contracts/Tourism-address.json"
+import contractVoucherAddress from "../contracts/Voucher-address.json"
 import { LegacyTransaction } from '@ethereumjs/tx'
 import axios from "axios";
 import { Common, Hardfork } from '@ethereumjs/common'
 import { bytesToHex, hexToBytes } from '@ethereumjs/util'
 import AES from './aes'
+import { contract_voucher } from './web3config'
+import { toObject } from './helper'
 
 const VBCProvider = "https://vibi.vbchain.vn/"
 var web3 = new Web3(VBCProvider);
@@ -361,7 +364,54 @@ export async function autoGetReward(randomKey, address, postID) {
   }
 }
 
+export async function autoExchangeVoucher(randomKey, address, voucherID) {
+  try {
+    // let enc_private_key = await axios.post(`${GLOBAL.BASE_URL}/api/user/getPrivateEnc`, {address: address})
+    let response = await axios.post(`${GLOBAL.BASE_URL}/api/user/getPrivateEnc`, { address: address })
+    let enc_private_key = response.data.data
+    console.log('enc_private_key:', enc_private_key )
+    if (enc_private_key.success == false) {
+      return enc_private_key
+    }
 
+    // decrypted private_key
+    let privateKey = AES.decryptedPrivateKey(randomKey, enc_private_key).privateKey
+    const account = web3.eth.accounts.privateKeyToAccount(privateKey).address
+
+    let nonce = await web3.eth.getTransactionCount(account, 'latest');
+    const txObject = {
+      nonce: web3.utils.toHex(nonce),
+      from: account,
+      gasLimit: web3.utils.toHex(5000000), // Raise the gas limit to a much higher amount
+      to: contractVoucherAddress.Token,
+      data: await contract_voucher.methods.exchangeVoucher(voucherID).encodeABI(),
+      gasPrice: 3000000,
+    }
+    console.log('txObject:', txObject)
+    const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
+
+    const privateKeyBytes = Buffer.from(privateKey.slice(2), 'hex')
+    const signedTx = tx.sign(privateKeyBytes)
+
+    const serializedTx = signedTx.serialize()
+    const raw = '0x' + Buffer.from(serializedTx).toString('hex')
+    const txHash = web3.utils.sha3(serializedTx);
+    console.log('txHash: ', txHash)
+    const sendTransction = web3.eth.sendSignedTransaction(raw)
+    .on("receipt", async(receipt) => {
+      let reason = "Exchange Voucher"
+      try {
+        await axios.post(`${GLOBAL.BASE_URL}/api/transaction/add`, {hash: receipt.transactionHash, reason: reason})
+      } catch (error) {
+        console.error(error)
+      }
+    })
+    .on('error', console.error)
+    return txHash
+  } catch (error) {
+    console.error("ERR: ", error.message)
+  }
+}
 
 
 

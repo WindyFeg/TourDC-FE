@@ -3,13 +3,16 @@ const DCToken_abi = require("../contracts/ERC20With4RMechanism.json")
 const Tourism_abi = require("../contracts/Tourism.json")
 const DCToken_address = require("../contracts/ERC20With4RMechanism-address.json")
 const Tourism_address = require("../contracts/Tourism-address.json")
+const Voucher_address = require("../contracts/Voucher-address.json")
+const Voucher_abi = require("../contracts/Voucher.json")
 const axios = require("axios");
 const GLOBAL = require("../Tabs/Custom/Globals")
-
+const toObject = require("./helper")
 const VBCProvider = "https://vibi.vbchain.vn/"
 var web3 = new Web3(VBCProvider);
 contract_DCToken = new web3.eth.Contract(DCToken_abi.abi, DCToken_address.Token)
 contract_4R = new web3.eth.Contract(Tourism_abi.abi, Tourism_address.Token)
+contract_voucher = new web3.eth.Contract(Voucher_abi.abi, Voucher_address.Token)
 
 // import { LegacyTransaction } from '@ethereumjs/tx'
 // import { Common, Hardfork } from '@ethereumjs/common'
@@ -162,6 +165,36 @@ const getReviewByPostID = async (postID) => {
   }
 }
 
+const getAllVoucher = async() => {
+  try {
+    return toObject(await contract_voucher.methods.getAllVouchers().call())
+  } catch (error) {
+    console.error("Error in touristRewardPointOnPostID:", error);
+    throw error; // Re-throw the error if needed
+  }
+}
+const getUserVouchers = async(owner) => {
+  try {
+    const vouchers =  toObject(await contract_voucher.methods.getUserVouchers().call({from: owner}))
+    let amount = {}
+    
+    vouchers.map((voucher) => {
+      if (voucher.id in amount) {
+        amount[voucher.id]++;
+      } else amount[voucher.id] = 1;
+    })
+    let unique = new Map(vouchers.map(obj => [obj.id, obj]));
+
+    let uniqueArray = Array.from(unique.values());
+    uniqueArray.map((voucher) => {
+      voucher.amount = amount[voucher.id]
+    })
+    return uniqueArray;
+  } catch (error) {
+    console.error("Error in touristRewardPointOnPostID:", error);
+    throw error; // Re-throw the error if needed
+  }
+}
 const test = async () => {
   const owner = "0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74";
   const address1 = "0x1a620c351c07763f430897AeaA2883E37cA0aaCD"
@@ -170,7 +203,7 @@ const test = async () => {
   // 0x4665d33e56519c29ba14eca5dd03b700e33585fb9dc96d63614be75cab4a6552
   // 0x6481bd19Ff98F34E53099F08B907d916cF22b210
   
-  console.log("See reward lists of user: ",await getListOfReward(owner))
+  console.log("See reward lists of user: ",await getUserVouchers(owner))
   // console.log("get destination reviews: ", await getDestinationReviews(owner, '65f2c7e1f60b126cb2487527'))
 }
 
