@@ -8,7 +8,8 @@ import BackNavigationButton from '../Custom/BackNavigationButton.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SvgComponent from '../../assets/SvgComponent.js';
 import TourDCToken from '../../assets/logo/DCToken.png';
-
+import * as Clipboard from 'expo-clipboard';
+import * as WebBrowser from 'expo-web-browser';
 /* 
 ! Tourism Page
 $ Contains information of a destination, hotel, restaurant, or activity
@@ -45,9 +46,10 @@ const TransactionHistory = ({ navigation }) => {
     const fetchUserTransactionHistory = async () => {
         try {
             console.log('User Address:', SessionAD);
-            const response = axios.post(`${GLOBAL.BASE_URL}/api/transaction/getTransactions`, { address: SessionAD });
-            console.log(response);
-            // setTransactions(response.data);
+            const response = await axios.post(`${GLOBAL.BASE_URL}/api/transaction/getTransactions`, { address: SessionAD });
+            console.log("fetchUserTransactionHistory", response.data.data);
+            setTransactions(response.data.data);
+            setNumberOfTransactions(response.data.data.length);
             setIsLoading(false);
         } catch (error) {
             console.log(error);
@@ -58,6 +60,29 @@ const TransactionHistory = ({ navigation }) => {
     useEffect(() => {
         if (SessionAD != '') fetchUserTransactionHistory();
     }, [SessionAD]);
+
+    const ViewTransaction = async (hash) => {
+        const url = `https://explorer.vbchain.vn/vibi/tx/${hash}`
+        await WebBrowser.openBrowserAsync(url);
+    }
+
+    const copyToClipboard = async (data) => {
+        if (data == null) {
+            return;
+        }
+        await Clipboard.setStringAsync(data);
+    };
+
+    function convertDateTimeString(dateTimeString) {
+        const dateObject = new Date(dateTimeString * 1000);
+        if (isNaN(dateObject.getTime())) {
+            return "? Ago";
+        }
+        const time = dateObject.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+        const date = dateObject.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        return `${time}, ${date}`;
+    }
 
     const TransactionCard = (props) => {
         const {
@@ -82,16 +107,19 @@ const TransactionHistory = ({ navigation }) => {
                             <Text style={styles.TransactionCard_TextBig}>
                                 {reason} {' '}
                             </Text>
-                            <Text style={styles.TransactionCard_TextCopy}>
-                                ({postID})
-                            </Text>
+                            <TouchableOpacity
+                                onPress={() => copyToClipboard(postID)}>
+                                <Text style={styles.TransactionCard_TextCopy}>
+                                    ${postID.slice(0, 5)}...${postID.slice(-5)}
+                                </Text>
+                            </TouchableOpacity>
                         </View>
 
                         {/* Date */}
                         <Text style={styles.TransactionCard_Text}>{transactionDate}</Text>
 
                         {/* Author address */}
-                        <Text style={styles.TransactionCard_Text}>From: {userAddress}</Text>
+                        <Text style={styles.TransactionCard_Text}>From: {`${userAddress.slice(0, 5)}...${userAddress.slice(-5)}`}</Text>
 
                         {/* Hash and token */}
                         <View style={{
@@ -99,9 +127,19 @@ const TransactionHistory = ({ navigation }) => {
                             justifyContent: 'space-between'
                         }}>
                             <Text style={styles.TransactionCard_Text}>Transaction Hash:</Text>
-                            <Text style={styles.TransactionCard_TextCopy}>{transactionHash}</Text>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    ViewTransaction(transactionHash);
+                                    copyToClipboard(transactionHash);
+                                }}
 
-                            <Text style={styles.TransactionCard_TextBig}> + {numberOfToken}
+                            >
+                                <Text style={styles.TransactionCard_TextCopy}>{
+                                    `${transactionHash.slice(0, 5)}...${transactionHash.slice(-5)}`
+                                }</Text>
+                            </TouchableOpacity>
+
+                            <Text style={styles.TransactionCard_TextBig}> + {numberOfToken / (10 ** 18)}
                                 <Image
                                     source={TourDCToken}
                                     style={{ width: 15, height: 15 }}
@@ -140,46 +178,20 @@ const TransactionHistory = ({ navigation }) => {
                         />
                     }
                 >
-                    <TransactionCard
-                        transactionHash={"1234512345"}
-                        postID={"0x1234567890"}
-                        transactionDate={"2021-09-01"}
-                        reason={"Upvote Reward"}
-                        numberOfToken={"10"}
-                        userAddress={"0x1234567890"}
-                    />
-                    <TransactionCard
-                        transactionHash={"0x1234567890"}
-                        postID={"0x1234567890"}
-                        transactionDate={"2021-09-01"}
-                        reason={"Post"}
-                        numberOfToken={"10"}
-                        userAddress={"0x1234567890"}
-                    />
-                    <TransactionCard
-                        transactionHash={"0x1234567890"}
-                        postID={"0x1234567890"}
-                        transactionDate={"2021-09-01"}
-                        reason={"Post"}
-                        numberOfToken={"10"}
-                        userAddress={"0x1234567890"}
-                    />
-                    <TransactionCard
-                        transactionHash={"0x1234567890"}
-                        postID={"0x1234567890"}
-                        transactionDate={"2021-09-01"}
-                        reason={"Post"}
-                        numberOfToken={"10"}
-                        userAddress={"0x1234567890"}
-                    />
-                    <TransactionCard
-                        transactionHash={"0x1234567890"}
-                        postID={"0x1234567890"}
-                        transactionDate={"2021-09-01"}
-                        reason={"Post"}
-                        numberOfToken={"10"}
-                        userAddress={"0x1234567890"}
-                    />
+
+                    {
+                        Array.from({ length: numberOfTransactions }, (_, i) => (
+                            <TransactionCard
+                                key={i}
+                                transactionHash={transactions[i].trHash}
+                                postID={transactions[i].postID}
+                                transactionDate={transactions[i].date}
+                                reason={transactions[i].reason}
+                                numberOfToken={transactions[i].amount}
+                                userAddress={transactions[i].userAddr}
+                            />
+                        ))
+                    }
                 </ScrollView>
             </View>
         </View>

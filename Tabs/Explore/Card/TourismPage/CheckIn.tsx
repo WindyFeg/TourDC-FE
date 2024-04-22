@@ -27,7 +27,7 @@ import * as Clipboard from 'expo-clipboard';
 import * as WebBrowser from 'expo-web-browser';
 import {
   autoCheckIn,
-} 
+}
   from '../../../../service/signmessage.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 interface CheckInProps {
