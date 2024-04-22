@@ -212,7 +212,7 @@ export async function autoCreatePost(randomKey, address, placeID, postID, title,
       const txHash = web3.utils.sha3(serializedTx);
       console.log("divide hash:", txHash)
       await web3.eth.sendSignedTransaction(raw)
-    }, 5*60000)
+    }, 1*30000)
     console.log(`Call to Create Post took ${endTime - startTime} milliseconds`)
     return txHash
   } catch (error) {
@@ -348,8 +348,13 @@ export async function autoGetReward(randomKey, address, postID) {
       if (postID.author != address) {
         reason = "Upvote Reward"
       } else reason = "Author Reward"
-      axios.post(`${GLOBAL.BASE_URL}/api/transaction/add`, {hash: receipt.hash, reason: reason})
+      try {
+        await axios.post(`${GLOBAL.BASE_URL}/api/transaction/add`, {hash: receipt.transactionHash, reason: reason})
+      } catch (error) {
+        console.error(error)
+      }
     })
+    .on('error', console.error)
     return txHash
   } catch (error) {
     console.error("ERR: ", error.message)

@@ -30,7 +30,7 @@ export default {
     //* GLOBALS
     STORE_KEY: 'a56z0fzrNpl^2',
     USER_ADDRESS: '0x1a620c351c07763f430897AeaA2883E37cA0aaCD',
-    BASE_URL: 'http://192.168.1.2:5500',
+    BASE_URL: 'http:/192.168.1.76:5500',
     COLOR: {
         DARKGRAY: '#999',
     },
