@@ -18,7 +18,7 @@ contract_voucher = new web3.eth.Contract(Voucher_abi.abi, Voucher_address.Token)
 // import { Common, Hardfork } from '@ethereumjs/common'
 // import { bytesToHex, hexToBytes } from '@ethereumjs/util'
 // import AES from './aes'
-const LegacyTransaction = require('@ethereumjs/tx')
+const {LegacyTransaction} = require('@ethereumjs/tx')
 const {Common, Hardfork} = require('@ethereumjs/common')
 const { bytesToHex, hexToBytes } = require('@ethereumjs/util')
 const customCommon = Common.custom({ chainId: 306, networkId: 306 }, { hardfork: Hardfork.Berlin })
@@ -195,6 +195,50 @@ const getUserVouchers = async(owner) => {
     throw error; // Re-throw the error if needed
   }
 }
+
+async function autoExchangeVoucher(voucherID) {
+  try {
+    // decrypted private_key
+    let privateKey = "0xe11f5c9977c82fe752f84caeb9ba0c50feabd0ce90088cb26e61ee0fce5950c2"
+    const account = web3.eth.accounts.privateKeyToAccount(privateKey).address
+
+    let nonce = await web3.eth.getTransactionCount(account, 'latest');
+    const txObject = {
+      nonce: web3.utils.toHex(nonce),
+      from: account,
+      gasLimit: web3.utils.toHex(5000000), // Raise the gas limit to a much higher amount
+      to: Voucher_address.Token,
+      data: await contract_voucher.methods.exchangeVoucher(voucherID).encodeABI(),
+      gasPrice: 3000000,
+    }
+    console.log('txObject:', txObject)
+    const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
+
+    const privateKeyBytes = Buffer.from(privateKey.slice(2), 'hex')
+    const signedTx = tx.sign(privateKeyBytes)
+
+    const serializedTx = signedTx.serialize()
+    const raw = '0x' + Buffer.from(serializedTx).toString('hex')
+    const txHash = web3.utils.sha3(serializedTx);
+    console.log('txHash: ', txHash)
+    const sendTransaction = web3.eth.sendSignedTransaction(raw)
+    .on("receipt", async(receipt) => {
+      let reason = "Exchange Voucher"
+      try {
+        console.log("Save into Back End...")
+        await axios.post(`${GLOBAL.BASE_URL}/api/transaction/add`, {hash: receipt.transactionHash, reason: reason})
+      } catch (error) {
+        console.error(error)
+      }
+    })
+    .on('error', console.error)
+    return txHash
+  } catch (error) {
+    console.error("ERR: ", error.message)
+  }
+}
+
+
 const test = async () => {
   const owner = "0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74";
   const address1 = "0x1a620c351c07763f430897AeaA2883E37cA0aaCD"
@@ -203,7 +247,8 @@ const test = async () => {
   // 0x4665d33e56519c29ba14eca5dd03b700e33585fb9dc96d63614be75cab4a6552
   // 0x6481bd19Ff98F34E53099F08B907d916cF22b210
   
-  console.log("See reward lists of user: ",await getUserVouchers(owner))
+  console.log("See voucher lists of user: ",await getUserVouchers(owner))
+  await autoExchangeVoucher(1)
   // console.log("get destination reviews: ", await getDestinationReviews(owner, '65f2c7e1f60b126cb2487527'))
 }
 
