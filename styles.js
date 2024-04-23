@@ -1616,7 +1616,6 @@ const styles = StyleSheet.create({
         fontFamily: 'InterB',
         fontSize: 16,
         opacity: 0.7,
-        // center
         width: 200,
     },
 

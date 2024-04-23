@@ -483,6 +483,8 @@ const SvgComponent = (props) => {
             return <HistoryIcon size="30" color="#828282" />;
         case 'Voucher':
             return <TicketIcon size="30" color="#828282" />;
+        case 'VoucherSmall':
+            return <TicketIcon size="20" color="#828282" />;
         case 'MetaMask':
             return <MetaMaskIcon size="25" />;
         case 'TotalReward':

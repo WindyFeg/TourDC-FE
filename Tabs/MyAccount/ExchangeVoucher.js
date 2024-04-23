@@ -67,14 +67,14 @@ const ExchangeVoucher = ({ navigation }) => {
     }, [SessionAD]);
 
     const ExchangeVoucherLogic = async (voucherId) => {
-        console.log('Exchange Voucher');
-        try {
-            const response = await autoExchangeVoucher(SessionRK, SessionAD, voucherId);
-            console.log("Exchange Voucher", response.data.data);
-            fetchUserExchangeVoucher();
-        } catch (error) {
-            console.log(error);
-        }
+        // console.log('Exchange Voucher');
+        // try {
+        //     const response = await autoExchangeVoucher(SessionRK, SessionAD, voucherId);
+        //     console.log("Exchange Voucher", response.data.data);
+        //     fetchUserExchangeVoucher();
+        // } catch (error) {
+        //     console.log(error);
+        // }
     }
 
     // const ViewTransaction = async (hash) => {
