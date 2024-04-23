@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity, TextInput, ScrollView, RefreshControl } from 'react-native';
+import { View, Text, Image, TouchableOpacity, TextInput, ScrollView, RefreshControl, ActivityIndicator } from 'react-native';
 import { Button } from 'react-native-web';
 import styles from '../../styles.js';
 import GLOBAL from '../Custom/Globals.js';
@@ -139,7 +139,7 @@ const TransactionHistory = ({ navigation }) => {
                                 }</Text>
                             </TouchableOpacity>
 
-                            <Text style={styles.TransactionCard_TextBig}> + {numberOfToken / (10 ** 18)}
+                            <Text style={styles.TransactionCard_TextBig}> {reason == "Exchange Voucher" ? '-' : '+'} {numberOfToken / (10 ** 18)}
                                 <Image
                                     source={TourDCToken}
                                     style={{ width: 15, height: 15 }}
@@ -150,6 +150,16 @@ const TransactionHistory = ({ navigation }) => {
                 </View>
             </View>
         );
+    }
+
+    const LoadingIcon = () => {
+        return (
+            <ActivityIndicator size="large" color="#39A7FF"
+                style={{
+                    margin: 10
+                }}
+            />
+        )
     }
 
     return (
@@ -180,19 +190,20 @@ const TransactionHistory = ({ navigation }) => {
                         />
                     }
                 >
-
                     {
-                        Array.from({ length: numberOfTransactions }, (_, i) => (
-                            <TransactionCard
-                                key={i}
-                                transactionHash={transactions[i].trHash}
-                                postID={transactions[i].postID}
-                                transactionDate={transactions[i].date}
-                                reason={transactions[i].reason}
-                                numberOfToken={transactions[i].amount}
-                                userAddress={transactions[i].userAddr}
-                            />
-                        ))
+                        (isLoading == true) ?
+                            <LoadingIcon /> :
+                            Array.from({ length: numberOfTransactions }, (_, i) => (
+                                <TransactionCard
+                                    key={i}
+                                    transactionHash={transactions[i].trHash}
+                                    postID={transactions[i].postID}
+                                    transactionDate={transactions[i].date}
+                                    reason={transactions[i].reason}
+                                    numberOfToken={transactions[i].amount}
+                                    userAddress={transactions[i].userAddr}
+                                />
+                            ))
                     }
                 </ScrollView>
             </View>

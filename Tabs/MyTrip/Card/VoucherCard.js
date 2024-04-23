@@ -8,6 +8,7 @@ import TourDCToken from '../../../assets/logo/DCToken.png';
 import GLOBAL from '../../Custom/Globals.js';
 import * as web3 from '../../../service/web3.js';
 import VoucherImage from '../../../assets/voucher/voucher.jpg';
+import QRCode from 'react-native-qrcode-svg';
 /* 
 ! Tourism Page
 $ Contains information of a destination, hotel, restaurant, or activity
@@ -23,7 +24,7 @@ const PostCard = (props) => {
         voucherExpireDate,
         voucherPrice
     } = props;
-    const [modalVisible, setModalVisible] = useState(true);
+    const [modalVisible, setModalVisible] = useState(false);
 
 
     async function showVoucherLogic() {
@@ -59,13 +60,32 @@ const PostCard = (props) => {
 
             <View style={styles.centeredView}>
                 <View style={styles.modalView}>
-                    <Text style={styles.modalText}>Hello World!</Text>
+                    <Text style={styles.modalBigText}>
+                        Check-In at {voucherContent}
+                    </Text>
+                    <Text style={styles.modalText}>
+                        This voucher will have discount at {voucherDiscount}%
+                        {'\n'}
+                        Cost: {voucherPrice} DCT
+                        {'\n'}
+                        Expire at: {convertDateTimeString(String(voucherExpireDate))}
+                        {'\n'}
+                        You have {voucherAmount} left
+                        {'\n'}
+                        Show this QR code to the staff to use the voucher
+                    </Text>
+                    <View style={styles.modalQRCodeContainer}>
+                        <QRCode
+                            value={voucherId}
+                        />
+                    </View>
+
                     <TouchableOpacity
-                        style={styles.openButton}
-                        onPress={() => {
-                            setModalVisible(!modalVisible);
-                        }}>
-                        <Text style={styles.textStyle}>Hide Modal</Text>
+                        style={styles.tourismPage_checkInBtnContainer}
+                        onPress={() => setModalVisible(false)}>
+                        <Text style={styles.tourismPage_checkInBtnText}>
+                            Close
+                        </Text>
                     </TouchableOpacity>
                 </View>
             </View>

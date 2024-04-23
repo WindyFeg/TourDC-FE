@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity, TextInput, ScrollView, RefreshControl } from 'react-native';
+import { View, Text, Image, TouchableOpacity, TextInput, ScrollView, RefreshControl, ActivityIndicator } from 'react-native';
 import { Button } from 'react-native-web';
 import styles from '../../styles.js';
 import GLOBAL from '../Custom/Globals.js';
@@ -144,6 +144,16 @@ const ExchangeVoucher = ({ navigation }) => {
         );
     }
 
+    const LoadingIcon = () => {
+        return (
+            <ActivityIndicator size="large" color="#39A7FF"
+                style={{
+                    margin: 10
+                }}
+            />
+        )
+    }
+
     return (
         <View>
             <BackNavigationButton
@@ -174,17 +184,18 @@ const ExchangeVoucher = ({ navigation }) => {
                 >
 
                     {
-                        Array.from({ length: numberOfVoucher }, (_, i) => (
-                            <ExchangeVoucherCard
-                                key={i}
-                                voucherId={vouchers[i].id}
-                                voucherAmount={vouchers[i].amount}
-                                voucherExpireDate={convertDateTimeString(vouchers[i].expiry)}
-                                voucherDiscount={vouchers[i].discount}
-                                voucherContent={vouchers[i].content}
-                                voucherPrice={vouchers[i].price}
-                            />
-                        ))
+                        isLoading ? <LoadingIcon /> :
+                            Array.from({ length: numberOfVoucher }, (_, i) => (
+                                <ExchangeVoucherCard
+                                    key={i}
+                                    voucherId={vouchers[i].id}
+                                    voucherAmount={vouchers[i].amount}
+                                    voucherExpireDate={convertDateTimeString(vouchers[i].expiry)}
+                                    voucherDiscount={vouchers[i].discount}
+                                    voucherContent={vouchers[i].content}
+                                    voucherPrice={vouchers[i].price}
+                                />
+                            ))
                     }
                 </ScrollView>
             </View>

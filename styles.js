@@ -1315,6 +1315,16 @@ const styles = StyleSheet.create({
         borderRadius: 5,
     },
 
+    modalQRCodeContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#D9D9D9',
+        borderRadius: 5,
+        padding: 10,
+    },
+
     tourismPage_checkInBtnText: {
         color: 'white',
         fontFamily: 'InterB',
@@ -1534,7 +1544,7 @@ const styles = StyleSheet.create({
     },
 
     TransactionCard_Container: {
-        height: 900,
+        height: 90,
         width: 330,
         backgroundColor: 'white',
         borderRadius: 10,

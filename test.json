@@ -1,17 +1,42 @@
 [
     {
-        "0": "1",
-        "1": "96",
-        "2": "30",
-        "3": "1714489436",
-        "4": "60",
-        "5": "Da Lat Farm Ticket Discount Voucher",
-        "__length__": 6,
-        "amount": 1,
-        "content": "Da Lat Farm Ticket Discount Voucher",
-        "discount": "60",
-        "expiry": "1714489436",
-        "id": "1",
-        "price": "30"
+        "__v": 0,
+        "_id": "66276bab4d5ce7bf27565f73",
+        "amount": 11250000000000000000,
+        "date": "2024-04-23T08:04:58.000Z",
+        "postID": "0xe23ea4ec724d4460f08b65be59235158fc2ea831b822ff4033dd6f7e7b987a72",
+        "reason": "Upvote Reward",
+        "trHash": "0xa80c5d6df5af0f8677c3d4502023c39bb6deb84fb01073a2721c738161f7d1b9",
+        "userAddr": "0x12c114f3c56898002f9ce85499304d3a4ea87aa9"
+    },
+    {
+        "__v": 0,
+        "_id": "66276c144d5ce7bf27565f81",
+        "amount": 11250000000000000000,
+        "date": "2024-04-23T08:06:43.000Z",
+        "postID": "0xa0a67555807503794f8b10e06a64c9d3193ca950b9aab02cb9b4cee932c8a561",
+        "reason": "Upvote Reward",
+        "trHash": "0xc1c572f5906b09f0f245d5610ede9a5bad843559603b0c71412df342e4d33493",
+        "userAddr": "0x12c114f3c56898002f9ce85499304d3a4ea87aa9"
+    },
+    {
+        "__v": 0,
+        "_id": "66276d4f4d5ce7bf27565ff0",
+        "amount": 11250000000000000000,
+        "date": "2024-04-23T08:11:58.000Z",
+        "postID": "0xe9bdbe4f1e49e089b519f06f8fe454a10471f0343e0c6227196702de9171d85c",
+        "reason": "Upvote Reward",
+        "trHash": "0xe395150392c2aaab9008bed9b983b9e3cf5cf04652c26846c445f50ab31f534c",
+        "userAddr": "0x12c114f3c56898002f9ce85499304d3a4ea87aa9"
+    },
+    {
+        "__v": 0,
+        "_id": "66276d9a4d5ce7bf27565ffb",
+        "amount": 30000000000000000000,
+        "date": "2024-04-23T08:13:13.000Z",
+        "postID": "0x0000000000000000000000000000000000000000000000000000000000000001",
+        "reason": "Exchange Voucher",
+        "trHash": "0x9d07a17e66077906e21ae9e4078897635c82a97216400209608bff75c5f17548",
+        "userAddr": "0x12c114f3c56898002f9ce85499304d3a4ea87aa9"
     }
 ]
