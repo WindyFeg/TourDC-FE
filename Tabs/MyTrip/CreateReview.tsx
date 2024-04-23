@@ -307,6 +307,7 @@ const CreateReview: React.FC<Props> = ({ route, navigation }) => {
                         <ModalButton
                             onPress={() => {
                                 setModalVisible(false);
+                                navigation.goBack();
                             }}
                             text={'Close'}
                         />

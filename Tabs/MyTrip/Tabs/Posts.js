@@ -87,7 +87,7 @@ const Posts = ({ navigation }) => {
                             navigation={navigation}
 
                             // Props
-                            postId={response[i].postId}
+                            postId={response[i].postID}
                             postTitle={response[i].title}
                             postReview={response[i].review}
                             placeId={response[i].placeId}

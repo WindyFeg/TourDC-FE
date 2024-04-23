@@ -123,7 +123,11 @@ const MainMyAccount = ({ navigation }) => {
                 <View style={styles.MyAccount_Button}>
                     <View style={styles.MyAccount_Inline}>
                         {/* Options Icon */}
-                        <SvgComponent name={props.iconName} />
+                        <View
+                        //style={styles.MyAccount_PreviousIcon}
+                        >
+                            <SvgComponent name={props.iconName} />
+                        </View>
 
                         {/* Options Text */}
                         <View style={{ marginLeft: 10 }}>
@@ -132,7 +136,13 @@ const MainMyAccount = ({ navigation }) => {
                         </View>
 
                         {/* Previous Icon */}
-                        <SvgComponent name="PreviousBlue" />
+                        <View
+                            style={styles.MyAccount_PreviousIcon}
+                        >
+                            {/* 
+                            <SvgComponent name="PreviousBlue" />
+                             */}
+                        </View>
                     </View>
                 </View>
             </TouchableOpacity>
@@ -251,7 +261,7 @@ const MainMyAccount = ({ navigation }) => {
             <MyAccount_DoubleButton
                 iconName1="History"
                 Title1="Transaction History"
-                Description1="Trade points for coupons and learn how to earn more!"
+                Description1="View your transaction history"
                 Nav1={() => History()}
 
                 iconName2="Voucher"

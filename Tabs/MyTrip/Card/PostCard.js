@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, View, Text, Image, TouchableOpacity } from 'react-native';
 import ReviewPost from '../../Explore/Card/Review/ReviewPost.js';
 import styles from '../../../styles.js';
 import SvgComponent from '../../../assets/SvgComponent.js';
+import axios from 'axios';
+import TourDCToken from '../../../assets/logo/DCToken.png';
+import GLOBAL from '../../Custom/Globals.js';
+import * as web3 from '../../../service/web3.js';
 /* 
 */
 const PostCard = (props) => {
@@ -20,6 +24,31 @@ const PostCard = (props) => {
         , upvoteNumber
 
     } = props;
+    const [postInfor, setPostInfor] = useState({});
+    const [imageName, setImageName] = useState('');
+
+    const fetchReviewImages = async () => {
+        try {
+            console.log('postId:', postId);
+            const response = await axios.get(`${GLOBAL.BASE_URL}/api/post/getImgs/${postId}`);
+            setImageName(response.data.data[0]);
+            console.log(`${GLOBAL.BASE_URL}/api/destination/getDestinationPicture/${imageName}`);
+        } catch (error) {
+            console.error('Error fetching review images:', error);
+        }
+    };
+
+    const fetchTripInfor = async () => {
+        web3.getReviewByPostID(postId).then((response) => {
+            setPostInfor(response);
+            console.log(response);
+        });
+
+    }
+    useEffect(() => {
+        fetchReviewImages();
+        fetchTripInfor();
+    }, []);
 
 
     // ! Components
@@ -40,7 +69,7 @@ const PostCard = (props) => {
         // Format the date (day/month/year)
         const date = dateObject.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
 
-        return `${time}, ${date}`;
+        return `${date}`;
     }
 
     const PostCardContent = () => {
@@ -53,13 +82,15 @@ const PostCard = (props) => {
 
             {/* Token */}
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text>{placeRate}</Text>
-                <Image
-                    source={require('../../../assets/logo/DCToken.png')}
-                    style={{ width: 25, height: 25 }}
-                />
-                <Text>1000</Text>
-                <SvgComponent name="Heart1" />
+                <Text style={styles.rewardCardText}>Reward: {postInfor.reward}
+                    <Image
+                        source={TourDCToken}
+                        style={{ width: 17, height: 17 }}
+                    />
+                </Text>
+
+                <Text style={styles.rewardCardText}>{upvoteNumber}</Text>
+                <SvgComponent name="HeartSmall1" />
             </View>
         </View>
     }
@@ -71,7 +102,7 @@ const PostCard = (props) => {
                 style={{ flexDirection: 'row', alignItems: 'center', width: "60%" }}>
                 {/* Image */}
                 <Image
-                    source={require('../../../assets/background/bai-bien-bali-2.jpg')}
+                    source={{ uri: `${GLOBAL.BASE_URL}/api/post/getImg/${imageName}` }}
                     style={styles.MyTripCard_Image}
                 />
                 {/* Content */}

@@ -1,4 +1,4 @@
- const toObject = (data) => {
+const toObject = (data) => {
   return JSON.parse(
     JSON.stringify(
       data,

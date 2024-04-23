@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Button } from 'react-native-web';
 import ReviewPost from '../../Explore/Card/Review/ReviewPost.js';
 import styles from '../../../styles.js';
@@ -18,6 +18,21 @@ const ClaimRewardButton = (props) => {
         SessionAD,
         SessionRK
     } = props;
+    const [isLoading, setIsLoading] = useState(false);
+    const [isClaimed, setIsClaimed] = useState(false);
+
+    useEffect(() => {
+        if (isClaimed) {
+            claimRewardPointOnBlockchain();
+        }
+    }, [isClaimed]);
+
+    useEffect(() => {
+        if (isLoading) {
+            setIsClaimed(true);
+        }
+    }, [isLoading]);
+
 
     async function claimRewardPointOnBlockchain() {
         try {
@@ -26,24 +41,43 @@ const ClaimRewardButton = (props) => {
             console.log('SessionAD:', SessionAD);
             console.log('postId:', postId);
             const response = await autoGetReward(SessionRK, SessionAD, postId);
+            setIsLoading(false);
             console.log(response);
         } catch (error) {
             console.error('Error claiming reward point:', error);
         }
     }
 
+    const LoadingIcon = () => {
+        return (
+            <ActivityIndicator size="small" color="#fff"
+                style={{
+                    margin: 10
+                }}
+            />
+        );
+    }
+
+
     return (
         <TouchableOpacity
-            onPress={claimRewardPointOnBlockchain}
+            onPress={() => { setIsLoading(true); }}
             style={styles.Review_BlueBtn}
+            activeOpacity={0.5}
         >
             <Text style={
                 styles.Review_BlueBtn_Text
-            }>CLAIM
-                <Image
-                    source={TourDCToken}
-                    style={{ width: 15, height: 15 }}
-                />
+            }>
+                {
+                    (isLoading == true) ? <LoadingIcon /> :
+                        isClaimed ? 'CLAIMED' :
+                            <>
+                                CLAIM
+                                <Image
+                                    source={TourDCToken}
+                                    style={{ width: 15, height: 15 }}
+                                />
+                            </>}
             </Text>
         </TouchableOpacity >
     );
@@ -130,9 +164,6 @@ export const RewardPostCard = (props) => {
 
     const [postInfor, setPostInfor] = useState({});
     const [imageName, setImageName] = useState('');
-
-
-
 
     const fetchReviewImages = async () => {
         try {

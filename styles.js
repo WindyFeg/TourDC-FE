@@ -1141,18 +1141,27 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
 
+    MyAccount_PreviousIcon: {
+        //backgroundColor: '#000',
+        width: "100%",
+        flexDirection: 'row',
+        alignContent: 'flex-end',
+    },
+
     MyAccount_Text: {
         color: 'white',
     },
 
     MyAccount_BtnTitle: {
         fontFamily: 'InterB',
-        fontSize: 16,
+        fontSize: 14,
+        color: '#000',
+        opacity: 0.7,
     },
 
     MyAccount_BtnDescription: {
         fontFamily: 'InterM',
-        fontSize: 14,
+        fontSize: 12,
         color: '#828282',
     },
 
@@ -1220,6 +1229,7 @@ const styles = StyleSheet.create({
         color: '#828282',
         fontFamily: 'InterR',
         fontSize: 12,
+        marginHorizontal: 2,
     },
 
     rewardCardBigText: {
@@ -1490,9 +1500,9 @@ const styles = StyleSheet.create({
     },
 
     TransactionCard_Container: {
-        height: 90,
+        height: 900,
         width: 330,
-        backgroundColor: '#f7f7f7',
+        backgroundColor: 'white',
         borderRadius: 10,
         margin: 5,
         // Box Shadow
@@ -1505,6 +1515,37 @@ const styles = StyleSheet.create({
         shadowRadius: 2,
         elevation: 2,
     },
+
+    ExchangeVoucherCard_Inline: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        margin: 10,
+    },
+
+    ExchangeVoucherCard_Container: {
+        height: 120,
+        width: 330,
+        backgroundColor: 'white',
+        borderRadius: 10,
+        margin: 5,
+        // Box Shadow
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+        elevation: 2,
+    },
+
+    ExchangeVoucherCard_Image: {
+        width: 100,
+        height: 100,
+        borderRadius: 5,
+        margin: 0,
+    },
+
 
     TransactionHistory_Container: {
         backgroundColor: '#FFF',
