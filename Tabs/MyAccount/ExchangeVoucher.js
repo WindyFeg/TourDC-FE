@@ -6,11 +6,13 @@ import GLOBAL from '../Custom/Globals.js';
 import axios from 'axios';
 import BackNavigationButton from '../Custom/BackNavigationButton.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import SvgComponent from '../../assets/SvgComponent.js';
-import TourDCToken from '../../assets/logo/DCToken.png';
 import * as Clipboard from 'expo-clipboard';
+import SvgComponent from '../../assets/SvgComponent.js';
 import * as WebBrowser from 'expo-web-browser';
 import { getAllVoucher } from '../../service/voucher.js'
+import TourDCToken from '../../assets/logo/DCToken.png';
+import { autoExchangeVoucher } from '../../service/signmessage.js';
+
 /* 
 ! Tourism Page
 $ Contains information of a destination, hotel, restaurant, or activity
@@ -18,6 +20,7 @@ $ Contains information of a destination, hotel, restaurant, or activity
 const ExchangeVoucher = ({ navigation }) => {
 
     const [SessionAD, setSessionAD] = useState('');
+    const [SessionRK, setSessionRK] = useState('');
     const [numberOfVoucher, setNumberOfVoucher] = useState(0);
     const [vouchers, setVouchers] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
@@ -35,6 +38,7 @@ const ExchangeVoucher = ({ navigation }) => {
         const loadData = async () => {
             try {
                 setSessionAD(await AsyncStorage.getItem('SessionAD'));
+                setSessionRK(await AsyncStorage.getItem('SessionRK'));
             } catch (error) {
                 console.log(error);
             }
@@ -61,6 +65,17 @@ const ExchangeVoucher = ({ navigation }) => {
     useEffect(() => {
         if (SessionAD != '') fetchUserExchangeVoucher();
     }, [SessionAD]);
+
+    const ExchangeVoucherLogic = async (voucherId) => {
+        console.log('Exchange Voucher');
+        try {
+            const response = await autoExchangeVoucher(SessionRK, SessionAD, voucherId);
+            console.log("Exchange Voucher", response.data.data);
+            fetchUserExchangeVoucher();
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     // const ViewTransaction = async (hash) => {
     //     const url = `https://explorer.vbchain.vn/vibi/tx/${hash}`
@@ -99,50 +114,42 @@ const ExchangeVoucher = ({ navigation }) => {
             <View style={styles.ExchangeVoucherCard_Container}>
                 <View style={styles.ExchangeVoucherCard_Inline}>
                     <Image
-                        // source={{ uri: `${GLOBAL.BASE_URL}/api/post/getImg/${imageName}` }}
                         source={{ uri: `${GLOBAL.BASE_URL}/api/post/getImg/1711987631923-tourdc-bai-bien-bali-2.jpg` }}
+                        // source={{ uri: `${GLOBAL.BASE_URL}/api/post/getImg/${imageName}` }}
                         style={styles.ExchangeVoucherCard_Image}
                     />
 
                     {/* </View> */}
                     <View style={styles.TransactionCard_Information}>
-                        <View style={{ flexDirection: 'row', }}>
-                            <Text style={styles.TransactionCard_TextBig}>
+                        <View style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                        }}>
+                            <Text style={styles.ExchangeVoucherCard_TextBig}>
                                 {voucherContent}
                             </Text>
                         </View>
+                        <View style={styles.ExchangeVoucherCard_PriceContainer}>
+                            <Image
+                                source={TourDCToken}
+                                style={{ width: 15, height: 15 }}
+                            />
+                            <Text style={styles.ExchangeVoucherCardText}> {voucherPrice}
+                            </Text>
+                        </View>
+
+                        {/* Discount */}
+                        <Text style={styles.TransactionCard_Text}>{voucherDiscount}</Text>
 
                         {/* Date */}
-                        {/* <Text style={styles.TransactionCard_Text}>{transactionDate}</Text> */}
+                        <Text style={styles.TransactionCard_Text}>{voucherExpireDate}</Text>
 
-                        {/* Author address */}
-                        {/* <Text style={styles.TransactionCard_Text}>From: {`${userAddress.slice(0, 5)}...${userAddress.slice(-5)}`}</Text> */}
-
-                        {/* Hash and token */}
-                        {/* <View style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-between'
-                        }}>
-                            <Text style={styles.TransactionCard_Text}>ExchangeVoucher Hash:</Text>
-                            <TouchableOpacity
-                                onPress={() => {
-                                    ViewTransaction(transactionHash);
-                                    copyToClipboard(transactionHash);
-                                }}
-
-                            >
-                                <Text style={styles.TransactionCard_TextCopy}>{
-                                    `${transactionHash.slice(0, 5)}...${transactionHash.slice(-5)}`
-                                }</Text>
-                            </TouchableOpacity>
-
-                            <Text style={styles.TransactionCard_TextBig}> + {numberOfToken / (10 ** 18)}
-                                <Image
-                                    source={TourDCToken}
-                                    style={{ width: 15, height: 15 }}
-                                />
-                            </Text>
-                        </View> */}
+                        <TouchableOpacity
+                            onPress={ExchangeVoucherLogic(voucherId)}
+                            style={styles.Review_BlueBtn}
+                        >
+                            <Text style={styles.Review_BlueBtn_Text}>Exchange Voucher</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </View>
@@ -192,9 +199,9 @@ const ExchangeVoucher = ({ navigation }) => {
                     <ExchangeVoucherCard
                         voucherId="1"
                         voucherAmount="1"
-                        voucherExpireDate="1"
-                        voucherDiscount="1"
-                        voucherContent="1"
+                        voucherExpireDate="17:00 - 13/01/2023"
+                        voucherDiscount="Discount 50%"
+                        voucherContent="Ueno Park"
                         voucherPrice="1"
                     />
                 </ScrollView>

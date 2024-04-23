@@ -820,11 +820,13 @@ const styles = StyleSheet.create({
     Review_BlueBtn: {
         backgroundColor: '#39A7FF',
         borderRadius: 5,
-        width: 100,
+        minWidth: 100,
+        maxWidth: 150,
         height: 30,
         justifyContent: 'center',
         alignItems: 'center',
         color: 'white',
+        padding: 5,
     },
 
     CommentFooterText: {
@@ -1607,6 +1609,33 @@ const styles = StyleSheet.create({
         fontFamily: 'InterR',
         opacity: 0.7,
         fontSize: 12,
+    },
+
+    ExchangeVoucherCard_TextBig: {
+        color: '#000',
+        fontFamily: 'InterB',
+        fontSize: 16,
+        opacity: 0.7,
+        // center
+        width: 200,
+    },
+
+    ExchangeVoucherCard_PriceContainer: {
+        position: 'absolute',
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#585858',
+        borderRadius: 5,
+        padding: 2,
+        right: 0,
+    },
+
+    ExchangeVoucherCardText: {
+        color: 'white',
+        fontFamily: 'InterB',
+        fontSize: 12,
+        opacity: 0.7,
+        margin: 2,
     },
 
 });
