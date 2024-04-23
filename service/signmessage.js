@@ -346,9 +346,11 @@ export async function autoGetReward(randomKey, address, postID) {
     console.log('txHash: ', txHash)
     const sendTransction = web3.eth.sendSignedTransaction(raw)
     .on("receipt", async(receipt) => {
-      const postID = receipt.logs[1].topics[1]
+      
       let reason;
-      if (postID.author != address) {
+      console.log("receipt: ", receipt)
+      console.log("Author address: ", receipt.from)
+      if ((receipt.from) != address.toLowerCase()) {
         reason = "Upvote Reward"
       } else reason = "Author Reward"
       try {
