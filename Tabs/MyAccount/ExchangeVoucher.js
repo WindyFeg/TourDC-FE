@@ -127,7 +127,7 @@ const ExchangeVoucher = ({ navigation }) => {
                         </View>
 
                         {/* Discount */}
-                        <Text style={styles.TransactionCard_Text}>{voucherDiscount}</Text>
+                        <Text style={styles.TransactionCard_Text}>Discount: {voucherDiscount}%</Text>
 
                         {/* Date */}
                         <Text style={styles.TransactionCard_Text}>{voucherExpireDate}</Text>
@@ -155,51 +155,53 @@ const ExchangeVoucher = ({ navigation }) => {
     }
 
     return (
-        <View>
-            <BackNavigationButton
-                navigation={navigation}
-            />
+        <>
+            <View>
+                <BackNavigationButton
+                    navigation={navigation}
+                />
 
-            <View style={[styles.ExchangeVoucher_Container, styles.TransactionHistory_Container]}>
-                <View style={styles.Transaction_SearchBar}>
-                    <TouchableOpacity >
-                        <SvgComponent name="Search" />
-                    </TouchableOpacity>
+                <View style={[styles.ExchangeVoucher_Container, styles.TransactionHistory_Container]}>
+                    <View style={styles.Transaction_SearchBar}>
+                        <TouchableOpacity >
+                            <SvgComponent name="Search" />
+                        </TouchableOpacity>
 
-                    <TextInput
-                        style={styles.Transaction_SearchInput}
-                        placeholder="Search Exchange Voucher"
-                    />
-                </View>
-                <Text style={styles.normalText}>All of the vouchers below must exchange through TourDC token and will be listed on MyTrip</Text>
-
-                {/* List of vouchers */}
-                <ScrollView
-                    refreshControl={
-                        <RefreshControl
-                            refreshing={refreshing}
-                            onRefresh={pullToRefreshFunction}
+                        <TextInput
+                            style={styles.Transaction_SearchInput}
+                            placeholder="Search Exchange Voucher"
                         />
-                    }
-                >
+                    </View>
+                    <Text style={styles.normalText}>All of the vouchers below must exchange through TourDC token and will be listed on MyTrip</Text>
 
-                    {
-                        isLoading ? <LoadingIcon /> :
-                            Array.from({ length: numberOfVoucher }, (_, i) => (
-                                <ExchangeVoucherCard
-                                    key={i}
-                                    voucherId={vouchers[i].id}
-                                    voucherAmount={vouchers[i].amount}
-                                    voucherExpireDate={convertDateTimeString(vouchers[i].expiry)}
-                                    voucherDiscount={vouchers[i].discount}
-                                    voucherContent={vouchers[i].content}
-                                    voucherPrice={vouchers[i].price}
-                                />
-                            ))
-                    }
-                </ScrollView>
+                    {/* List of vouchers */}
+                </View>
             </View>
-        </View>
+            <ScrollView
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={pullToRefreshFunction}
+                    />
+                }
+            >
+
+                {
+                    isLoading ? <LoadingIcon /> :
+                        Array.from({ length: numberOfVoucher }, (_, i) => (
+                            <ExchangeVoucherCard
+                                key={i}
+                                voucherId={vouchers[i].id}
+                                voucherAmount={vouchers[i].amount}
+                                voucherExpireDate={convertDateTimeString(vouchers[i].expiry)}
+                                voucherDiscount={vouchers[i].discount}
+                                voucherContent={vouchers[i].content}
+                                voucherPrice={vouchers[i].price}
+                            />
+                        ))
+                }
+            </ScrollView>
+        </>
     );
 };
 

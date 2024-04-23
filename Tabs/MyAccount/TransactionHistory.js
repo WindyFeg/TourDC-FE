@@ -180,33 +180,33 @@ const TransactionHistory = ({ navigation }) => {
                     />
                 </View>
                 <Text style={styles.normalText}>All of the Transaction related to tourdc Token will be listed below</Text>
-
-                {/* List of transaction history */}
-                <ScrollView
-                    refreshControl={
-                        <RefreshControl
-                            refreshing={refreshing}
-                            onRefresh={pullToRefreshFunction}
-                        />
-                    }
-                >
-                    {
-                        (isLoading == true) ?
-                            <LoadingIcon /> :
-                            Array.from({ length: numberOfTransactions }, (_, i) => (
-                                <TransactionCard
-                                    key={i}
-                                    transactionHash={transactions[i].trHash}
-                                    postID={transactions[i].postID}
-                                    transactionDate={transactions[i].date}
-                                    reason={transactions[i].reason}
-                                    numberOfToken={transactions[i].amount}
-                                    userAddress={transactions[i].userAddr}
-                                />
-                            ))
-                    }
-                </ScrollView>
             </View>
+
+            {/* List of transaction history */}
+            <ScrollView
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={pullToRefreshFunction}
+                    />
+                }
+            >
+                {
+                    (isLoading == true) ?
+                        <LoadingIcon /> :
+                        Array.from({ length: numberOfTransactions }, (_, i) => (
+                            <TransactionCard
+                                key={i}
+                                transactionHash={transactions[i].trHash}
+                                postID={transactions[i].postID}
+                                transactionDate={transactions[i].date}
+                                reason={transactions[i].reason}
+                                numberOfToken={transactions[i].amount}
+                                userAddress={transactions[i].userAddr}
+                            />
+                        ))
+                }
+            </ScrollView>
         </View>
     );
 };

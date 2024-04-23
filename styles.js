@@ -1545,7 +1545,7 @@ const styles = StyleSheet.create({
 
     TransactionCard_Container: {
         height: 90,
-        width: 330,
+        width: "97%",
         backgroundColor: 'white',
         borderRadius: 10,
         margin: 5,
@@ -1567,8 +1567,8 @@ const styles = StyleSheet.create({
     },
 
     ExchangeVoucherCard_Container: {
-        height: 130,
-        width: 330,
+        // height: 130,
+        width: "95%",
         backgroundColor: 'white',
         borderRadius: 10,
         margin: 5,
@@ -1594,7 +1594,7 @@ const styles = StyleSheet.create({
     TransactionHistory_Container: {
         backgroundColor: '#FFF',
         borderRadius: 10,
-        margin: 5,
+        margin: 2,
         // Box Shadow
         shadowColor: "#000",
         shadowOffset: {
@@ -1657,7 +1657,7 @@ const styles = StyleSheet.create({
         fontFamily: 'InterB',
         fontSize: 16,
         opacity: 0.7,
-        width: 200,
+        width: "70%",
     },
 
     ExchangeVoucherCard_PriceContainer: {
