@@ -1,9 +1,21 @@
 import { contract_voucher } from './web3config'
-import { toObject } from './helper'
+import  {toObject} from './helper'
 
 export const getAllVoucher = async() => {
   try {
-    return toObject(await contract_voucher.methods.getAllVouchers().call())
+    const vouchers = toObject(await contract_voucher.methods.getAllVouchers().call())
+    const result = []
+    vouchers.map((voucher) => {
+        let temp = {}
+        temp.id = voucher.id;
+        temp.amount = voucher.amount;
+        temp.price = voucher.price; 
+        temp.expiry = voucher.expiry;
+        temp.discount = voucher.discount;
+        temp.content = voucher.content;
+        result.push(temp)
+    })
+    return result
   } catch (error) {
     console.error("Error in touristRewardPointOnPostID:", error);
     throw error; // Re-throw the error if needed
@@ -12,6 +24,7 @@ export const getAllVoucher = async() => {
 
 export const getUserVouchers = async(owner) => {
   try {
+    
     const vouchers =  toObject(await contract_voucher.methods.getUserVouchers().call({from: owner}))
     let amount = {}
     

@@ -52,9 +52,9 @@ const ExchangeVoucher = ({ navigation }) => {
         try {
             console.log('Fetch all voucher:');
             const response = await getAllVoucher();
-            console.log("All Voucher", response.data.data);
-            setVouchers(response.data.data);
-            setNumberOfVoucher(response.data.data.length);
+            console.log("All Voucher", response);
+            setVouchers(response);
+            setNumberOfVoucher(response);
             setIsLoading(false);
         } catch (error) {
             console.log(error);
