@@ -82,7 +82,6 @@ const Trips = ({ navigation }) => {
                     Array.from({ length: numberOfTrips }, (_, i) => (
                         <TripCard key={i}
                             navigation={navigation}
-
                             // Props
                             postId={response[i].postID}
                             postList_imgs={response[i].list_imgs}

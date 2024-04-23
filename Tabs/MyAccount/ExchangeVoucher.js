@@ -12,6 +12,7 @@ import * as WebBrowser from 'expo-web-browser';
 import { getAllVoucher } from '../../service/voucher.js'
 import TourDCToken from '../../assets/logo/DCToken.png';
 import { autoExchangeVoucher } from '../../service/signmessage.js';
+import VoucherImage from '../../assets/voucher/voucher.jpg';
 
 /* 
 ! Tourism Page
@@ -54,7 +55,7 @@ const ExchangeVoucher = ({ navigation }) => {
             const response = await getAllVoucher();
             console.log("All Voucher", response);
             setVouchers(response);
-            setNumberOfVoucher(response);
+            setNumberOfVoucher(response.length);
             setIsLoading(false);
         } catch (error) {
             console.log(error);
@@ -67,27 +68,14 @@ const ExchangeVoucher = ({ navigation }) => {
     }, [SessionAD]);
 
     const ExchangeVoucherLogic = async (voucherId) => {
-        // console.log('Exchange Voucher');
-        // try {
-        //     const response = await autoExchangeVoucher(SessionRK, SessionAD, voucherId);
-        //     console.log("Exchange Voucher", response.data.data);
-        //     fetchUserExchangeVoucher();
-        // } catch (error) {
-        //     console.log(error);
-        // }
+        console.log('Exchange Voucher');
+        try {
+            const response = await autoExchangeVoucher(SessionRK, SessionAD, voucherId);
+            console.log("Exchange Voucher", response);
+        } catch (error) {
+            console.log(error);
+        }
     }
-
-    // const ViewTransaction = async (hash) => {
-    //     const url = `https://explorer.vbchain.vn/vibi/tx/${hash}`
-    //     await WebBrowser.openBrowserAsync(url);
-    // }
-
-    // const copyToClipboard = async (data) => {
-    //     if (data == null) {
-    //         return;
-    //     }
-    //     await Clipboard.setStringAsync(data);
-    // };
 
     function convertDateTimeString(dateTimeString) {
         const dateObject = new Date(dateTimeString * 1000);
@@ -114,7 +102,7 @@ const ExchangeVoucher = ({ navigation }) => {
             <View style={styles.ExchangeVoucherCard_Container}>
                 <View style={styles.ExchangeVoucherCard_Inline}>
                     <Image
-                        source={{ uri: `${GLOBAL.BASE_URL}/api/post/getImg/1711987631923-tourdc-bai-bien-bali-2.jpg` }}
+                        source={VoucherImage}
                         // source={{ uri: `${GLOBAL.BASE_URL}/api/post/getImg/${imageName}` }}
                         style={styles.ExchangeVoucherCard_Image}
                     />
@@ -145,7 +133,7 @@ const ExchangeVoucher = ({ navigation }) => {
                         <Text style={styles.TransactionCard_Text}>{voucherExpireDate}</Text>
 
                         <TouchableOpacity
-                            onPress={ExchangeVoucherLogic(voucherId)}
+                            onPress={() => ExchangeVoucherLogic(voucherId)}
                             style={styles.Review_BlueBtn}
                         >
                             <Text style={styles.Review_BlueBtn_Text}>Exchange Voucher</Text>
@@ -185,27 +173,19 @@ const ExchangeVoucher = ({ navigation }) => {
                     }
                 >
 
-                    {/*
-                        Array.from({ length: numberOfTransactions }, (_, i) => (
-                            <TransactionCard
+                    {
+                        Array.from({ length: numberOfVoucher }, (_, i) => (
+                            <ExchangeVoucherCard
                                 key={i}
-                                transactionHash={transactions[i].trHash}
-                                postID={transactions[i].postID}
-                                transactionDate={transactions[i].date}
-                                reason={transactions[i].reason}
-                                numberOfToken={transactions[i].amount}
-                                userAddress={transactions[i].userAddr}
+                                voucherId={vouchers[i].id}
+                                voucherAmount={vouchers[i].amount}
+                                voucherExpireDate={convertDateTimeString(vouchers[i].expiry)}
+                                voucherDiscount={vouchers[i].discount}
+                                voucherContent={vouchers[i].content}
+                                voucherPrice={vouchers[i].price}
                             />
                         ))
-                    */}
-                    <ExchangeVoucherCard
-                        voucherId="1"
-                        voucherAmount="1"
-                        voucherExpireDate="17:00 - 13/01/2023"
-                        voucherDiscount="Discount 50%"
-                        voucherContent="Ueno Park"
-                        voucherPrice="1"
-                    />
+                    }
                 </ScrollView>
             </View>
         </View>

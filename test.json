@@ -1,42 +1,17 @@
 [
     {
-        "__v": 0,
-        "_id": "662643a752afc459c091a521",
-        "amount": 11250000000000000000,
-        "date": "1970-01-20T20:03:03.718Z",
-        "postID": "0xc9d89cedd5cf7dfb91ba17cbea78426d800f4de7ff2d6cf08d70f3a9a2ec9196",
-        "reason": "Upvote Reward",
-        "trHash": "0xc2b9b261e647c2e5c95136d4f9dfc038df0fd9d0cc943ed890b437129b9a12b7",
-        "userAddr": "0x1e1faa2c3ea4b196fdfc169e7e949bf48c56e0a2"
-    },
-    {
-        "__v": 0,
-        "_id": "662648dd52afc459c091a561",
-        "amount": 11250000000000000000,
-        "date": "1970-01-20T20:03:05.053Z",
-        "postID": "0xc5a8879cb12970b6f2a5730f7af6882a3eebb7a00df4b41d2e00f2bd0010786a",
-        "reason": "Upvote Reward",
-        "trHash": "0x3b3313ae18dcb7b3199b92b00214ddfe3bf1ec8ed6316f21d3cd3673d8053d75",
-        "userAddr": "0x1e1faa2c3ea4b196fdfc169e7e949bf48c56e0a2"
-    },
-    {
-        "__v": 0,
-        "_id": "66264a1952afc459c091a5a3",
-        "amount": 11250000000000000000,
-        "date": "1970-01-20T20:03:05.368Z",
-        "postID": "0x5e897d9d18a1d74a3d6a11c6432139d6926c49bc4f91ff0e28f007f3ab9f97ad",
-        "reason": "Upvote Reward",
-        "trHash": "0xd7510507858f478fc2981d6346e303cd84ec251ad7db27d73d67c1165afcddec",
-        "userAddr": "0x1e1faa2c3ea4b196fdfc169e7e949bf48c56e0a2"
-    },
-    {
-        "__v": 0,
-        "_id": "66264c3552afc459c091a5ec",
-        "amount": 11250000000000000000,
-        "date": "1970-01-20T20:03:05.908Z",
-        "postID": "0xc66d506a032fd0d2fe5e01b8d76c4b5b0d970fe23381df6d428e92cc963c3e85",
-        "reason": "Upvote Reward",
-        "trHash": "0xb07d6b08fb2147cc6c0a3592c07b83fb6a5b8764b319f71fe3662ea297e15ad9",
-        "userAddr": "0x1e1faa2c3ea4b196fdfc169e7e949bf48c56e0a2"
+        "0": "1",
+        "1": "96",
+        "2": "30",
+        "3": "1714489436",
+        "4": "60",
+        "5": "Da Lat Farm Ticket Discount Voucher",
+        "__length__": 6,
+        "amount": 1,
+        "content": "Da Lat Farm Ticket Discount Voucher",
+        "discount": "60",
+        "expiry": "1714489436",
+        "id": "1",
+        "price": "30"
     }
 ]

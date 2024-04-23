@@ -775,8 +775,25 @@ const styles = StyleSheet.create({
 
         flexDirection: 'row',
     },
+
     PostCard_Container: {
         height: 120,
+        backgroundColor: '#FFF',
+        borderRadius: 10,
+        margin: 5,
+        // Box Shadow
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+        elevation: 2,
+    },
+
+    VoucherCard_Container: {
+        height: 130,
         backgroundColor: '#FFF',
         borderRadius: 10,
         margin: 5,
@@ -798,6 +815,12 @@ const styles = StyleSheet.create({
         margin: 10,
     },
 
+    VoucherCard_Image: {
+        width: 140,
+        height: 110,
+        borderRadius: 5,
+        margin: 10,
+    },
 
     Review_BlackBtn: {
         backgroundColor: '#000',
@@ -1250,6 +1273,15 @@ const styles = StyleSheet.create({
         margin: 2,
     },
 
+    voucherCardBigText: {
+        color: '#000',
+        fontFamily: 'InterB',
+        fontSize: 14,
+        margin: 2,
+        opacity: 0.7,
+        width: 150
+    },
+
     modalText: {
         color: '#828282',
         fontFamily: 'InterR',
@@ -1525,7 +1557,7 @@ const styles = StyleSheet.create({
     },
 
     ExchangeVoucherCard_Container: {
-        height: 120,
+        height: 130,
         width: 330,
         backgroundColor: 'white',
         borderRadius: 10,
@@ -1562,7 +1594,6 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 2,
         elevation: 2,
-        height: "100%",
         width: "100%",
         // center
         alignItems: 'center',
