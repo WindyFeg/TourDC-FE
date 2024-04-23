@@ -173,7 +173,9 @@ const ExchangeVoucher = ({ navigation }) => {
                         placeholder="Search Exchange Voucher"
                     />
                 </View>
+                <Text style={styles.normalText}>All of the vouchers below must exchange through TourDC token and will be listed on MyTrip</Text>
 
+                {/* List of vouchers */}
                 <ScrollView
                     refreshControl={
                         <RefreshControl

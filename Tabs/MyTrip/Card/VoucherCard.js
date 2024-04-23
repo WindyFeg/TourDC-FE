@@ -13,6 +13,10 @@ $ Contains information of a destination, hotel, restaurant, or activity
 */
 const PostCard = ({ navigation }) => {
 
+    async function showVoucherLogic() {
+        console.log('Show voucher logic');
+    }
+
     const UseVoucher = () => {
     }
 
@@ -38,9 +42,12 @@ const PostCard = ({ navigation }) => {
             <Text style={styles.tripCardText}>Discount 50%</Text>
             {/* Date */}
             <Text style={styles.tripCardText}>11/2/3312</Text>
-
-
-            <Text style={styles.rewardCardText}></Text>
+            <TouchableOpacity
+                onPress={showVoucherLogic}
+                style={styles.Review_BlackBtn}
+            >
+                <Text style={styles.Review_BlackBtn_Text}>Use voucher</Text>
+            </TouchableOpacity>
         </View>
     }
 

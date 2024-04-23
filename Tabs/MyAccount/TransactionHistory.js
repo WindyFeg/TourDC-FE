@@ -169,7 +169,9 @@ const TransactionHistory = ({ navigation }) => {
                         placeholder="Search Transaction"
                     />
                 </View>
+                <Text style={styles.normalText}>All of the Transaction related to tourdc Token will be listed below</Text>
 
+                {/* List of transaction history */}
                 <ScrollView
                     refreshControl={
                         <RefreshControl
