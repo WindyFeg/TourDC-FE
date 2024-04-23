@@ -6,5 +6,3 @@ export const toObject = (data) => {
     )
   );
 };
-
-module.exports = toObject
