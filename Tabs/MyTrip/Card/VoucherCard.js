@@ -50,7 +50,7 @@ const PostCard = (props) => {
 
     const VoucherQR = () => {
         return (<Modal
-            animationType="none"
+            animationType="fade"
             transparent={true}
             visible={modalVisible}
             onRequestClose={() => {
@@ -66,7 +66,11 @@ const PostCard = (props) => {
                     <Text style={styles.modalText}>
                         This voucher will have discount at {voucherDiscount}%
                         {'\n'}
-                        Cost: {voucherPrice} DCT
+                        Cost: {voucherPrice}
+                        <Image
+                            source={TourDCToken}
+                            style={{ width: 15, height: 15 }}
+                        />
                         {'\n'}
                         Expire at: {convertDateTimeString(String(voucherExpireDate))}
                         {'\n'}

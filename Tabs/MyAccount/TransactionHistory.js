@@ -84,6 +84,14 @@ const TransactionHistory = ({ navigation }) => {
         return `${time}, ${date}`;
     }
 
+    function convertDateTime(dateTimeString) {
+        const dateTime = new Date(dateTimeString);
+        const date = dateTime.toLocaleDateString();
+        const time = dateTime.toLocaleTimeString();
+
+        return `${time}, ${date}`;
+    }
+
     const TransactionCard = (props) => {
         const {
             transactionHash,
@@ -98,7 +106,10 @@ const TransactionHistory = ({ navigation }) => {
             <View style={styles.TransactionCard_Container}>
                 <View style={styles.TransactionCard_Inline}>
                     <View style={styles.TransactionCard_icon}>
-                        <SvgComponent name="SendTransaction" />
+                        <SvgComponent name={
+                            reason == "Exchange Voucher" ? "ReceiveTransaction" : "SendTransaction"
+
+                        } />
                     </View>
                     <View style={styles.TransactionCard_Information}>
 
@@ -116,7 +127,7 @@ const TransactionHistory = ({ navigation }) => {
                         </View>
 
                         {/* Date */}
-                        <Text style={styles.TransactionCard_Text}>{transactionDate}</Text>
+                        <Text style={styles.TransactionCard_Text}>{convertDateTime(String(transactionDate))}</Text>
 
                         {/* Author address */}
                         <Text style={styles.TransactionCard_Text}>From: {`${userAddress.slice(0, 5)}...${userAddress.slice(-5)}`}</Text>

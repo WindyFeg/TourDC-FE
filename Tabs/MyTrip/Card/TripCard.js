@@ -59,14 +59,22 @@ const TripCard = (props) => {
         return `${time}, ${date}`;
     }
 
+    function convertDateTime(dateTimeString) {
+        const dateTime = new Date(dateTimeString);
+        const date = dateTime.toLocaleDateString();
+        const time = dateTime.toLocaleTimeString();
+
+        return `${time}, ${date}`;
+    }
+
     const TripCardContent = (props) => {
         return (
             <View>
                 <Text style={styles.tripCardBigText}>{tripName}</Text>
                 <Text
                     style={styles.tripCardText}
-                >Check In at:
-                    {convertDateTimeString(String(checkInTime))}
+                >Check In time: {'\n'}
+                    {convertDateTime(String(checkInTime))}
                 </Text>
                 <TouchableOpacity
                     onPress={CreateReview}

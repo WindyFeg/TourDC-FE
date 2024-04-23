@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity, TextInput, ScrollView, RefreshControl, ActivityIndicator } from 'react-native';
+import { View, Text, Image, TouchableOpacity, TextInput, ScrollView, RefreshControl, ActivityIndicator, Modal } from 'react-native';
 import { Button } from 'react-native-web';
 import styles from '../../styles.js';
 import GLOBAL from '../Custom/Globals.js';
@@ -26,6 +26,9 @@ const ExchangeVoucher = ({ navigation }) => {
     const [vouchers, setVouchers] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [exchangeStatus, setExchangeStatus] = useState(false);
+    const [errorText, setErrorText] = useState('Waiting for exchange voucher status...');
 
     const pullToRefreshFunction = () => {
         setIsLoading(true);
@@ -60,6 +63,7 @@ const ExchangeVoucher = ({ navigation }) => {
         } catch (error) {
             console.log(error);
             setIsLoading(false);
+            setErrorText('Error: Fetching Voucher failed');
         }
     };
 
@@ -69,11 +73,14 @@ const ExchangeVoucher = ({ navigation }) => {
 
     const ExchangeVoucherLogic = async (voucherId) => {
         console.log('Exchange Voucher');
+        setModalVisible(true);
         try {
             const response = await autoExchangeVoucher(SessionRK, SessionAD, voucherId);
             console.log("Exchange Voucher", response);
+            setExchangeStatus(true);
         } catch (error) {
             console.log(error);
+            setExchangeStatus(false);
         }
     }
 
@@ -86,6 +93,39 @@ const ExchangeVoucher = ({ navigation }) => {
 
         const date = dateObject.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
         return `${time}, ${date}`;
+    }
+
+    const ExchangeNotification = () => {
+        return (<Modal
+            animationType="fade"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+                Alert.alert('Modal has been closed.');
+                setModalVisible(!modalVisible);
+            }}>
+            <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                    <Text style={styles.modalBigText}>
+                        Exchange Voucher status
+                    </Text>
+                    {
+                        exchangeStatus ?
+                            <Text style={styles.CreateReview_successText}>Exchange voucher Successfully{'\n'} </Text> :
+                            <Text style={styles.CreateReview_errorText}>
+                                {errorText}
+                            </Text>
+                    }
+
+                    <TouchableOpacity
+                        style={styles.tourismPage_checkInBtnContainer}
+                        onPress={() => setModalVisible(false)}
+                    >
+                        <Text style={styles.tourismPage_checkInBtnText}>CLOSE</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        </Modal>)
     }
 
     const ExchangeVoucherCard = (props) => {
@@ -130,7 +170,7 @@ const ExchangeVoucher = ({ navigation }) => {
                         <Text style={styles.TransactionCard_Text}>Discount: {voucherDiscount}%</Text>
 
                         {/* Date */}
-                        <Text style={styles.TransactionCard_Text}>{voucherExpireDate}</Text>
+                        <Text style={styles.TransactionCard_Text}>Expired:{voucherExpireDate.split(',')[1]}</Text>
 
                         <TouchableOpacity
                             onPress={() => ExchangeVoucherLogic(voucherId)}
@@ -156,6 +196,7 @@ const ExchangeVoucher = ({ navigation }) => {
 
     return (
         <>
+            <ExchangeNotification />
             <View>
                 <BackNavigationButton
                     navigation={navigation}
@@ -185,7 +226,6 @@ const ExchangeVoucher = ({ navigation }) => {
                     />
                 }
             >
-
                 {
                     isLoading ? <LoadingIcon /> :
                         Array.from({ length: numberOfVoucher }, (_, i) => (

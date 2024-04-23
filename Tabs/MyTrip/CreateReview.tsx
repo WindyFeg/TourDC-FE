@@ -239,7 +239,7 @@ const CreateReview: React.FC<Props> = ({ route, navigation }) => {
     const CreateReviewNotify = () => {
         return (
             <Modal
-                animationType="none"
+                animationType="fade"
                 transparent={true}
                 visible={modalVisible}
                 onRequestClose={() => {
