@@ -46,13 +46,7 @@ const MainMyTrip = () => {
     // console.log("userVP: " + userVP);
     // console.log("numberOfToken: " + numberOfToken);
 
-    //! Copy Share 3 to clipboard
-    const copyToClipboard = async () => {
-        if (SessionAD == null) {
-            return;
-        }
-        await Clipboard.setStringAsync(SessionAD);
-    };
+
 
     //! Load user address
     useEffect(() => {
@@ -135,17 +129,21 @@ const MainMyTrip = () => {
             >
                 {/* Avatar and Icon */}
                 <View style={styles.MyTrip_headerContainer}>
-                    <TouchableOpacity
-                        onPress={pullToRefreshFunction}
-                        style={styles.MyTrip_backgroundUserAvatar}>
-                        <Image
-                            style={styles.MyTrip_userAvatar}
-                            source={{ uri: `${GLOBAL.BASE_URL}/api/user/getAvatar/${SessionAD}` }} />
-                    </TouchableOpacity>
+                    <View style={{
+                        alignItems: 'center',
+                    }}>
+                        <TouchableOpacity
+                            onPress={pullToRefreshFunction}
+                            style={styles.MyTrip_backgroundUserAvatar}>
+                            <Image
+                                style={styles.MyTrip_userAvatar}
+                                source={{ uri: `${GLOBAL.BASE_URL}/api/user/getAvatar/${SessionAD}` }} />
+                        </TouchableOpacity>
+                    </View>
 
                     <View style={styles.MyTrip_headerText}>
                         {/* Username section */}
-                        <Text style={{ fontFamily: 'InterB', fontSize: 18 }}>
+                        <Text style={{ fontFamily: 'InterB', fontSize: 24, marginLeft: 10 }}>
                             {props.username}
                         </Text>
 
@@ -155,23 +153,10 @@ const MainMyTrip = () => {
                                 {/* <SvgComponent name="UserVerification" style={styles.MyTrip_headerIcon} /> */}
                                 <Text style={styles.typeOfAccount}>{typeOfAccount}</Text>
                             </View>
-
+                            {/* 
                             <View style={styles.MyTrip_headerIcon}>
-                                {/* <SvgComponent name="Reputation" /> */}
-                                <TouchableOpacity onPress={copyToClipboard}>
-                                    <Text style={styles.MyTrip_headerStatLinkText}>
-                                        {
-                                            SessionAD != null ?
-                                                (SessionAD.length > 7 ? `${SessionAD.slice(0, 5)}...${SessionAD.slice(-5)}` : SessionAD) :
-                                                "No Address"
-                                        }
-                                    </Text>
-                                </TouchableOpacity>
-                                <Image
-                                    source={require('../../assets/icons/clipboard.png')}
-                                    style={styles.tourismPage_clipboardIcon}
-                                />
-                            </View>
+                                <SvgComponent name="Reputation" />
+                            </View> */}
                         </View>
 
                     </View>
@@ -179,6 +164,7 @@ const MainMyTrip = () => {
                     {/* Token Section */}
                     <DCToken
                         numberOfToken={numberOfToken}
+                        SessionAD={SessionAD}
                     />
 
                 </View>

@@ -9,6 +9,18 @@ const styles = StyleSheet.create({
         // justifyContent: 'center',
     },
 
+    MyTrip_UserVerifiedButton: {
+        backgroundColor: '#39A7FF',
+        borderRadius: 10,
+        height: 40,
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: 'white',
+        marginBottom: 10,
+        padding: 5,
+        opacity: 0.8,
+    },
+
     mainExploreContainer: {
         flex: 1,
         padding: 10,
@@ -661,15 +673,27 @@ const styles = StyleSheet.create({
     },
 
     MyTrip_headerToken: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        // paddingHorizontal: 10,
+        backgroundColor: '#192733',
+        borderRadius: 10,
+        width: 100,
+        height: 40,
+        padding: 5,
+        marginTop: 20,
+        marginBottom: 10,
+    },
+
+    MyTrip_headerTokenIconAndText: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingHorizontal: 10,
-        backgroundColor: '#192733',
-        borderRadius: 20,
-        width: 80,
-        height: 30,
+        width: "100%",
     },
+
     MyTrip_headerBackground: {
         shadowOpacity: 0.5,
         marginBottom: 10,
@@ -681,7 +705,7 @@ const styles = StyleSheet.create({
         // flexDirection: 'row',
         alignItems: 'flex-start',
         justifyContent: 'center',
-        margin: 10,
+        marginLeft: 10,
     },
 
     MyTrip_userAvatar: {
@@ -735,10 +759,23 @@ const styles = StyleSheet.create({
 
     MyTrip_headerStatLinkText: {
         fontFamily: 'InterR',
-        fontSize: 12,
-        opacity: 0.9,
-        color: '#828282',
+        fontSize: 10,
+        opacity: 0.7,
+        // color: '#828282',
+        color: 'black',
         textDecorationLine: 'underline',
+    },
+
+    MyTrip_headerStatLinkTextSmall: {
+        fontFamily: 'InterB',
+        fontSize: 9,
+        opacity: 0.9,
+        color: 'white',
+        // width: "100%",
+    },
+
+    Green: {
+        color: '#5cca60',
     },
 
     MyTrip_headerStatTextBig: {
@@ -1469,11 +1506,10 @@ const styles = StyleSheet.create({
     },
 
     typeOfAccount: {
-        fontFamily: 'InterB',
-        fontSize: 9,
-        backgroundColor: "#39A7FF",
-        color: 'white',
-        padding: 5,
+        fontFamily: 'InterR',
+        fontSize: 10,
+        // backgroundColor: "#39A7FF",
+        color: 'black',
         borderRadius: 5,
     }
 

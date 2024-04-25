@@ -116,7 +116,7 @@ const ReviewHeader = (props) => {
                             onPress={() => ViewTransaction(txHash)}
                         >
                             <SvgComponent name='Blockchain' />
-                            <Text style={styles.tourismPage_contentHeaderTextTitle}>Blockchain Verified</Text>
+                            <Text style={styles.tourismPage_contentHeaderTextTitle}>Browser Verified</Text>
                         </TouchableOpacity>
                     )}
                     {ticketVerified && (
