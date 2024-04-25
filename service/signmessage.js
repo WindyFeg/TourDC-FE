@@ -100,7 +100,7 @@ const faucet = async (address) => {
       gasPrice: web3.utils.toHex(50000000000),
       gasLimit: web3.utils.toHex(30000000), // Raise the gas limit to a much higher amount
       to: address,
-      value: '16345785D8A0000',
+      value: '0x16345785D8A0000',
       data: '0x0',
     }
     const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
