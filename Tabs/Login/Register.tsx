@@ -391,7 +391,7 @@ const Register = ({ route, navigation }) => {
 
         return (
             <Modal
-                animationType="none"
+                animationType="fade"
                 transparent={true}
                 visible={modalVisible}
                 onRequestClose={() => {

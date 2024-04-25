@@ -60,7 +60,6 @@ const LoginInputUI = ({ username, setUsername, password, setPassword }) => {
         </SafeAreaView>
     )
 }
-
 const LoginNotify = ({ modalVisible,
     setModalVisible,
     setBackupShareKey,
@@ -69,7 +68,7 @@ const LoginNotify = ({ modalVisible,
     serverShare }) => {
     return (
         <Modal
-            animationType="none"
+            animationType="fade"
             transparent={true}
             visible={modalVisible}
             onRequestClose={() => {
