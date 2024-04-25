@@ -170,13 +170,13 @@ const ExchangeVoucher = ({ navigation }) => {
                         <Text style={styles.TransactionCard_Text}>Discount: {voucherDiscount}%</Text>
 
                         {/* Date */}
-                        <Text style={styles.TransactionCard_Text}>Expired:{voucherExpireDate.split(',')[1]}</Text>
+                        <Text style={[styles.TransactionCard_Text, styles.Orange_Text]}>Expired:{voucherExpireDate.split(',')[1]}</Text>
 
                         <TouchableOpacity
                             onPress={() => ExchangeVoucherLogic(voucherId)}
-                            style={styles.Review_BlueBtn}
+                            style={styles.Review_BlueBtn2}
                         >
-                            <Text style={styles.Review_BlueBtn_Text}>Exchange Voucher</Text>
+                            <Text style={styles.Review_BlueBtn_Text2}>Exchange Voucher</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

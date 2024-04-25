@@ -887,6 +887,21 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         color: 'white',
         padding: 5,
+        opacity: 0.9,
+    },
+
+    Review_BlueBtn2: {
+        backgroundColor: 'white',
+        borderRadius: 5,
+        minWidth: 100,
+        maxWidth: 150,
+        height: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: 'white',
+        padding: 5,
+        borderWidth: 1,
+        borderColor: '#39A7FF',
     },
 
     CommentFooterText: {
@@ -899,6 +914,16 @@ const styles = StyleSheet.create({
         color: 'white',
         fontFamily: 'InterB',
         fontSize: 12,
+    },
+
+    Review_BlueBtn_Text2: {
+        fontFamily: 'InterB',
+        fontSize: 12,
+        color: '#39A7FF',
+    },
+
+    Orange_Text: {
+        color: '#de6464',
     },
 
     CreateReview_container: {
@@ -1605,7 +1630,7 @@ const styles = StyleSheet.create({
 
     ExchangeVoucherCard_Container: {
         // height: 130,
-        width: "95%",
+        width: "97%",
         backgroundColor: 'white',
         borderRadius: 10,
         margin: 5,
@@ -1618,6 +1643,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 2,
         elevation: 2,
+
     },
 
     ExchangeVoucherCard_Image: {
