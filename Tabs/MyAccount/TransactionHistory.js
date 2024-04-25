@@ -62,7 +62,7 @@ const TransactionHistory = ({ navigation }) => {
     }, [SessionAD]);
 
     const ViewTransaction = async (hash) => {
-        const url = `https://explorer.vbchain.vn/vibi/tx/${hash}`
+        const url = `https://sepolia.etherscan.io/tx/${hash}`
         await WebBrowser.openBrowserAsync(url);
     }
 

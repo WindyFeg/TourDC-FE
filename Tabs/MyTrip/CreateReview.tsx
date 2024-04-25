@@ -63,7 +63,7 @@ const CreateReview: React.FC<Props> = ({ route, navigation }) => {
     }, []);
 
     const ViewTransaction = async () => {
-        const url = `https://explorer.vbchain.vn/vibi/tx/${registerHash}`
+        const url = `https://sepolia.etherscan.io/tx/${registerHash}`
         await WebBrowser.openBrowserAsync(url);
     }
 

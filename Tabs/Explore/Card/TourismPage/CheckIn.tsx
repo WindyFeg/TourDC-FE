@@ -81,7 +81,7 @@ export default function CheckIn(
     if (hash == null) {
       return;
     }
-    const url = `https://explorer.vbchain.vn/vibi/tx/${hash}`
+    const url = `https://sepolia.etherscan.io/tx/${hash}`
     await WebBrowser.openBrowserAsync(url);
   }
 

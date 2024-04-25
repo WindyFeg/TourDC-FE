@@ -33,7 +33,7 @@ const ReviewHeader = (props) => {
         if (hash == null) {
             return;
         }
-        const url = `https://explorer.vbchain.vn/vibi/tx/${hash}`
+        const url = `https://sepolia.etherscan.io/tx/${hash}`
         await WebBrowser.openBrowserAsync(url);
     }
 
@@ -41,7 +41,7 @@ const ReviewHeader = (props) => {
         if (address == null) {
             return;
         }
-        const url = `https://explorer.vbchain.vn/vibi/account/${address}`
+        const url = `https://sepolia.etherscan.io/address/${address}`
         await WebBrowser.openBrowserAsync(url);
     }
 

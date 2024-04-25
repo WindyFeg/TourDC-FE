@@ -13,7 +13,9 @@ import Voucher_abi from "../contracts/Voucher.json"
 // const Tourism_address = require("../contracts/Tourism-address.json")
 
 const VBCProvider = "https://vibi.vbchain.vn/"
-var web3 = new Web3(VBCProvider);
+const infuraProvider = "https://sepolia.infura.io/v3/185ca6c54cdb438b977b428d45017f05"
+
+var web3 = new Web3(infuraProvider);
 contract_DCToken = new web3.eth.Contract(DCToken_abi.abi, DCToken_address.Token)
 contract_4R = new web3.eth.Contract(Tourism_abi.abi, Tourism_address.Token)
 contract_voucher = new web3.eth.Contract(Voucher_abi.abi, Voucher_address.Token)
