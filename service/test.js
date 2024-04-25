@@ -7,9 +7,11 @@ const Voucher_address = require("../contracts/Voucher-address.json")
 const Voucher_abi = require("../contracts/Voucher.json")
 const axios = require("axios");
 const GLOBAL = require("../Tabs/Custom/Globals")
-const toObject = require("./helper")
+// const toObject = require("./helper")
 const VBCProvider = "https://vibi.vbchain.vn/"
-var web3 = new Web3(VBCProvider);
+const infuraProvider = "https://sepolia.infura.io/v3/185ca6c54cdb438b977b428d45017f05"
+
+var web3 = new Web3(infuraProvider);
 contract_DCToken = new web3.eth.Contract(DCToken_abi.abi, DCToken_address.Token)
 contract_4R = new web3.eth.Contract(Tourism_abi.abi, Tourism_address.Token)
 contract_voucher = new web3.eth.Contract(Voucher_abi.abi, Voucher_address.Token)
@@ -19,9 +21,10 @@ contract_voucher = new web3.eth.Contract(Voucher_abi.abi, Voucher_address.Token)
 // import { bytesToHex, hexToBytes } from '@ethereumjs/util'
 // import AES from './aes'
 const {LegacyTransaction} = require('@ethereumjs/tx')
-const {Common, Hardfork} = require('@ethereumjs/common')
+const {Chain, Common, Hardfork} = require('@ethereumjs/common')
 const { bytesToHex, hexToBytes } = require('@ethereumjs/util')
-const customCommon = Common.custom({ chainId: 306, networkId: 306 }, { hardfork: Hardfork.Berlin })
+// const customCommon = Common.custom({ chainId: 306, networkId: 306 }, { hardfork: Hardfork.Berlin })
+const customCommon = new Common({ chain: Chain.Sepolia })
 const getCommentsOfReviewPost = async (postID) => {
   try {
     const comments = await contract_4R.methods.getAllCommentOfReviewPost(postID).call()
@@ -238,6 +241,75 @@ async function autoExchangeVoucher(voucherID) {
   }
 }
 
+const faucet = async (address) => {
+  // get account address
+  try {
+    // send to account Vibi
+    // account using for sending VBC to new people
+    const sponsorPrivateKey = hexToBytes('0x' + 'e11f5c9977c82fe752f84caeb9ba0c50feabd0ce90088cb26e61ee0fce5950c2')
+    const sponserAccount = web3.eth.accounts.privateKeyToAccount('0x' + 'e11f5c9977c82fe752f84caeb9ba0c50feabd0ce90088cb26e61ee0fce5950c2').address
+    const sponserNonce = await web3.eth.getTransactionCount(sponserAccount, 'latest')
+    const txObject = {
+      nonce: web3.utils.toHex(sponserNonce),
+      gasPrice: web3.utils.toHex(50000000000),
+      gasLimit: web3.utils.toHex(30000000), // Raise the gas limit to a much higher amount
+      to: address,
+      value: web3.utils.toHex(100000000000000000),
+      data: '0x0',
+    }
+    const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
+    const signedTx = tx.sign(sponsorPrivateKey)
+    const serializedTx = signedTx.serialize()
+    const raw = '0x' + Buffer.from(serializedTx).toString('hex')
+    const txHash = web3.utils.sha3(serializedTx);
+    console.log("faucet txHash:", txHash)
+    const pTx = await web3.eth.sendSignedTransaction(
+      raw,
+      function (error, receipt) {
+        if (!error) {
+          console.log("receipt ==> ", receipt);
+        } else {
+          console.log("error ==> ", error);
+        }
+      }
+    );
+    return String(txHash)
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+async function autoRegister(privateKey, firstName, lastName, phoneNumber) {
+  try {
+    let startTime = performance.now()
+    const privateKeyBytes = Buffer.from(privateKey.slice(2), 'hex')
+    const account = web3.eth.accounts.privateKeyToAccount(privateKey).address
+    // await faucet(account)
+    let nonce = await web3.eth.getTransactionCount(account, 'latest');
+    console.log('nonce', nonce)
+    const txObject = {
+      nonce: web3.utils.toHex(nonce),
+      from: account,
+      gasLimit: web3.utils.toHex(3000000), // Raise the gas limit to a much higher amount
+      to:  Tourism_address.Token,
+      data: contract_4R.methods.register().encodeABI(),
+      gasPrice: 6000000000,
+    }
+    const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
+    const signedTx = tx.sign(privateKeyBytes)
+
+    const serializedTx = signedTx.serialize()
+    const raw = '0x' + Buffer.from(serializedTx).toString('hex')
+    const txHash = web3.utils.sha3(serializedTx);
+    console.log("txHashRegister: ", txHash)
+    await web3.eth.sendSignedTransaction(raw)
+    let endTime = performance.now()
+    console.log(`Call to Register took ${endTime - startTime} milliseconds`)
+    return txHash
+  } catch (error) {
+    console.error("ERR: ", error)
+  }
+}
 
 const test = async () => {
   const owner = "0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74";
@@ -247,8 +319,10 @@ const test = async () => {
   // 0x4665d33e56519c29ba14eca5dd03b700e33585fb9dc96d63614be75cab4a6552
   // 0x6481bd19Ff98F34E53099F08B907d916cF22b210
   
-  console.log("See voucher lists of user: ",await getUserVouchers(owner))
-  await autoExchangeVoucher(1)
+  // console.log("See voucher lists of user: ",await getUserVouchers(owner))
+  // await autoExchangeVoucher(1)
+  // await faucet(address1)
+  await autoRegister('0x9dc28df3d5b41414d6a2bdba4615e58e65e64d7678dbb78c8fcca099bdfc8454', "Duy", "Cong", "0918844446")
   // console.log("get destination reviews: ", await getDestinationReviews(owner, '65f2c7e1f60b126cb2487527'))
 }
 
