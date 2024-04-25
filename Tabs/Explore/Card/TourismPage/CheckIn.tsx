@@ -244,7 +244,7 @@ export default function CheckIn(
   const CheckInNotify = () => {
     return (
       <Modal
-        animationType="none"
+        animationType="fade"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {

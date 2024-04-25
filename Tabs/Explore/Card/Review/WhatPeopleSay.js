@@ -7,7 +7,7 @@ import SvgComponent from '../../../../assets/SvgComponent.js';
 const WhatPeopleSay = ({ navigation }) => {
 
     const ReviewPost = () => {
-        navigation.navigate('ReviewPost');
+        // navigation.navigate('ReviewPost');
     }
 
     const UserSection = (props) => {
