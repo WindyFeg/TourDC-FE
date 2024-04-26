@@ -344,6 +344,7 @@ const Register = ({ route, navigation }) => {
     useEffect(() => {
         if (privateKey !== '') {
             privateKeyEncrypt();
+            registerOnBlockchain();
         }
     }, [privateKey]);
 
@@ -352,7 +353,6 @@ const Register = ({ route, navigation }) => {
     useEffect(() => {
         const registerAndFetch = async () => {
             if (encryptedPrivateKey !== '') {
-                await registerOnBlockchain();
                 fetchRegisterData();
             }
         };
