@@ -219,9 +219,9 @@ const Register = ({ route, navigation }) => {
     };
 
     //! Save Share 2 to device
-    const saveShare2 = async () => {
+    const saveShare2 = async (share2) => {
         try {
-            await AsyncStorage.setItem(username, shares[1]);
+            await AsyncStorage.setItem(username, share2);
             console.log("Share 2 saved");
         } catch (error) {
             console.log(error);
@@ -314,11 +314,11 @@ const Register = ({ route, navigation }) => {
         //$ encrypt private key
         let encryptedPrivateKey = await aes.encryptedPrivateKey(randomKey, privateKey);
 
+        //! Save share 2 (Device)
+        saveShare2(hexShares[1]);
+
         //! Save share 1 and encrypted private key (Server)
         setEncryptedPrivateKey(encryptedPrivateKey.encryptedKey ?? '');
-
-        //! Save share 2 (Device)
-        saveShare2();
 
         //! Show share 3 (User)
     }

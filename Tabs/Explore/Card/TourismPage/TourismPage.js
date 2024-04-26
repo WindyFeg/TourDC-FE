@@ -1,5 +1,5 @@
 import 'react-native-get-random-values';
-import { Button, View, Text, Image, ImageBackground, TouchableOpacity, ScrollView, Platform, ActivityIndicator } from 'react-native';
+import { Button, View, Text, Image, ImageBackground, TouchableOpacity, ScrollView, Platform, ActivityIndicator, RefreshControl } from 'react-native';
 import ReviewShort from '../Review/ReviewShort.js';
 import styles from '../../../../styles.js';
 import SvgComponent from '../../../../assets/SvgComponent.js';
@@ -41,7 +41,15 @@ const TourismPage = ({ route, navigation }) => {
     const [SessionRK, setSessionRK] = useState('');
     const [SessionAD, setSessionAD] = useState('');
     const [IsLoadingReview, setIsLoadingReview] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
 
+    const pullToRefreshFunction = () => {
+        setIsLoadingReview(true);
+        setRefreshing(true);
+        fetchTourismPage();
+        setRefreshing(false);
+        // fetchComment (Done Refreshing)
+    }
 
     //! Load SessionRK and SessionAD
     useEffect(() => {
@@ -73,14 +81,14 @@ const TourismPage = ({ route, navigation }) => {
     }, []);
 
     //! Smart Contract
+    const fetchTourismPage = async () => {
+        console.log("Fetching all reviews of id: " + placeId);
+        web3.getDestinationReviews(SessionAD, placeId).then((result) => {
+            setReviews(result)
+            setIsLoadingReview(false);
+        })
+    };
     useEffect(() => {
-        const fetchTourismPage = async () => {
-            console.log("Fetching all reviews of id: " + placeId);
-            web3.getDestinationReviews(SessionAD, placeId).then((result) => {
-                setReviews(result)
-                setIsLoadingReview(false);
-            })
-        };
         if (SessionAD != '') fetchTourismPage();
     }, [SessionAD]);
 
@@ -263,6 +271,7 @@ const TourismPage = ({ route, navigation }) => {
     const ReviewContainer = () => {
         return (
             <View>
+                <Text style={styles.tourismPage_whatPeopleSay}>Reviews</Text>
                 {
                     IsLoadingReview ? <LoadingIcon /> :
                         Array.from({ length: reviews.length }, (_, i) => (
@@ -324,7 +333,13 @@ const TourismPage = ({ route, navigation }) => {
         style={{
             backgroundColor: '#fff',
         }}
-        stickyHeaderIndices={[3]} // Add this line
+        stickyHeaderIndices={[3]}
+        refreshControl={
+            <RefreshControl
+                refreshing={refreshing}
+                onRefresh={pullToRefreshFunction}
+            />
+        }
     >
         {/* Back Button and Options Button */}
         <BackNavigationButton navigation={navigation} />

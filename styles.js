@@ -9,6 +9,21 @@ const styles = StyleSheet.create({
         // justifyContent: 'center',
     },
 
+    ReviewPostShort_container: {
+        backgroundColor: 'white',
+        borderRadius: 20,
+        // Box Shadow
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+        elevation: 2,
+        marginVertical: 5,
+    },
+
     contractVerified_btnContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
@@ -546,9 +561,10 @@ const styles = StyleSheet.create({
     },
 
     ReviewPostHeader_image: {
-        width: "100%",
+        // width: "100%",
         height: 230,
-        borderRadius: 30,
+        borderRadius: 20,
+        margin: 5,
     },
 
     ReviewPostHeader_title: {
@@ -592,7 +608,8 @@ const styles = StyleSheet.create({
     },
 
     ReviewPostShort_content: {
-        margin: 20,
+        marginVertical: 10,
+        marginHorizontal: 20,
         opacity: 0.7,
         fontFamily: 'InterR',
         fontWeight: 'regular',

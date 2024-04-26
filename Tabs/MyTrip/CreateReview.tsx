@@ -162,9 +162,9 @@ const CreateReview: React.FC<Props> = ({ route, navigation }) => {
             SessionAD,
             placeId,
             postId,
-            title,
-            rating * 10,
             reviewText,
+            rating * 10,
+            title,
         );
         setSuccessText('Your review has been posted successfully!');
         setTxHash(response);

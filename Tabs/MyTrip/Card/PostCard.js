@@ -75,7 +75,13 @@ const PostCard = (props) => {
     const PostCardContent = () => {
         return <View>
             {/* Title */}
-            <Text style={styles.tripCardBigText}>{postTitle}</Text>
+            <Text style={styles.tripCardBigText}>
+                {
+                    postTitle && postTitle.length > 20 ?
+                        postTitle.substring(0, 20) + '...'
+                        : postTitle
+                }
+            </Text>
             <Text style={styles.tripCardText}>{placeName}</Text>
             {/* Date */}
             <Text style={styles.tripCardText}>Create at: {convertDateTimeString(String(createTime))}</Text>

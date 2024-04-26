@@ -67,7 +67,7 @@ const ReviewHeader = (props) => {
             >
                 <Text
                     style={styles.ReviewPostHeader_title}>
-                    {title}
+                    {title.length > 25 ? title.substring(0, 25) + "..." : title}
                 </Text>
 
                 {/* User profile*/}
