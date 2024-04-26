@@ -37,7 +37,7 @@ const MainMyAccount = ({ navigation }) => {
     const [SessionAD, setSessionAD] = useState('');
     const [userData, setUserData] = useState({});
     const [isLoading, setIsLoading] = useState(true);
-    const [modalVisible, setModalVisible] = useState(true);
+    const [modalVisible, setModalVisible] = useState(false);
 
     //! Load user address
     useEffect(() => {

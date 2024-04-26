@@ -20,8 +20,7 @@ function generateRandomBase64Secret(length) {
   return result;
 }
 
-async function shares_key_shamir() {
-  const randomKey = generateRandomBase64Secret(16)
+async function shares_key_shamir(randomKey) {
   console.log("Random Key: " + randomKey)
   const shares = sss.split(randomKey, { shares: 3, threshold: 2 })
   return shares
@@ -51,5 +50,6 @@ function shamir_combine(key_share_1, key_share_2) {
 
 module.exports = {
   shares_key_shamir,
-  shamir_combine
+  shamir_combine,
+  generateRandomBase64Secret
 }

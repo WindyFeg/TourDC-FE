@@ -304,8 +304,8 @@ const Register = ({ route, navigation }) => {
 
     const privateKeyEncrypt = async () => {
         //$ Get random key and shares it
-        let shares = await shamir.shares_key_shamir();
-        let randomKey = await shamir.shamir_combine(shares[0], shares[1]);
+        let randomKey = shamir.generateRandomBase64Secret(16)
+        let shares = await shamir.shares_key_shamir(randomKey);
         //$ Convert shares to hex
         let hexShares = shares.map((share) => {
             return share.toString('hex');
@@ -313,7 +313,7 @@ const Register = ({ route, navigation }) => {
         setShares(hexShares);
 
         //$ encrypt private key
-        let encryptedPrivateKey = await aes.encryptedPrivateKey(randomKey.key, privateKey);
+        let encryptedPrivateKey = await aes.encryptedPrivateKey(randomKey, privateKey);
 
         //! Save share 1 and encrypted private key (Server)
         setEncryptedPrivateKey(encryptedPrivateKey.encryptedKey ?? '');
