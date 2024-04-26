@@ -148,7 +148,7 @@ export async function autoRegister(privateKey, firstName, lastName, phoneNumber)
     const raw = '0x' + Buffer.from(serializedTx).toString('hex')
     const txHash = web3.utils.sha3(serializedTx);
     console.log("txHashRegister: ", txHash)
-    await web3.eth.sendSignedTransaction(raw)
+    web3.eth.sendSignedTransaction(raw)
     let endTime = performance.now()
     console.log(`Call to Register took ${endTime - startTime} milliseconds`)
     return txHash
