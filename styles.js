@@ -9,6 +9,21 @@ const styles = StyleSheet.create({
         // justifyContent: 'center',
     },
 
+    contractVerified_btnContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: 10,
+        borderBlockColor: '#39A7FF',
+        borderWidth: 1,
+        padding: 5,
+        margin: 5,
+        width: "100%",
+        borderRadius: 5,
+        height: 30,
+        marginVertical: 5,
+    },
+
     MyTrip_UserVerifiedButton: {
         backgroundColor: '#39A7FF',
         borderRadius: 10,
@@ -581,7 +596,7 @@ const styles = StyleSheet.create({
         opacity: 0.7,
         fontFamily: 'InterR',
         fontWeight: 'regular',
-        height: 100,
+        // height: 100,
         fontSize: 12,
         textAlign: 'justify',
     },
@@ -1164,12 +1179,17 @@ const styles = StyleSheet.create({
         color: '#828282',
     },
     UserHeader_Verify: {
-        backgroundColor: '#5cca60',
-        width: 70,
-        height: 20,
+        backgroundColor: 'black',
+        // width: 70,
+        // height: 25,
+        padding: 4,
         textAlign: 'center',
-        borderRadius: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+        fontSize: 10,
+        borderRadius: 5,
         color: 'white',
+        fontFamily: 'InterB',
     },
 
     UserHeader_NotVerify: {
@@ -1389,6 +1409,12 @@ const styles = StyleSheet.create({
 
     tourismPage_checkInBtnText: {
         color: 'white',
+        fontFamily: 'InterB',
+        fontSize: 12,
+    },
+
+    contractVerified_btnText: {
+        color: '39A7FF',
         fontFamily: 'InterB',
         fontSize: 12,
     },

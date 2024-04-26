@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, Image, TextInput, TouchableOpacity, Button } from 'react-native';
+import { Text, View, Image, TextInput, TouchableOpacity, Button, Modal } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import ExploreTab from '../Explore/ExploreTab';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -15,11 +15,15 @@ import { ScrollView } from 'react-native-gesture-handler';
 import axios from 'axios';
 import GLOBAL from '../Custom/Globals.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as WebBrowser from 'expo-web-browser';
 import {
     useAccount,
     useDisconnect
 } from "wagmi";
 import * as web3 from '../../service/web3.js';
+import ERC20With4RMechanism from '../../contracts/ERC20With4RMechanism-address.json';
+import TourismContract from '../../contracts/Tourism-address.json';
+import VoucherContract from '../../contracts/Voucher-address.json';
 
 /* 
 ! Tourism Page
@@ -33,6 +37,7 @@ const MainMyAccount = ({ navigation }) => {
     const [SessionAD, setSessionAD] = useState('');
     const [userData, setUserData] = useState({});
     const [isLoading, setIsLoading] = useState(true);
+    const [modalVisible, setModalVisible] = useState(true);
 
     //! Load user address
     useEffect(() => {
@@ -46,6 +51,13 @@ const MainMyAccount = ({ navigation }) => {
 
         loadData();
     }, []);
+
+    const ViewAddress = async (address) => {
+        if (address == undefined) return;
+
+        const url = `https://sepolia.etherscan.io/address/${address}`
+        await WebBrowser.openBrowserAsync(url);
+    }
 
 
     //! Fetch user data from blockchain
@@ -81,9 +93,13 @@ const MainMyAccount = ({ navigation }) => {
                     >
                         <Text style={styles.UserHeader_UserName}>{userData.firstName + " " + userData.lastName}</Text>
                         <Text style={styles.UserHeader_Phone}>{userData.phoneNumber}</Text>
-                        <Text style={styles.UserHeader_Verify}>
-                            Verify
-                        </Text>
+                        <TouchableOpacity
+                            onPress={() => setModalVisible(true)}
+                        >
+                            <Text style={styles.UserHeader_Verify}>
+                                CONTRACT VERIFIED
+                            </Text>
+                        </TouchableOpacity>
                         {/* <Text style={styles.UserHeader_NumberPost}>
                             Voting Power: {Number(userData.VP)}
                         </Text> */}
@@ -236,54 +252,106 @@ const MainMyAccount = ({ navigation }) => {
         navigation.navigate('TransactionHistory');
     }
 
+    const ContractVerifiedNotification = () => {
+        return (<Modal
+            animationType="fade"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+                Alert.alert('Modal has been closed.');
+                setModalVisible(!modalVisible);
+            }}>
+            <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                    <Text style={styles.modalBigText}>
+                        Contract Verified
+                    </Text>
+
+                    <Text style={styles.modalText}>
+                        Your account has been verified by the TourDC contract
+                    </Text>
+
+                    <TouchableOpacity
+                        style={styles.contractVerified_btnContainer}
+                        onPress={() => ViewAddress(ERC20With4RMechanism.Token)}
+                    >
+                        <Text style={styles.contractVerified_btnText}>ERC20With4RMechanism</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.contractVerified_btnContainer}
+                        onPress={() => ViewAddress(TourismContract.Token)}
+                    >
+                        <Text style={styles.contractVerified_btnText}>Tourism Contract</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.contractVerified_btnContainer}
+                        onPress={() => ViewAddress(VoucherContract.Token)}
+                    >
+                        <Text style={styles.contractVerified_btnText}>Voucher Contract</Text>
+                    </TouchableOpacity>
+
+
+                    <TouchableOpacity
+                        style={styles.tourismPage_checkInBtnContainer}
+                        onPress={() => setModalVisible(false)}
+                    >
+                        <Text style={styles.tourismPage_checkInBtnText}>CLOSE</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        </Modal>)
+    }
 
     return (
-        <ScrollView style={styles.MyAccount_Container}>
-            <SearchBarHeader />
-            <UserHeaderInfo />
+        <>
+            <ContractVerifiedNotification />
+            <ScrollView style={styles.MyAccount_Container}>
+                <SearchBarHeader />
+                <UserHeaderInfo />
 
-            <MyAccount_TourDCButton />
+                <MyAccount_TourDCButton />
 
-            <MyAccount_DoubleButton
-                iconName1="Settings"
-                Title1="Settings"
-                Description1="View and set your account preference"
-                Nav1={() => Settings()}
+                <MyAccount_DoubleButton
+                    iconName1="Settings"
+                    Title1="Settings"
+                    Description1="View and set your account preference"
+                    Nav1={() => Settings()}
 
-                iconName2="Help"
-                Title2="Help Centre"
-                Description2="Find the best answer to your questions"
-                Nav2={() => open({ view: 'WhatIsAWallet' })}
-            />
+                    iconName2="Help"
+                    Title2="Help Centre"
+                    Description2="Find the best answer to your questions"
+                    Nav2={() => open({ view: 'WhatIsAWallet' })}
+                />
 
-            <Text>My Rewards</Text>
+                <Text>My Rewards</Text>
 
-            <MyAccount_DoubleButton
-                iconName1="History"
-                Title1="Transaction History"
-                Description1="View your transaction history"
-                Nav1={() => History()}
+                <MyAccount_DoubleButton
+                    iconName1="History"
+                    Title1="Transaction History"
+                    Description1="View your transaction history"
+                    Nav1={() => History()}
 
-                iconName2="Voucher"
-                Title2="Exchange Vouchers"
-                Description2="View vouchers that you can use now"
-                Nav2={() => ExchangeVoucher()}
-            />
+                    iconName2="Voucher"
+                    Title2="Exchange Vouchers"
+                    Description2="View vouchers that you can use now"
+                    Nav2={() => ExchangeVoucher()}
+                />
 
-            <TouchableOpacity
-                onPress={() => Logout()}
-                style={styles.MyAccount_BtnLogout}
-            >
-                <Text style={styles.MyAccount_LogoutButtonText}>LOGOUT</Text>
-            </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => Logout()}
+                    style={styles.MyAccount_BtnLogout}
+                >
+                    <Text style={styles.MyAccount_LogoutButtonText}>LOGOUT</Text>
+                </TouchableOpacity>
 
-            <TouchableOpacity
-                onPress={deleteAppData}
-                style={styles.MyAccount_BtnLogout}
-            >
-                <Text style={styles.MyAccount_LogoutButtonText}>DELETE APPDATA</Text>
-            </TouchableOpacity>
-        </ScrollView >
+                <TouchableOpacity
+                    onPress={deleteAppData}
+                    style={styles.MyAccount_BtnLogout}
+                >
+                    <Text style={styles.MyAccount_LogoutButtonText}>DELETE APPDATA</Text>
+                </TouchableOpacity>
+            </ScrollView >
+        </>
     );
 };
 
