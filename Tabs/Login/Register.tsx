@@ -290,7 +290,6 @@ const Register = ({ route, navigation }) => {
                 },
             );
             console.log(response.data);
-            setSuccessText('Register successfully');
             setErrorText('');
             // register on blockchain 
 
@@ -328,6 +327,7 @@ const Register = ({ route, navigation }) => {
     async function registerOnBlockchain() {
         console.log(firstName, lastName, phoneNumber, privateKey)
         setRegisterHash(await autoRegister(privateKey, firstName, lastName, phoneNumber) as String)
+        setSuccessText('Register successfully');
     }
 
 
