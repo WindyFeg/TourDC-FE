@@ -313,7 +313,7 @@ const Register = ({ route, navigation }) => {
         setShares(hexShares);
 
         //$ encrypt private key
-        let encryptedPrivateKey = await aes.encryptedPrivateKey(randomKey.key, privateKey);
+        let encryptedPrivateKey = await aes.encryptedPrivateKey(randomKey, privateKey);
 
         //! Save share 1 and encrypted private key (Server)
         setEncryptedPrivateKey(encryptedPrivateKey.encryptedKey ?? '');

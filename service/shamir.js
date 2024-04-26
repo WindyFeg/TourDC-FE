@@ -50,5 +50,6 @@ function shamir_combine(key_share_1, key_share_2) {
 
 module.exports = {
   shares_key_shamir,
-  shamir_combine
+  shamir_combine,
+  generateRandomBase64Secret
 }
