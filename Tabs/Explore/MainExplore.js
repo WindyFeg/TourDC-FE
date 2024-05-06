@@ -11,8 +11,11 @@ const Tab = createMaterialTopTabNavigator();
 ! Explore page
 $ Contain Explore Tabs
 */
-const SearchBarHeader = () => {
+const SearchBarHeader = (navigation) => {
     {/* Header View */ }
+    const QRCode = () => {
+        navigation.navigate('ScanQR');
+    }
     return (<View style={styles.headerContainer}>
         <TouchableOpacity style={styles.qrCodeBtn} onPress={() => QRCode()}>
             <SvgComponent name="QRCode" />
@@ -32,14 +35,13 @@ const SearchBarHeader = () => {
 }
 const MainExplore = ({ navigation }) => {
 
-    const QRCode = () => {
-        navigation.navigate('ScanQR');
-    }
 
     return (
         <View style={styles.mainExploreContainer}>
             {/* Header */}
-            <SearchBarHeader />
+            <SearchBarHeader
+                navigation={navigation}
+            />
 
             {/* Explore Tabs */}
             <Tab.Navigator

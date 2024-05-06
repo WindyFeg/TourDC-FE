@@ -211,11 +211,11 @@ const Register = ({ route, navigation }) => {
     }
 
     //! Copy Share 3 to clipboard
-    const copyToClipboard = async () => {
-        if (shares[2] == null) {
+    const copyToClipboard = async (hash) => {
+        if (hash == null) {
             return;
         }
-        await Clipboard.setStringAsync(shares[2]);
+        await Clipboard.setStringAsync(hash);
     };
 
     //! Save Share 2 to device
@@ -415,7 +415,7 @@ const Register = ({ route, navigation }) => {
                                             Your private share key, Please be backed-up this key (Touch to copy):
                                         </Text>
                                         <View style={styles.modalCopyTextContainer}>
-                                            <TouchableOpacity onPress={() => copyToClipboard()}>
+                                            <TouchableOpacity onPress={() => copyToClipboard(shares[2])}>
                                                 <Text style={styles.tourismPage_checkInLocationText}>
                                                     {encryptedPrivateKey}
                                                     <Image
@@ -439,7 +439,7 @@ const Register = ({ route, navigation }) => {
                                             Your Register Hash, (Touch to copy):
                                         </Text>
                                         <View style={styles.modalCopyTextContainer}>
-                                            <TouchableOpacity onPress={() => copyToClipboard()}>
+                                            <TouchableOpacity onPress={() => copyToClipboard(registerHash)}>
                                                 <Text style={styles.tourismPage_checkInLocationText}>
                                                     {registerHash}
                                                     <Image
