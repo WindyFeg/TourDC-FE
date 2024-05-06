@@ -251,10 +251,10 @@ const faucet = async (address) => {
     const sponserNonce = await web3.eth.getTransactionCount(sponserAccount, 'latest')
     const txObject = {
       nonce: web3.utils.toHex(sponserNonce),
-      gasPrice: web3.utils.toHex(50000000000),
-      gasLimit: web3.utils.toHex(30000000), // Raise the gas limit to a much higher amount
+      gasPrice: web3.utils.toHex(1000000000000),
+      gasLimit: web3.utils.toHex(3000000), // Raise the gas limit to a much higher amount
       to: address,
-      value: web3.utils.toHex(100000000000000000),
+      value: '0x16345785D8A0000',
       data: '0x0',
     }
     const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
@@ -290,10 +290,10 @@ async function autoRegister(privateKey, firstName, lastName, phoneNumber) {
     const txObject = {
       nonce: web3.utils.toHex(nonce),
       from: account,
-      gasLimit: web3.utils.toHex(1000000), // Raise the gas limit to a much higher amount
+      gasLimit: web3.utils.toHex(300000), // Raise the gas limit to a much higher amount
       to:  Tourism_address.Token,
       data: contract_4R.methods.register().encodeABI(),
-      gasPrice: 6000000000,
+      gasPrice: 200000000000,
     }
     const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
     const signedTx = tx.sign(privateKeyBytes)
@@ -376,10 +376,10 @@ const test = async () => {
   
   // console.log("See voucher lists of user: ",await getUserVouchers(owner))
   // await autoExchangeVoucher(1)
-  // await faucet(address1)
-  // await autoRegister('0x9dc28df3d5b41414d6a2bdba4615e58e65e64e7678dbb78c8fcca099bdfc8454', "Duy", "Cong", "0918844446")
+  // await faucet(address2)
+  await autoRegister('0x68e69f75a55589f3fc4a47246921cfde47f2d7490320fb4defdd344453c5ea43', "Duy", "Cong", "0918844446")
   // console.log("get destination reviews: ", await getDestinationReviews(owner, '65f2c7e1f60b126cb2487527'))
-  await autoCheckIn('0xe11f5c9977c82fe752f84caeb9ba0c50feabd0ce90088cb26e61ee0fce5950c2', '0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74' ,'65f2c7e1f60b126cb2487527')
+  // await autoCheckIn('0xe11f5c9977c82fe752f84caeb9ba0c50feabd0ce90088cb26e61ee0fce5950c2', '0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74' ,'65f2c7e1f60b126cb2487527')
 }
 
 test()
