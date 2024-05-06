@@ -45,10 +45,10 @@ export async function autoCheckIn(randomKey, address, placeID) {
     const txObject = {
       nonce: web3.utils.toHex(nonce),
       from: account,
-      gasLimit: web3.utils.toHex(3000000), // Raise the gas limit to a much higher amount
+      gasLimit: web3.utils.toHex(300000), // Raise the gas limit to a much higher amount
       to: contractAddress.Token,
       data: contract.methods.checkIn(placeID).encodeABI(),
-      gasPrice: 50000000000,
+      gasPrice: 200000000000,
     }
     console.log('txObject:', txObject)
     const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
