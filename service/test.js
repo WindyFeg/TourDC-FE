@@ -290,7 +290,7 @@ async function autoRegister(privateKey, firstName, lastName, phoneNumber) {
     const txObject = {
       nonce: web3.utils.toHex(nonce),
       from: account,
-      gasLimit: web3.utils.toHex(3000000), // Raise the gas limit to a much higher amount
+      gasLimit: web3.utils.toHex(1000000), // Raise the gas limit to a much higher amount
       to:  Tourism_address.Token,
       data: contract_4R.methods.register().encodeABI(),
       gasPrice: 6000000000,
@@ -311,6 +311,61 @@ async function autoRegister(privateKey, firstName, lastName, phoneNumber) {
   }
 }
 
+async function autoCheckIn(privateKey, address, placeID) {
+  try {
+
+    // signmessage
+    const account = web3.eth.accounts.privateKeyToAccount(privateKey).address
+
+    let nonce = await web3.eth.getTransactionCount(account, 'latest');
+    let data = contract_4R.methods.checkIn(placeID).encodeABI();
+
+    const txObject = {
+      nonce: web3.utils.toHex(Number(nonce)),
+      from: account,
+      gasLimit: web3.utils.toHex(3000000), // Raise the gas limit to a much higher amount
+      to: Tourism_address.Token,
+      data: contract_4R.methods.checkIn(placeID).encodeABI(),
+      // maxFeePerGas: 32527070143,
+      gasPrice: 50000000000 
+    }
+    console.log('txObject:', txObject)
+    const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
+
+    const privateKeyBytes = Buffer.from(privateKey.slice(2), 'hex')
+    const signedTx = tx.sign(privateKeyBytes)
+
+    const serializedTx = signedTx.serialize()
+    const raw = '0x' + Buffer.from(serializedTx).toString('hex')
+    const txHash = web3.utils.sha3(serializedTx);
+    console.log("checkIn txHash: ", txHash)
+    await web3.eth.sendSignedTransaction(raw)
+    .on('receipt', (sendtransaction) => {
+      const postID = sendtransaction.logs[0].topics[1]
+      console.log('postID', postID)
+      console.log('save postID to db')
+      // call api to save post in db
+      // axios.post(`${GLOBAL.BASE_URL}/api/post/add`, {
+      //   hash: txHash,
+      //   placeID: placeID,
+      // })
+    })
+    .on('error', console.error)
+    let endTime = performance.now()
+    console.log(`Call to CheckIn took ${endTime - startTime} milliseconds`)
+    return {
+      success: true,
+      txHash: txHash,
+    }
+  } catch (error) {
+    console.error(error)
+    return {
+      success: false,
+      error: error.message
+    }
+  }
+}
+
 const test = async () => {
   const owner = "0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74";
   const address1 = "0x1a620c351c07763f430897AeaA2883E37cA0aaCD"
@@ -322,8 +377,9 @@ const test = async () => {
   // console.log("See voucher lists of user: ",await getUserVouchers(owner))
   // await autoExchangeVoucher(1)
   // await faucet(address1)
-  await autoRegister('0x9dc28df3d5b41414d6a2bdba4615e58e65e64d7678dbb78c8fcca099bdfc8454', "Duy", "Cong", "0918844446")
+  // await autoRegister('0x9dc28df3d5b41414d6a2bdba4615e58e65e64e7678dbb78c8fcca099bdfc8454', "Duy", "Cong", "0918844446")
   // console.log("get destination reviews: ", await getDestinationReviews(owner, '65f2c7e1f60b126cb2487527'))
+  await autoCheckIn('0xe11f5c9977c82fe752f84caeb9ba0c50feabd0ce90088cb26e61ee0fce5950c2', '0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74' ,'65f2c7e1f60b126cb2487527')
 }
 
 test()
