@@ -48,7 +48,7 @@ export async function autoCheckIn(randomKey, address, placeID) {
       gasLimit: web3.utils.toHex(3000000), // Raise the gas limit to a much higher amount
       to: contractAddress.Token,
       data: contract.methods.checkIn(placeID).encodeABI(),
-      gasPrice: 3000000000,
+      gasPrice: 50000000000,
     }
     console.log('txObject:', txObject)
     const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
@@ -139,7 +139,7 @@ export async function autoRegister(privateKey, firstName, lastName, phoneNumber)
       gasLimit: web3.utils.toHex(3000000), // Raise the gas limit to a much higher amount
       to: contractAddress.Token,
       data: contract.methods.register().encodeABI(),
-      gasPrice: 6000000000,
+      gasPrice: 50000000000,
     }
     const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
     const signedTx = tx.sign(privateKeyBytes)
@@ -182,7 +182,7 @@ export async function autoCreatePost(randomKey, address, placeID, postID, title,
       gasLimit: web3.utils.toHex(3000000), // Raise the gas limit to a much higher amount
       to: contractAddress.Token,
       data: contract.methods.reviews(placeID, postID, title, rate, review).encodeABI(),
-      gasPrice: 3000000000,
+      gasPrice: 50000000000,
     }
     console.log('txObject:', txObject)
     const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
@@ -206,7 +206,7 @@ export async function autoCreatePost(randomKey, address, placeID, postID, title,
       const sponserNonce = await web3.eth.getTransactionCount(sponserAccount, 'latest')
       const txObject = {
         nonce: web3.utils.toHex(sponserNonce),
-        gasPrice: web3.utils.toHex(3000000000),
+        gasPrice: web3.utils.toHex(50000000000),
         gasLimit: web3.utils.toHex(3000000), // Raise the gas limit to a much higher amount
         to: contractAddress.Token,
         data: contract.methods.divideRewardBy4R(postID).encodeABI(),
@@ -248,7 +248,7 @@ export async function autoUpvote(randomKey, address, postID) {
       gasLimit: web3.utils.toHex(3000000), // Raise the gas limit to a much higher amount
       to: contractAddress.Token,
       data: await contract.methods.upvote(postID).encodeABI(),
-      gasPrice: 3000000000,
+      gasPrice: 50000000000,
     }
     console.log('txObject:', txObject)
     const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
@@ -292,7 +292,7 @@ export async function autoComment(randomKey, address, postID, content) {
       gasLimit: web3.utils.toHex(3000000), // Raise the gas limit to a much higher amount
       to: contractAddress.Token,
       data: await contract.methods.comment(postID, content).encodeABI(),
-      gasPrice: 3000000000,
+      gasPrice: 50000000000,
     }
     console.log('txObject:', txObject)
     const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
@@ -335,7 +335,7 @@ export async function autoGetReward(randomKey, address, postID) {
       gasLimit: web3.utils.toHex(3000000), // Raise the gas limit to a much higher amount
       to: contractAddress.Token,
       data: await contract.methods.getRewardPoint(postID).encodeABI(),
-      gasPrice: 3000000000,
+      gasPrice: 50000000000,
     }
     console.log('txObject:', txObject)
     const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
@@ -390,7 +390,7 @@ export async function autoExchangeVoucher(randomKey, address, voucherID) {
       gasLimit: web3.utils.toHex(3000000), // Raise the gas limit to a much higher amount
       to: contractVoucherAddress.Token,
       data: await contract_voucher.methods.exchangeVoucher(voucherID).encodeABI(),
-      gasPrice: 3000000000,
+      gasPrice: 50000000000,
     }
     console.log('txObject:', txObject)
     const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
