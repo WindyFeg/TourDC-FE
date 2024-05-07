@@ -40,15 +40,17 @@ export async function autoCheckIn(randomKey, address, placeID) {
     const account = web3.eth.accounts.privateKeyToAccount(privateKey).address
 
     let nonce = await web3.eth.getTransactionCount(account, 'latest');
-    let data = contract.methods.checkIn(placeID).encodeABI();
+    const maxPriorityFeePerGas = await web3.eth.getMaxPriorityFeePerGas()
+    const maxFeePerGas = await web3.eth.getBlock("pending")
 
     const txObject = {
       nonce: web3.utils.toHex(nonce),
       from: account,
-      gasLimit: web3.utils.toHex(300000), // Raise the gas limit to a much higher amount
+      gasLimit: web3.utils.toHex(3000000), // Raise the gas limit to a much higher amount
       to: contractAddress.Token,
       data: contract.methods.checkIn(placeID).encodeABI(),
-      gasPrice: 200000000000,
+      maxPriorityFeePerGas: maxPriorityFeePerGas,
+      gasPrice: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas)*(1.1)))
     }
     console.log('txObject:', txObject)
     const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
@@ -60,7 +62,7 @@ export async function autoCheckIn(randomKey, address, placeID) {
     const raw = '0x' + Buffer.from(serializedTx).toString('hex')
     const txHash = web3.utils.sha3(serializedTx);
     console.log("checkIn txHash: ", txHash)
-    web3.eth.sendSignedTransaction(raw)
+    await web3.eth.sendSignedTransaction(raw)
     .on('receipt', (sendtransaction) => {
       const postID = sendtransaction.logs[0].topics[1]
       console.log('postID', postID)
@@ -78,10 +80,10 @@ export async function autoCheckIn(randomKey, address, placeID) {
       txHash: txHash,
     }
   } catch (error) {
-    console.error(error)
+    console.error(Object.values(error))
     return {
       success: false,
-      error: error.message
+      error: Object.values(error)
     }
   }
 }
@@ -95,13 +97,16 @@ const faucet = async (address) => {
     const sponsorPrivateKey = hexToBytes('0x' + 'e11f5c9977c82fe752f84caeb9ba0c50feabd0ce90088cb26e61ee0fce5950c2')
     const sponserAccount = web3.eth.accounts.privateKeyToAccount('0x' + 'e11f5c9977c82fe752f84caeb9ba0c50feabd0ce90088cb26e61ee0fce5950c2').address
     const sponserNonce = await web3.eth.getTransactionCount(sponserAccount, 'latest')
+    const maxPriorityFeePerGas = await web3.eth.getMaxPriorityFeePerGas()
+    const maxFeePerGas = await web3.eth.getBlock("pending")
     const txObject = {
       nonce: web3.utils.toHex(sponserNonce),
-      gasPrice: web3.utils.toHex(1000000000000),
       gasLimit: web3.utils.toHex(3000000), // Raise the gas limit to a much higher amount
       to: address,
       value: '0x16345785D8A0000',
       data: '0x0',
+      maxPriorityFeePerGas: maxPriorityFeePerGas,
+      gasPrice: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas)*(1.1)))
     }
     const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
     const signedTx = tx.sign(sponsorPrivateKey)
@@ -121,25 +126,27 @@ const faucet = async (address) => {
     );
     return String(txHash)
   } catch (error) {
-    console.error(error.message)
+    console.error("ERR: ", Object.values(error))
   }
 }
 
-export async function autoRegister(privateKey, firstName, lastName, phoneNumber) {
+export async function autoRegister(privateKey) {
   try {
     let startTime = performance.now()
     const privateKeyBytes = Buffer.from(privateKey.slice(2), 'hex')
     const account = web3.eth.accounts.privateKeyToAccount(privateKey).address
     await faucet(account)
     let nonce = await web3.eth.getTransactionCount(account, 'latest');
-    console.log('nonce', nonce)
+    const maxPriorityFeePerGas = await web3.eth.getMaxPriorityFeePerGas()
+    const maxFeePerGas = await web3.eth.getBlock("pending")
     const txObject = {
       nonce: web3.utils.toHex(nonce),
       from: account,
       gasLimit: web3.utils.toHex(300000), // Raise the gas limit to a much higher amount
       to: contractAddress.Token,
       data: contract.methods.register().encodeABI(),
-      gasPrice: 200000000000,
+      gasPrice: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas)*(1.1))),
+      maxPriorityFeePerGas: maxPriorityFeePerGas
     }
     const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
     const signedTx = tx.sign(privateKeyBytes)
@@ -174,15 +181,18 @@ export async function autoCreatePost(randomKey, address, placeID, postID, title,
     const account = web3.eth.accounts.privateKeyToAccount(privateKey).address
 
     let nonce = await web3.eth.getTransactionCount(account, 'latest');
-    let data = contract.methods.checkIn(placeID).encodeABI();
-
+    const maxPriorityFeePerGas = await web3.eth.getMaxPriorityFeePerGas()
+    const maxFeePerGas = await web3.eth.getBlock("pending")
+    console.log("maxFeePerGas: ", maxFeePerGas.baseFeePerGas)
     const txObject = {
       nonce: web3.utils.toHex(nonce),
       from: account,
-      gasLimit: web3.utils.toHex(300000), // Raise the gas limit to a much higher amount
+      gasLimit: web3.utils.toHex(3000000), // Raise the gas limit to a much higher amount
       to: contractAddress.Token,
       data: contract.methods.reviews(placeID, postID, title, rate, review).encodeABI(),
-      gasPrice: 200000000000,
+      gasPrice: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas)*(1.1))),
+      maxPriorityFeePerGas: maxPriorityFeePerGas,
+      maxFeePerGas: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas)*(1.1)))
     }
     console.log('txObject:', txObject)
     const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
@@ -194,7 +204,7 @@ export async function autoCreatePost(randomKey, address, placeID, postID, title,
     const raw = '0x' + Buffer.from(serializedTx).toString('hex')
     const txHash = web3.utils.sha3(serializedTx);
     console.log('txHash: ', txHash)
-    web3.eth.sendSignedTransaction(raw)
+    await web3.eth.sendSignedTransaction(raw)
     .on('receipt', () => {
       console.log("update to DB")
       axios.post(`${GLOBAL.BASE_URL}/api/post/updateReview`, { postID: postID })
@@ -204,12 +214,16 @@ export async function autoCreatePost(randomKey, address, placeID, postID, title,
       const sponsorPrivateKey = hexToBytes('0x' + 'e11f5c9977c82fe752f84caeb9ba0c50feabd0ce90088cb26e61ee0fce5950c2')
       const sponserAccount = web3.eth.accounts.privateKeyToAccount('0x' + 'e11f5c9977c82fe752f84caeb9ba0c50feabd0ce90088cb26e61ee0fce5950c2').address
       const sponserNonce = await web3.eth.getTransactionCount(sponserAccount, 'latest')
+      const maxPriorityFeePerGas = await web3.eth.getMaxPriorityFeePerGas()
+      const maxFeePerGas = await web3.eth.getBlock("pending")
       const txObject = {
         nonce: web3.utils.toHex(sponserNonce),
-        gasPrice: web3.utils.toHex(200000000000),
-        gasLimit: web3.utils.toHex(300000), // Raise the gas limit to a much higher amount
+        gasLimit: web3.utils.toHex(3000000), // Raise the gas limit to a much higher amount
         to: contractAddress.Token,
         data: contract.methods.divideRewardBy4R(postID).encodeABI(),
+        gasPrice: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas)*(1.1))),
+        maxPriorityFeePerGas: maxPriorityFeePerGas,
+        maxFeePerGas: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas)*(1.1)))
       }
       const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
       const signedTx = tx.sign(sponsorPrivateKey)
@@ -218,11 +232,12 @@ export async function autoCreatePost(randomKey, address, placeID, postID, title,
       const txHash = web3.utils.sha3(serializedTx);
       console.log("divide hash:", txHash)
       await web3.eth.sendSignedTransaction(raw)
-    }, 1*30000)
+    }, 2*60000)
     console.log(`Call to Create Post took ${endTime - startTime} milliseconds`)
     return txHash
   } catch (error) {
-    console.error("ERR: ", error)
+    console.error("ERR: ", Object.keys(error))
+    console.error("ERR: ", Object.values(error))
   }
 }
 
@@ -240,15 +255,18 @@ export async function autoUpvote(randomKey, address, postID) {
     // decrypted private_key
     let privateKey = AES.decryptedPrivateKey(randomKey, enc_private_key).privateKey
     const account = web3.eth.accounts.privateKeyToAccount(privateKey).address
-
+    const maxPriorityFeePerGas = await web3.eth.getMaxPriorityFeePerGas()
+    const maxFeePerGas = await web3.eth.getBlock("pending")
     let nonce = await web3.eth.getTransactionCount(account, 'latest');
     const txObject = {
       nonce: web3.utils.toHex(nonce),
       from: account,
-      gasLimit: web3.utils.toHex(300000), // Raise the gas limit to a much higher amount
+      gasLimit: web3.utils.toHex(3000000), // Raise the gas limit to a much higher amount
       to: contractAddress.Token,
       data: await contract.methods.upvote(postID).encodeABI(),
-      gasPrice: 200000000000,
+      gasPrice: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas)*(1.1))),
+      maxPriorityFeePerGas: maxPriorityFeePerGas,
+      maxFeePerGas: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas)*(1.1)))
     }
     console.log('txObject:', txObject)
     const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
@@ -284,15 +302,18 @@ export async function autoComment(randomKey, address, postID, content) {
     // decrypted private_key
     let privateKey = AES.decryptedPrivateKey(randomKey, enc_private_key).privateKey
     const account = web3.eth.accounts.privateKeyToAccount(privateKey).address
-
+    const maxPriorityFeePerGas = await web3.eth.getMaxPriorityFeePerGas()
+    const maxFeePerGas = await web3.eth.getBlock("pending")
     let nonce = await web3.eth.getTransactionCount(account, 'latest');
     const txObject = {
       nonce: web3.utils.toHex(nonce),
       from: account,
-      gasLimit: web3.utils.toHex(300000), // Raise the gas limit to a much higher amount
+      gasLimit: web3.utils.toHex(3000000), // Raise the gas limit to a much higher amount
       to: contractAddress.Token,
       data: await contract.methods.comment(postID, content).encodeABI(),
-      gasPrice: 200000000000,
+      gasPrice: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas)*(1.1))),
+      maxPriorityFeePerGas: maxPriorityFeePerGas,
+      maxFeePerGas: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas)*(1.1)))
     }
     console.log('txObject:', txObject)
     const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
@@ -327,15 +348,18 @@ export async function autoGetReward(randomKey, address, postID) {
     // decrypted private_key
     let privateKey = AES.decryptedPrivateKey(randomKey, enc_private_key).privateKey
     const account = web3.eth.accounts.privateKeyToAccount(privateKey).address
-
+    const maxPriorityFeePerGas = await web3.eth.getMaxPriorityFeePerGas()
+    const maxFeePerGas = await web3.eth.getBlock("pending")
     let nonce = await web3.eth.getTransactionCount(account, 'latest');
     const txObject = {
       nonce: web3.utils.toHex(nonce),
       from: account,
-      gasLimit: web3.utils.toHex(300000), // Raise the gas limit to a much higher amount
+      gasLimit: web3.utils.toHex(3000000), // Raise the gas limit to a much higher amount
       to: contractAddress.Token,
       data: await contract.methods.getRewardPoint(postID).encodeABI(),
-      gasPrice: 200000000000,
+      maxPriorityFeePerGas: maxPriorityFeePerGas,
+      maxFeePerGas: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas)*(1.1))),
+      gasPrice: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas)*(1.1)))
     }
     console.log('txObject:', txObject)
     const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
@@ -382,15 +406,18 @@ export async function autoExchangeVoucher(randomKey, address, voucherID) {
     // decrypted private_key
     let privateKey = AES.decryptedPrivateKey(randomKey, enc_private_key).privateKey
     const account = web3.eth.accounts.privateKeyToAccount(privateKey).address
-
+    const maxPriorityFeePerGas = await web3.eth.getMaxPriorityFeePerGas()
+    const maxFeePerGas = await web3.eth.getBlock("pending")
     let nonce = await web3.eth.getTransactionCount(account, 'latest');
     const txObject = {
       nonce: web3.utils.toHex(nonce),
       from: account,
-      gasLimit: web3.utils.toHex(300000), // Raise the gas limit to a much higher amount
+      gasLimit: web3.utils.toHex(3000000), // Raise the gas limit to a much higher amount
       to: contractVoucherAddress.Token,
       data: await contract_voucher.methods.exchangeVoucher(voucherID).encodeABI(),
-      gasPrice: 200000000000,
+      maxPriorityFeePerGas: maxPriorityFeePerGas,
+      gasPrice: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas)*(1.1))),
+      maxFeePerGas: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas)*(1.1))),
     }
     console.log('txObject:', txObject)
     const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })

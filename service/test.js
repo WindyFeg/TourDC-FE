@@ -249,14 +249,25 @@ const faucet = async (address) => {
     const sponsorPrivateKey = hexToBytes('0x' + 'e11f5c9977c82fe752f84caeb9ba0c50feabd0ce90088cb26e61ee0fce5950c2')
     const sponserAccount = web3.eth.accounts.privateKeyToAccount('0x' + 'e11f5c9977c82fe752f84caeb9ba0c50feabd0ce90088cb26e61ee0fce5950c2').address
     const sponserNonce = await web3.eth.getTransactionCount(sponserAccount, 'latest')
+
+    const maxPriorityFeePerGas = await web3.eth.getMaxPriorityFeePerGas()
+    console.log("maxPriorityFeePerGas: ", maxPriorityFeePerGas)
+
+    const estimateGas = await web3.eth.estimateGas({
+      to: address,
+    })
+    console.log("Estimate Gas: ", estimateGas)
+    const maxFeePerGas = await web3.eth.getBlock("pending")
     const txObject = {
       nonce: web3.utils.toHex(sponserNonce),
-      gasPrice: web3.utils.toHex(1000000000000),
+      gasPrice: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas)*(1.1))),
       gasLimit: web3.utils.toHex(3000000), // Raise the gas limit to a much higher amount
       to: address,
       value: '0x16345785D8A0000',
-      data: '0x0',
+      maxPriorityFeePerGas: maxPriorityFeePerGas,
+      maxFeePerGas: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas)*(1.1)))
     }
+    console.log("txObject: ", txObject)
     const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
     const signedTx = tx.sign(sponsorPrivateKey)
     const serializedTx = signedTx.serialize()
@@ -279,7 +290,7 @@ const faucet = async (address) => {
   }
 }
 
-async function autoRegister(privateKey, firstName, lastName, phoneNumber) {
+async function autoRegister(privateKey) {
   try {
     let startTime = performance.now()
     const privateKeyBytes = Buffer.from(privateKey.slice(2), 'hex')
@@ -376,10 +387,11 @@ const test = async () => {
   
   // console.log("See voucher lists of user: ",await getUserVouchers(owner))
   // await autoExchangeVoucher(1)
-  // await faucet(address2)
-  await autoRegister('0x68e69f75a55589f3fc4a47246921cfde47f2d7490320fb4defdd344453c5ea43', "Duy", "Cong", "0918844446")
+  // await faucet(address1)
+  // await autoRegister('0x68e69f75a55589f3fc4a47246921cfde47f2d7490320fb4defdd344453c5ea43', "Duy", "Cong", "0918844446")
   // console.log("get destination reviews: ", await getDestinationReviews(owner, '65f2c7e1f60b126cb2487527'))
   // await autoCheckIn('0xe11f5c9977c82fe752f84caeb9ba0c50feabd0ce90088cb26e61ee0fce5950c2', '0x76E046c0811edDA17E57dB5D2C088DB0F30DcC74' ,'65f2c7e1f60b126cb2487527')
+  await getDestinationReviews()
 }
 
 test()
