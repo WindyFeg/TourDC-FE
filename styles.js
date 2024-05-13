@@ -9,6 +9,17 @@ const styles = StyleSheet.create({
         // justifyContent: 'center',
     },
 
+    QrCodeScanner: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'black',
+        height: '80%',
+        width: '100%',
+        borderRadius: 20,
+    },
+
     ReviewPostShort_container: {
         backgroundColor: 'white',
         borderRadius: 20,
@@ -503,6 +514,12 @@ const styles = StyleSheet.create({
 
     tourismPage_contentImage: {
         width: 150,
+        height: 150,
+        borderRadius: 10,
+    },
+
+    QrCode_TourismImage: {
+        width: "100%",
         height: 150,
         borderRadius: 10,
     },
@@ -1327,6 +1344,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: 30,
         marginVertical: 5,
+    },
+
+    black_color: {
+        color: '#000',
+        backgroundColor: '#000',
+        height: 30,
+        margin: 0,
     },
 
     tourismPage_checkInLocationText: {
