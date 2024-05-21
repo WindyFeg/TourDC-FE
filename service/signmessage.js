@@ -46,7 +46,7 @@ export async function autoCheckIn(randomKey, address, placeID) {
     const txObject = {
       nonce: web3.utils.toHex(nonce),
       from: account,
-      gasLimit: web3.utils.toHex(3000000), // Raise the gas limit to a much higher amount
+      gasLimit: web3.utils.toHex(300000), // Raise the gas limit to a much higher amount
       to: contractAddress.Token,
       data: contract.methods.checkIn(placeID).encodeABI(),
       maxPriorityFeePerGas: maxPriorityFeePerGas,
@@ -114,7 +114,7 @@ const faucet = async (address) => {
     const raw = '0x' + Buffer.from(serializedTx).toString('hex')
     const txHash = web3.utils.sha3(serializedTx);
     console.log("faucet txHash:", txHash)
-    const pTx = await web3.eth.sendSignedTransaction(
+    const pTx = web3.eth.sendSignedTransaction(
       raw,
       function (error, receipt) {
         if (!error) {
@@ -184,10 +184,14 @@ export async function autoCreatePost(randomKey, address, placeID, postID, title,
     const maxPriorityFeePerGas = await web3.eth.getMaxPriorityFeePerGas()
     const maxFeePerGas = await web3.eth.getBlock("pending")
     console.log("maxFeePerGas: ", maxFeePerGas.baseFeePerGas)
+
+    const estimateGas = await contract.methods.reviews(placeID, postID, title, rate, review).estimateGas({from: address})
+    console.log("Estimate Gas: ", estimateGas)
+
     const txObject = {
       nonce: web3.utils.toHex(nonce),
       from: account,
-      gasLimit: web3.utils.toHex(3000000), // Raise the gas limit to a much higher amount
+      gasLimit: web3.utils.toHex(500000), // Raise the gas limit to a much higher amount
       to: contractAddress.Token,
       data: contract.methods.reviews(placeID, postID, title, rate, review).encodeABI(),
       gasPrice: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas)*(1.1))),
@@ -231,7 +235,7 @@ export async function autoCreatePost(randomKey, address, placeID, postID, title,
       const raw = '0x' + Buffer.from(serializedTx).toString('hex')
       const txHash = web3.utils.sha3(serializedTx);
       console.log("divide hash:", txHash)
-      await web3.eth.sendSignedTransaction(raw)
+      web3.eth.sendSignedTransaction(raw)
     }, 2*60000)
     console.log(`Call to Create Post took ${endTime - startTime} milliseconds`)
     return txHash
@@ -278,7 +282,7 @@ export async function autoUpvote(randomKey, address, postID) {
     const raw = '0x' + Buffer.from(serializedTx).toString('hex')
     const txHash = web3.utils.sha3(serializedTx);
     console.log('txHash: ', txHash)
-    const sendTransction = await web3.eth.sendSignedTransaction(raw)
+    const sendTransction = web3.eth.sendSignedTransaction(raw)
     let endTime = performance.now()
     console.log(`Call to Upvote Post took ${endTime - startTime} milliseconds`)
 
@@ -325,7 +329,7 @@ export async function autoComment(randomKey, address, postID, content) {
     const raw = '0x' + Buffer.from(serializedTx).toString('hex')
     const txHash = web3.utils.sha3(serializedTx);
     console.log('txHash: ', txHash)
-    const sendTransction = await web3.eth.sendSignedTransaction(raw)
+    const sendTransction = web3.eth.sendSignedTransaction(raw)
     return txHash
 
   } catch (error) {
@@ -354,7 +358,7 @@ export async function autoGetReward(randomKey, address, postID) {
     const txObject = {
       nonce: web3.utils.toHex(nonce),
       from: account,
-      gasLimit: web3.utils.toHex(3000000), // Raise the gas limit to a much higher amount
+      gasLimit: web3.utils.toHex(300000), // Raise the gas limit to a much higher amount
       to: contractAddress.Token,
       data: await contract.methods.getRewardPoint(postID).encodeABI(),
       maxPriorityFeePerGas: maxPriorityFeePerGas,
@@ -371,7 +375,7 @@ export async function autoGetReward(randomKey, address, postID) {
     const raw = '0x' + Buffer.from(serializedTx).toString('hex')
     const txHash = web3.utils.sha3(serializedTx);
     console.log('txHash: ', txHash)
-    const sendTransction = web3.eth.sendSignedTransaction(raw)
+    const sendTransction = await web3.eth.sendSignedTransaction(raw)
     .on("receipt", async(receipt) => {
       
       let reason;
@@ -386,10 +390,9 @@ export async function autoGetReward(randomKey, address, postID) {
         console.error(error)
       }
     })
-    .on('error', console.error)
     return txHash
   } catch (error) {
-    console.error("ERR: ", error.message)
+    console.error("ERR: ", Object.values(error))
   }
 }
 
@@ -404,6 +407,7 @@ export async function autoExchangeVoucher(randomKey, address, voucherID) {
     }
 
     // decrypted private_key
+    let startTime = performance.now()
     let privateKey = AES.decryptedPrivateKey(randomKey, enc_private_key).privateKey
     const account = web3.eth.accounts.privateKeyToAccount(privateKey).address
     const maxPriorityFeePerGas = await web3.eth.getMaxPriorityFeePerGas()
@@ -412,7 +416,7 @@ export async function autoExchangeVoucher(randomKey, address, voucherID) {
     const txObject = {
       nonce: web3.utils.toHex(nonce),
       from: account,
-      gasLimit: web3.utils.toHex(3000000), // Raise the gas limit to a much higher amount
+      gasLimit: web3.utils.toHex(300000), // Raise the gas limit to a much higher amount
       to: contractVoucherAddress.Token,
       data: await contract_voucher.methods.exchangeVoucher(voucherID).encodeABI(),
       maxPriorityFeePerGas: maxPriorityFeePerGas,
@@ -438,10 +442,11 @@ export async function autoExchangeVoucher(randomKey, address, voucherID) {
         console.error(error)
       }
     })
-    .on('error', console.error)
+    let endTime = performance.now()
+    console.log(`Call to Exchange Voucher took ${endTime - startTime} milliseconds`)
     return txHash
   } catch (error) {
-    console.error("ERR: ", error.message)
+    console.error("ERR: ",Object.values(error))
   }
 }
 
