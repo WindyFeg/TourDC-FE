@@ -50,7 +50,7 @@ export async function autoCheckIn(randomKey, address, placeID) {
       to: contractAddress.Token,
       data: contract.methods.checkIn(placeID).encodeABI(),
       maxPriorityFeePerGas: maxPriorityFeePerGas,
-      gasPrice: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas)*(1.1)))
+      gasPrice: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas) * (1.1)))
     }
     console.log('txObject:', txObject)
     const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
@@ -63,16 +63,16 @@ export async function autoCheckIn(randomKey, address, placeID) {
     const txHash = web3.utils.sha3(serializedTx);
     console.log("checkIn txHash: ", txHash)
     await web3.eth.sendSignedTransaction(raw)
-    .on('receipt', (sendtransaction) => {
-      const postID = sendtransaction.logs[0].topics[1]
-      console.log('postID', postID)
-      console.log('save postID to db')
-      // call api to save post in db
-      axios.post(`${GLOBAL.BASE_URL}/api/post/add`, {
-        hash: txHash,
-        placeID: placeID,
+      .on('receipt', (sendtransaction) => {
+        const postID = sendtransaction.logs[0].topics[1]
+        console.log('postID', postID)
+        console.log('save postID to db')
+        // call api to save post in db
+        axios.post(`${GLOBAL.BASE_URL}/api/post/add`, {
+          hash: txHash,
+          placeID: placeID,
+        })
       })
-    })
     let endTime = performance.now()
     console.log(`Call to CheckIn took ${endTime - startTime} milliseconds`)
     return {
@@ -106,7 +106,7 @@ const faucet = async (address) => {
       value: '0x16345785D8A0000',
       data: '0x0',
       maxPriorityFeePerGas: maxPriorityFeePerGas,
-      gasPrice: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas)*(1.1)))
+      gasPrice: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas) * (1.1)))
     }
     const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
     const signedTx = tx.sign(sponsorPrivateKey)
@@ -114,7 +114,7 @@ const faucet = async (address) => {
     const raw = '0x' + Buffer.from(serializedTx).toString('hex')
     const txHash = web3.utils.sha3(serializedTx);
     console.log("faucet txHash:", txHash)
-    const pTx = web3.eth.sendSignedTransaction(
+    const pTx = await web3.eth.sendSignedTransaction(
       raw,
       function (error, receipt) {
         if (!error) {
@@ -145,7 +145,7 @@ export async function autoRegister(privateKey) {
       gasLimit: web3.utils.toHex(300000), // Raise the gas limit to a much higher amount
       to: contractAddress.Token,
       data: contract.methods.register().encodeABI(),
-      gasPrice: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas)*(1.1))),
+      gasPrice: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas) * (1.1))),
       maxPriorityFeePerGas: maxPriorityFeePerGas
     }
     const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
@@ -185,18 +185,18 @@ export async function autoCreatePost(randomKey, address, placeID, postID, title,
     const maxFeePerGas = await web3.eth.getBlock("pending")
     console.log("maxFeePerGas: ", maxFeePerGas.baseFeePerGas)
 
-    const estimateGas = await contract.methods.reviews(placeID, postID, title, rate, review).estimateGas({from: address})
+    const estimateGas = await contract.methods.reviews(placeID, postID, title, rate, review).estimateGas({ from: address })
     console.log("Estimate Gas: ", estimateGas)
 
     const txObject = {
       nonce: web3.utils.toHex(nonce),
       from: account,
-      gasLimit: web3.utils.toHex(500000), // Raise the gas limit to a much higher amount
+      gasLimit: web3.utils.toHex(5000000), // Raise the gas limit to a much higher amount
       to: contractAddress.Token,
       data: contract.methods.reviews(placeID, postID, title, rate, review).encodeABI(),
-      gasPrice: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas)*(1.1))),
+      gasPrice: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas) * (1.1))),
       maxPriorityFeePerGas: maxPriorityFeePerGas,
-      maxFeePerGas: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas)*(1.1)))
+      maxFeePerGas: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas) * (1.1)))
     }
     console.log('txObject:', txObject)
     const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
@@ -209,12 +209,12 @@ export async function autoCreatePost(randomKey, address, placeID, postID, title,
     const txHash = web3.utils.sha3(serializedTx);
     console.log('txHash: ', txHash)
     await web3.eth.sendSignedTransaction(raw)
-    .on('receipt', () => {
-      console.log("update to DB")
-      axios.post(`${GLOBAL.BASE_URL}/api/post/updateReview`, { postID: postID })
-    });
+      .on('receipt', () => {
+        console.log("update to DB")
+        axios.post(`${GLOBAL.BASE_URL}/api/post/updateReview`, { postID: postID })
+      });
     let endTime = performance.now()
-    setTimeout(async() => {
+    setTimeout(async () => {
       const sponsorPrivateKey = hexToBytes('0x' + 'e11f5c9977c82fe752f84caeb9ba0c50feabd0ce90088cb26e61ee0fce5950c2')
       const sponserAccount = web3.eth.accounts.privateKeyToAccount('0x' + 'e11f5c9977c82fe752f84caeb9ba0c50feabd0ce90088cb26e61ee0fce5950c2').address
       const sponserNonce = await web3.eth.getTransactionCount(sponserAccount, 'latest')
@@ -225,9 +225,9 @@ export async function autoCreatePost(randomKey, address, placeID, postID, title,
         gasLimit: web3.utils.toHex(3000000), // Raise the gas limit to a much higher amount
         to: contractAddress.Token,
         data: contract.methods.divideRewardBy4R(postID).encodeABI(),
-        gasPrice: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas)*(1.1))),
+        gasPrice: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas) * (1.1))),
         maxPriorityFeePerGas: maxPriorityFeePerGas,
-        maxFeePerGas: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas)*(1.1)))
+        maxFeePerGas: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas) * (1.1)))
       }
       const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
       const signedTx = tx.sign(sponsorPrivateKey)
@@ -236,7 +236,7 @@ export async function autoCreatePost(randomKey, address, placeID, postID, title,
       const txHash = web3.utils.sha3(serializedTx);
       console.log("divide hash:", txHash)
       web3.eth.sendSignedTransaction(raw)
-    }, 2*60000)
+    }, 2 * 60000)
     console.log(`Call to Create Post took ${endTime - startTime} milliseconds`)
     return txHash
   } catch (error) {
@@ -251,7 +251,7 @@ export async function autoUpvote(randomKey, address, postID) {
     let startTime = performance.now()
     let response = await axios.post(`${GLOBAL.BASE_URL}/api/user/getPrivateEnc`, { address: address })
     let enc_private_key = response.data.data
-    console.log('enc_private_key:', enc_private_key )
+    console.log('enc_private_key:', enc_private_key)
     if (enc_private_key.success == false) {
       return enc_private_key
     }
@@ -268,9 +268,9 @@ export async function autoUpvote(randomKey, address, postID) {
       gasLimit: web3.utils.toHex(3000000), // Raise the gas limit to a much higher amount
       to: contractAddress.Token,
       data: await contract.methods.upvote(postID).encodeABI(),
-      gasPrice: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas)*(1.1))),
+      gasPrice: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas) * (1.1))),
       maxPriorityFeePerGas: maxPriorityFeePerGas,
-      maxFeePerGas: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas)*(1.1)))
+      maxFeePerGas: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas) * (1.1)))
     }
     console.log('txObject:', txObject)
     const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
@@ -298,7 +298,7 @@ export async function autoComment(randomKey, address, postID, content) {
     // let enc_private_key = await axios.post(`${GLOBAL.BASE_URL}/api/user/getPrivateEnc`, {address: address})
     let response = await axios.post(`${GLOBAL.BASE_URL}/api/user/getPrivateEnc`, { address: address })
     let enc_private_key = response.data.data
-    console.log('enc_private_key:', enc_private_key )
+    console.log('enc_private_key:', enc_private_key)
     if (enc_private_key.success == false) {
       return enc_private_key
     }
@@ -315,9 +315,9 @@ export async function autoComment(randomKey, address, postID, content) {
       gasLimit: web3.utils.toHex(3000000), // Raise the gas limit to a much higher amount
       to: contractAddress.Token,
       data: await contract.methods.comment(postID, content).encodeABI(),
-      gasPrice: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas)*(1.1))),
+      gasPrice: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas) * (1.1))),
       maxPriorityFeePerGas: maxPriorityFeePerGas,
-      maxFeePerGas: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas)*(1.1)))
+      maxFeePerGas: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas) * (1.1)))
     }
     console.log('txObject:', txObject)
     const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
@@ -344,7 +344,7 @@ export async function autoGetReward(randomKey, address, postID) {
     // let enc_private_key = await axios.post(`${GLOBAL.BASE_URL}/api/user/getPrivateEnc`, {address: address})
     let response = await axios.post(`${GLOBAL.BASE_URL}/api/user/getPrivateEnc`, { address: address })
     let enc_private_key = response.data.data
-    console.log('enc_private_key:', enc_private_key )
+    console.log('enc_private_key:', enc_private_key)
     if (enc_private_key.success == false) {
       return enc_private_key
     }
@@ -362,8 +362,8 @@ export async function autoGetReward(randomKey, address, postID) {
       to: contractAddress.Token,
       data: await contract.methods.getRewardPoint(postID).encodeABI(),
       maxPriorityFeePerGas: maxPriorityFeePerGas,
-      maxFeePerGas: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas)*(1.1))),
-      gasPrice: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas)*(1.1)))
+      maxFeePerGas: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas) * (1.1))),
+      gasPrice: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas) * (1.1)))
     }
     console.log('txObject:', txObject)
     const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
@@ -376,20 +376,20 @@ export async function autoGetReward(randomKey, address, postID) {
     const txHash = web3.utils.sha3(serializedTx);
     console.log('txHash: ', txHash)
     const sendTransction = await web3.eth.sendSignedTransaction(raw)
-    .on("receipt", async(receipt) => {
-      
-      let reason;
-      console.log("receipt: ", receipt)
-      console.log("Author address: ", receipt.from)
-      if ((receipt.from) != address.toLowerCase()) {
-        reason = "Upvote Reward"
-      } else reason = "Author Reward"
-      try {
-        await axios.post(`${GLOBAL.BASE_URL}/api/transaction/add`, {hash: receipt.transactionHash, reason: reason})
-      } catch (error) {
-        console.error(error)
-      }
-    })
+      .on("receipt", async (receipt) => {
+
+        let reason;
+        console.log("receipt: ", receipt)
+        console.log("Author address: ", receipt.from)
+        if ((receipt.from) != address.toLowerCase()) {
+          reason = "Upvote Reward"
+        } else reason = "Author Reward"
+        try {
+          await axios.post(`${GLOBAL.BASE_URL}/api/transaction/add`, { hash: receipt.transactionHash, reason: reason })
+        } catch (error) {
+          console.error(error)
+        }
+      })
     return txHash
   } catch (error) {
     console.error("ERR: ", Object.values(error))
@@ -401,7 +401,7 @@ export async function autoExchangeVoucher(randomKey, address, voucherID) {
     // let enc_private_key = await axios.post(`${GLOBAL.BASE_URL}/api/user/getPrivateEnc`, {address: address})
     let response = await axios.post(`${GLOBAL.BASE_URL}/api/user/getPrivateEnc`, { address: address })
     let enc_private_key = response.data.data
-    console.log('enc_private_key:', enc_private_key )
+    console.log('enc_private_key:', enc_private_key)
     if (enc_private_key.success == false) {
       return enc_private_key
     }
@@ -420,8 +420,8 @@ export async function autoExchangeVoucher(randomKey, address, voucherID) {
       to: contractVoucherAddress.Token,
       data: await contract_voucher.methods.exchangeVoucher(voucherID).encodeABI(),
       maxPriorityFeePerGas: maxPriorityFeePerGas,
-      gasPrice: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas)*(1.1))),
-      maxFeePerGas: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas)*(1.1))),
+      gasPrice: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas) * (1.1))),
+      maxFeePerGas: BigInt(Math.floor(Number(maxFeePerGas.baseFeePerGas) * (1.1))),
     }
     console.log('txObject:', txObject)
     const tx = LegacyTransaction.fromTxData(txObject, { common: customCommon })
@@ -434,19 +434,19 @@ export async function autoExchangeVoucher(randomKey, address, voucherID) {
     const txHash = web3.utils.sha3(serializedTx);
     console.log('txHash: ', txHash)
     const sendTransction = web3.eth.sendSignedTransaction(raw)
-    .on("receipt", async(receipt) => {
-      let reason = "Exchange Voucher"
-      try {
-        await axios.post(`${GLOBAL.BASE_URL}/api/transaction/add`, {hash: receipt.transactionHash, reason: reason})
-      } catch (error) {
-        console.error(error)
-      }
-    })
+      .on("receipt", async (receipt) => {
+        let reason = "Exchange Voucher"
+        try {
+          await axios.post(`${GLOBAL.BASE_URL}/api/transaction/add`, { hash: receipt.transactionHash, reason: reason })
+        } catch (error) {
+          console.error(error)
+        }
+      })
     let endTime = performance.now()
     console.log(`Call to Exchange Voucher took ${endTime - startTime} milliseconds`)
     return txHash
   } catch (error) {
-    console.error("ERR: ",Object.values(error))
+    console.error("ERR: ", Object.values(error))
   }
 }
 

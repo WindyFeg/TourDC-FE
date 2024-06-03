@@ -13,11 +13,13 @@ import '@walletconnect/react-native-compat'
 import { WagmiConfig } from 'wagmi'
 import { mainnet, polygon, arbitrum, sepolia } from 'viem/chains'
 import { createWeb3Modal, defaultWagmiConfig, Web3Modal } from '@web3modal/wagmi-react-native'
-import {vibiChain} from './defineChain.tsx'
+import { vibiChain } from './defineChain.tsx'
 import { useConnect } from 'wagmi'
+import { LogBox } from 'react-native';
 
+LogBox.ignoreLogs(['Warning: ...']);
 
-import {autoCheckIn, autoRegister, autoCreatePost, autoUpvote } from './service/signmessage.js'
+import { autoCheckIn, autoRegister, autoCreatePost, autoUpvote } from './service/signmessage.js'
 // autoCheckIn('2dc232208048ff7f', '65f2c7e1f60b126cb2487527')
 // autoCreatePost('2dc232208048ff7f', '0x0', '65f2c7e1f60b126cb2487527', '0xca5cec26fd1a51ab59e8d679d1b8193394870b3843dd4fd4b02513af8b4b99fa', 'test', '50', 'test')
 // autoUpvote('2dc232208048ff7f', '0x0', '0xca5cec26fd1a51ab59e8d679d1b8193394870b3843dd4fd4b02513af8b4b99fa')
@@ -77,13 +79,13 @@ export default function App() {
             name="TourDC_Register"
             component={Register}
             options={{ headerShown: false }}
-          
+
           />
 
           <Stack.Screen
             name="TourDC_ForgotPassword"
             component={ForgotPassword}
-            options={{ headerShown: false }}  
+            options={{ headerShown: false }}
           />
 
           <Stack.Screen
