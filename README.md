@@ -11,7 +11,7 @@ Below is several UI of the TourDC application
 | ![Tríp](/RMAsset/Tríp.jpg)      | ![Posts](/RMAsset/Posts.jpg)           | ![CreateReview](/RMAsset/CreateReview.jpg) |  ![History](/RMAsset/History.jpg)   |
 
 # 4R Model
-![4R Model](/RMAsset/TourDC Blockchain-based Tourist Handbook.png)
+![4R Model](/RMAsset/TourDC%20Blockchain-based%20Tourist%20Handbook.png)
 This model revolves around four key elements: 
 • **Review:** Authors share their experiences and knowledge by writing reviews, articles, and other content. 
 • **Rate:** Curators read and review the content, assigning up-voted based on its quality and relevance. 
