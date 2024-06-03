@@ -1,4 +1,4 @@
-![[image-removebg-preview.png]]
+<img src="/RMAsset/image-removebg-preview.png" alt="TourDC">
 # Introduction 
 This project aims to enhance the tourism experience by developing a multi-faceted and reliable review system. The objectives include promoting credible reviews, encouraging user engagement, and utilizing blockchain technology to enhance transparency.
 
@@ -6,9 +6,9 @@ This project aims to enhance the tourism experience by developing a multi-facete
 # Front End
 Below is several UI of the TourDC application
 
-|<img src="/RMAsset/image-removebg-preview.png" alt="Neovim">  | ![[registerwaiting.jpg]] | ![[ExplorePage.jpg]]  |   ![[UserVerified.jpg]]  |     
+| <img src="/RMAsset/loginPage.jpg"> |<img src="/RMAsset/registerwaiting.jpg"> | <img src="/RMAsset/ExplorePage.jpg">  |   ![UserVerified](/RMAsset/UserVerified.jpg)  |     
 | ------------------ | ------------------------ | --------------------- | --- | 
-| ![[Tríp.jpg]]      | ![[Posts.jpg]]           | ![[CreateReview.jpg]] |  ![[History.jpg]]   |  
+| ![Tríp](/RMAsset/Tríp.jpg)      | ![Posts](/RMAsset/Posts.jpg)           | ![CreateReview](/RMAsset/CreateReview.jpg) |  ![History](/RMAsset/History.jpg)   |
 
 # 4R Model
 ![[TourDC Blockchain-based Tourist Handbook.png]]
