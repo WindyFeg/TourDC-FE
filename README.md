@@ -6,7 +6,7 @@ This project aims to enhance the tourism experience by developing a multi-facete
 # Front End
 Below is several UI of the TourDC application
 
-| ![[loginPage.jpg]] | ![[registerwaiting.jpg]] | ![[ExplorePage.jpg]]  |   ![[UserVerified.jpg]]  |     
+|<img src="/RMAsset/image-removebg-preview.png" alt="Neovim">  | ![[registerwaiting.jpg]] | ![[ExplorePage.jpg]]  |   ![[UserVerified.jpg]]  |     
 | ------------------ | ------------------------ | --------------------- | --- | 
 | ![[Tríp.jpg]]      | ![[Posts.jpg]]           | ![[CreateReview.jpg]] |  ![[History.jpg]]   |  
 
